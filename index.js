@@ -7,6 +7,8 @@ const dotenv = require('dotenv')
 var bodyParser = require('body-parser')
 const userRoute = require('./route/users')
 const authRoute = require('./route/auth')
+const postRoute = require('./route/post')
+
 
 
 dotenv.config()
@@ -34,12 +36,14 @@ app.get("/", (req, res) => {
     res.send("Welcome to Home Page")
 })
 
-app.get("/users", (req, res) => {
-    res.send("User")
-})
+// app.get("/users", (req, res) => {
+//     res.send("User")
+// })
 
 app.use("/api/users", userRoute)
 app.use("/api/auth", authRoute)
+app.use("/api/post", postRoute)
+
 
 
 console.log("Server is running on port is:", port)
