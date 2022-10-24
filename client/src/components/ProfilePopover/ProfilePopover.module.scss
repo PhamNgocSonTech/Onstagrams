@@ -1,0 +1,63 @@
+.wrapper {
+    width: 320px;
+    padding: 20px;
+
+    .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 12px;
+
+        .avt {
+            width: 44px;
+            border-radius: 50%;
+        }
+
+        .follow {
+            width: 106px;
+            height: 34px;
+            font-size: 1.5rem;
+            line-height: 22px;
+            font-weight: 600;
+            padding: 6px 8px;
+            display: flex;
+            justify-content: center;
+        }
+    }
+
+    .username {
+        padding: 0;
+        font-family: Sofiapro;
+        font-size: 18px;
+
+        .check {
+            margin-left: 4px;
+        }
+
+    }
+    .name {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-weight: 600;
+        font-size: 13px;
+        line-height: 20px;
+    }
+
+    .number-des {
+        margin-top: 8px;
+        .num {
+            font-family: Sofiapro;
+            font-weight: 700;
+            margin-right: 6px;
+            font-size: 17px;
+            line-height: 20px;
+            margin-right: 6px;
+        }
+        .label {
+            margin-right: 12px;
+            color: rgba(22, 24, 35, 0.75);
+            font-size: 16px;
+            line-height: 20px;
+        }
+    }
+
+}

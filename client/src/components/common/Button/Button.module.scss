@@ -1,0 +1,42 @@
+.wrapper {
+    border-radius: 4px;
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 22px;
+    padding: 8px 26px;
+    display: flex;
+    align-items: center;
+    color: black;
+    background-color: transparent;
+
+    &:hover {
+        cursor: pointer;
+    }
+
+    img {
+        margin-right: 8px;
+    }
+}
+
+.wrapper + .wrapper {
+    margin-left: 16px;
+
+}
+
+.primary {
+    background-color: rgba(254, 44, 85, 1.0);
+    color: rgba(255, 255, 255, 1.0);
+
+    &:hover {
+        background: linear-gradient(0deg, rgba(0, 0, 0, 0.06), rgba(0, 0, 0, 0.06)),#FE2C55;
+    }
+}
+
+.outline {
+    border-radius: 2px;
+    border: 1px solid rgba(22, 24, 35, 0.12);
+
+    &:hover {
+        background-color: rgba(22, 24, 35, 0.03);
+    }
+}

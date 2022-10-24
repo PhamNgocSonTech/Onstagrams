@@ -1,0 +1,38 @@
+.frame {
+    padding: 16px 0;
+    color: rgba(22, 24, 35, 0.75);
+    position: relative;
+    
+    &::before {
+        content: "";
+        position: absolute;
+        left: 8px;
+        right: 8px;
+        top: 0;
+        display: block;
+        height: 1px;
+        width: 325px;
+        background-color: rgba(22, 24, 35, 0.12);;
+    }
+
+    .title {
+        padding: 0 8px;
+        margin-bottom: 8px;
+        font-size: 14px;
+        line-height: 20px;
+    }
+
+    .expand {
+        margin-top: 8px;
+        padding: 0 8px;
+        color: rgb(254, 44, 85);
+        font-family: ProximaNova, Arial, Tahoma, PingFangSC, sans-serif;
+        font-weight: 600;
+        font-size: 14px;
+        line-height: 20px;
+
+        &:hover {
+            cursor: pointer;
+        }
+    }
+}

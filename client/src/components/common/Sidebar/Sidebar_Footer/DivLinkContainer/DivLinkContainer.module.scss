@@ -1,0 +1,22 @@
+.wrapper {
+    margin-bottom: 8px;
+
+    .ft-btn {
+        font-family: ProximaNova,Arial,Tahoma,PingFangSC,sans-serif;
+        font-weight: 600;
+        font-size: 13px;
+        line-height: 17px;
+        display: inline-block;
+        margin-right: 6px;
+        margin-top: 5px;
+        background-color: transparent;
+        margin-left: 0;
+        padding: 0;
+        color: rgba(22, 24, 35, 0.5);
+
+        &:hover {
+            cursor: pointer;
+            text-decoration: underline;
+        }
+    }
+}

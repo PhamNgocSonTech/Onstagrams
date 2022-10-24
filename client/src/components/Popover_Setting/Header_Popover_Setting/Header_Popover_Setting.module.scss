@@ -1,0 +1,20 @@
+.popover-hd {
+    height: 50px;
+    margin-top: -8px;
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+.popover-img {
+    margin-left: 28px;
+}
+
+.popover-title {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 22px;
+}

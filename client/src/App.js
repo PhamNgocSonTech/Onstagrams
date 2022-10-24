@@ -1,29 +1,28 @@
 import React from "react";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
-
-import { pubRoutes } from "./Routes/public_route";
-
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import DefaultLayout from "./Default/Layout/DefaultLayout";
+import { pubRoutes } from "./Routes/PublicRoutes";
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        {pubRoutes.map((item, index) => {
+        {pubRoutes.map((route, index) => {
           const Layout =
-            item.layout === null
+            route.layout === null
               ? React.Fragment
-              : item.layout === undefined
-              ? "DefaultLayout"
-              : item.layout;
+              : route.layout === undefined
+              ? DefaultLayout
+              : route.layout;
           return (
             <Route
               key={index}
-              path={item.path}
+              path={route.path}
               element={
                 <Layout>
-                  <item.element />
+                  <route.element />
                 </Layout>
               }
-            ></Route>
+            />
           );
         })}
       </Routes>

@@ -1,0 +1,27 @@
+.main-bar {
+    margin-bottom: 8px;
+
+    .nav-main {
+
+
+        .nav-item {
+            text-align: left;
+            margin: 0;
+            background-color: rgba(255, 255, 255, 1.0);
+            width: 100%;
+            padding: 8px;
+            &.active {
+                color: var(--primary-color);
+            }
+        }
+
+        .nav-icon {
+            margin-right: 8px;
+        }
+
+        .nav-item:hover {
+            background-color: rgba(22, 24, 35, 0.03);;
+            cursor: pointer;
+        }
+    }
+}

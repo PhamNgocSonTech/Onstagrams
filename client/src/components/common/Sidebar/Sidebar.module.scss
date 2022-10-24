@@ -1,0 +1,77 @@
+.sidebar {
+    width: var(--sidebar-width);
+    padding: 20px 8px 26px;
+    position: fixed;
+    z-index: 1;
+    bottom: 0;
+    top: 60px;
+    overflow-y: hidden;
+
+    &::-webkit-scrollbar-thumb {
+        border-radius: 3px;
+        background: rgba(22, 24, 35, .06);
+    }
+    
+    &::-webkit-scrollbar {
+        width: 6px;
+    }
+    
+    &:hover {
+        overflow-y: overlay;
+    }
+
+    .container {
+        position: relative;
+
+        .profile-popover {
+            position: absolute;
+            z-index: 1;
+            left: 0;
+            margin: 0;
+        }
+    }
+
+    .tag {
+        display: flex;
+        flex-wrap: wrap;
+        
+        .tag-btn {
+            display: inline-flex;
+            justify-content: center;
+            color: rgba(22, 24, 35, 0.75);
+    
+            font-family: ProximaNova, Arial, Tahoma, PingFangSC, sans-serif;
+            font-weight: 400;
+            font-size: 14px;
+    
+            line-height: 18px;
+    
+            background-color: transparent;
+            border-radius: 12px;
+            border: 1px solid rgba(22, 24, 35, 0.2);
+    
+            height: 2.4rem;
+            width: fit-content;
+    
+            overflow: hidden;
+            margin-right: 8px;
+            margin-left: 0;
+            margin-bottom: 12px;
+            padding: 3px 10px;
+    
+            &:hover {
+                cursor: pointer;
+                background: rgba(22, 24, 35, 0.03);
+            }
+            
+        }
+
+    }
+
+}
+
+.text-hidden-overflow {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}

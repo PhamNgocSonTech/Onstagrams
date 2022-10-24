@@ -1,0 +1,45 @@
+.wrapper {
+    .but-item {
+        font-size: 1.5rem;
+        white-space: nowrap;
+        font-weight: 600;
+        margin-left: 0;
+        width: 100%;
+        padding: 10px 16px;
+        background-color: rgba(255, 255, 255, 1.0);
+        font-family: 'ProximaNova';
+
+        &:hover {
+            background-color: rgba(22, 24, 35, 0.03);
+            cursor: pointer;
+        }
+    }
+
+
+
+    .pop-item {
+        padding-bottom: 8px;
+        display: flex;
+        flex-direction: column;
+
+        .header {
+            flex-shrink: 0;
+        }
+
+        .container {
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        .logout {
+            border-top: 1px solid rgba(22, 24, 35, 0.12);
+        }
+
+    }
+
+    .arrow-popover {
+        position: absolute;
+        right: 0;
+        top: 0;
+    }
+}

@@ -1,0 +1,23 @@
+.wrapper {
+    background-color: rgba(84, 84, 84, 0.92);
+    position: relative;
+    min-height: 38px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 13px;
+    line-height: 22px;
+    color: rgb(255, 255, 255);
+    padding: 8px;
+    
+    .arrow-tooltip {
+        position: absolute;
+        width: 36px;
+        height: 8px;
+        top: -8px;
+        left: 50%;
+        transform: translateX(-50%);
+        background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzYiIGhlaWdodD0iOCIgdmlld0JveD0iMCAwIDM2IDgiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik0wIDhoNi42ODZhOCA4IDAgMCAwIDUuNjU3LTIuMzQzbDQuOTUtNC45NWExIDEgMCAwIDEgMS40MTQgMGw0Ljk1IDQuOTVBOCA4IDAgMCAwIDI5LjMxNCA4SDM2IDB6IiBmaWxsPSIjNTQ1NDU0IiBmaWxsLW9wYWNpdHk9Ii45MiIvPjwvc3ZnPg==');
+    }
+}
+
+
