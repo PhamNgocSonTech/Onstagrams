@@ -1,20 +1,19 @@
 import classNames from "classnames/bind";
-import styles from "./VideoInfor.module.scss";
+import styles from "./PostInfor.module.scss";
+import { useState } from "react";
 import { motion } from "framer-motion";
 
-import FrameRecommendVideo from "../../components/common/FrameRecommendVideo";
 import Button from "../../components/common/Button";
-
-import music from "../../assets/image/sidebar/music.svg";
 import black_heart from "../../assets/image/content/black_heart.svg";
 import pink_heart from "../../assets/image/content/pink_heart.svg";
 import comment from "../../assets/image/content/comment.svg";
 import share from "../../assets/image/content/share.svg";
-import { useState } from "react";
+
+import FrameRecommendVideo from "../common/FrameRecommendVideo";
 
 const cn = classNames.bind(styles);
 
-function VideoInfor() {
+function PostInfor() {
     const [isUnderlineUsername, setIsUnderlineUsername] = useState(false);
     const [isLike, setIsLike] = useState(false);
     const [isFollow, setIsFollow] = useState(false);
@@ -47,7 +46,7 @@ function VideoInfor() {
             <img
                 className={cn("avatar")}
                 alt='avt'
-                src='https://p16-sign-va.tiktokcdn.com/tos-maliva-avt-0068/01d8d4475876db565c7990edf21443e8~c5_100x100.jpeg?x-expires=1666807200&x-signature=CRSAI21L0yFB6t8%2Foz59CZb6stI%3D'
+                src='https://p16-sign-sg.tiktokcdn.com/aweme/100x100/tos-alisg-avt-0068/27090e4b6826f4471c40afb66771d5ce.jpeg?x-expires=1666843200&x-signature=ogQ00wzSeEyfEvRat%2Fm99FoZGZ4%3D'
                 onMouseEnter={handleMouseHoverAvt}
                 onMouseLeave={handleMouseLeaveAvt}
             />
@@ -59,41 +58,30 @@ function VideoInfor() {
                             active: isUnderlineUsername,
                         })}
                     >
-                        thanlanoscarr
+                        alex_mine
                     </h3>
                     <h4
                         className={cn("name")}
                         onMouseEnter={handleMouseHoverAvt}
                         onMouseLeave={handleMouseLeaveAvt}
                     >
-                        𝓣𝓪̀𝓲❤️𝓦𝓲𝓷𝓽𝓮𝓪𝓶
+                        ❤️
                     </h4>
                 </div>
                 <div className={cn("video-des")}>
                     <span className={cn("cap")}>
-                        Huyền thoại vẫn luôn cháy như thế... {"  "}
+                        Bạn có đủ dũng cảm để tiếp tục tình yêu dù biết rằng sẽ
+                        không đem lại kết quả? 😂{" "}
                     </span>
-                    <Button className={cn("hashtag")}>#lyrics</Button>
-                    <Button className={cn("hashtag")}>#giacmocothat</Button>
-                    <Button className={cn("hashtag")}>#nhachaymoingay</Button>
+                    <Button className={cn("hashtag")}>#sad</Button>
                     <Button className={cn("hashtag")}>#tinhyeu</Button>
                     <Button className={cn("hashtag")}>#tamtrang</Button>
                     <Button className={cn("hashtag")}>#tinhyeu</Button>
-                    <Button className={cn("hashtag")}>
-                        #voiceeffectsforyou
-                    </Button>
                 </div>
-                <Button
-                    className={cn("hashtag", "music")}
-                    leftIcon={music}
-                >
-                    Timber LHT - 𝐿𝑒 𝐻𝑢𝑦𝑒𝑛 𝑇𝑟𝑎𝑛𝑔🐰
-                </Button>
                 <div className={cn("video-container")}>
-                    <video
+                    <img
                         className={cn("video")}
-                        controls
-                        src='https://v16-webapp.tiktok.com/b79ada0af0b8f72e253b485e512b974b/6357bd01/video/tos/alisg/tos-alisg-pve-0037/85b2ad386e334aec98aa276cac2c576e/?a=1988&ch=0&cr=0&dr=0&lr=tiktok&cd=0%7C0%7C1%7C0&cv=1&br=3070&bt=1535&cs=0&ds=3&ft=kLO5qy-gZmo0P3rTBBkVQtqKViHKJdmC0&mime_type=video_mp4&qs=0&rc=NmhkOmg0N2Y1ZGZnaThlNEBpM2h1N2k6Zmk6ZjMzODgzNEAxYzUvYGIuXjUxLWEuLzMvYSNzM2xlcjRnNGBgLS1kLy1zcw%3D%3D&l=2022102504391501024401221613257FEB&btag=80000'
+                        src='https://kenh14cdn.com/thumb_w/660/2020/6/23/a483bd33d4c46bf25bac64d11cdb04d8-159292559942978254085.jpg'
                     />
                     <div className={cn("actions")}>
                         <div className={cn("action")}>
@@ -153,4 +141,4 @@ function VideoInfor() {
     );
 }
 
-export default VideoInfor;
+export default PostInfor;

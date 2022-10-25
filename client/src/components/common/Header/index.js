@@ -163,7 +163,7 @@ function Header() {
               <div className={cn("send-icon")}>
                 <img src={message}></img>
                 <PopUpNotification className={cn("number-notifi")}>
-                  99+
+                  5
                 </PopUpNotification>
                 <div className={cn("tooltip-inbox")}>
                   <Tooltip>Inbox</Tooltip>
