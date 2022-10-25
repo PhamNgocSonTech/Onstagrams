@@ -4,6 +4,8 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 
 import Button from "../../components/common/Button";
+import Comment from "../Comment";
+
 import black_heart from "../../assets/image/content/black_heart.svg";
 import pink_heart from "../../assets/image/content/pink_heart.svg";
 import comment from "../../assets/image/content/comment.svg";
@@ -17,6 +19,7 @@ function PostInfor() {
     const [isUnderlineUsername, setIsUnderlineUsername] = useState(false);
     const [isLike, setIsLike] = useState(false);
     const [isFollow, setIsFollow] = useState(false);
+    const [isShowComment, setIsShowComment] = useState(false);
 
     const animations = {
         like: {
@@ -39,6 +42,10 @@ function PostInfor() {
 
     function handleChangeFollower() {
         setIsFollow(!isFollow);
+    }
+
+    function handleOpenCommentSection() {
+        setIsShowComment(true);
     }
 
     return (
@@ -99,7 +106,10 @@ function PostInfor() {
                             <span className={cn("act-text")}>130K</span>
                         </div>
                         <div className={cn("action")}>
-                            <div className={cn("act-btn")}>
+                            <div
+                                className={cn("act-btn")}
+                                onClick={handleOpenCommentSection}
+                            >
                                 <img
                                     alt='img'
                                     src={comment}
@@ -137,6 +147,8 @@ function PostInfor() {
                     <p className={cn("fl-text")}>Follow</p>
                 </Button>
             )}
+            {/* Comment Section */}
+            {isShowComment && <Comment setIsShowComment={setIsShowComment} />}
         </FrameRecommendVideo>
     );
 }

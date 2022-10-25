@@ -43,7 +43,7 @@
                 flex-direction: row;
                 margin-bottom: 15px;
 
-                img {
+                .owner-avatar {
                     width:50px;
                     height: 50px;
                     border-radius: 50%;
@@ -65,10 +65,13 @@
             margin-top: 10px;
             display: flex;
             flex-direction: row;
-            width: fit-content;
+            width: 100%;
+            justify-content: center;
+            padding-bottom: 15px;
     
             .action {
                 margin: 0 10px;
+
                 .act-btn, .act-text {
                     display: block;
                 }
@@ -85,6 +88,7 @@
     
                     &:hover {
                         background-color: rgba(22, 24, 35, .1);
+                        cursor: pointer;
                     }
                 }
     
@@ -94,6 +98,112 @@
                     font-weight: 800;
                     line-height: 17px;
                     text-align: center;
+                }
+            }
+        }
+
+        .comments {
+            border-top: 1px solid rgba(22, 24, 35, 0.2);
+            border-bottom: 1px solid rgba(22, 24, 35, 0.2);
+            background-color: rgb(248, 248, 248);
+            width: 100%;
+            padding: 20px 32px;
+            height: 378px;
+            overflow: scroll;
+            
+            .comment {
+                display: flex;
+                margin-bottom: 15px;
+
+                & > img {
+                    width:50px;
+                    height: 50px;
+                    border-radius: 50%;
+                }
+
+                .action-cmt {
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+
+                    .act-btn-cmt {
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                    }
+
+                    .act-text-cmt {
+                        opacity: 0.7;
+                        margin-top: 3px;
+                        font-size: 15px;
+                        text-align: center;
+                    }
+                }
+            }
+            .comment-content {
+                margin-left: 12px;
+                flex-grow: 1;
+                h4 {
+                    font-weight: 300;
+                    margin-top: -2px;
+                }
+
+                .cmt-footer {
+                    margin-top: 5px;
+
+                    .cmt-time {
+                        opacity: 0.7;
+                        font-size: 14px;
+                    }
+    
+                    .cmt-reply {
+                        font-size: 14px;
+                        opacity: 0.7;
+                        margin-left: 30px;
+                    }
+                }
+            }
+        }
+        .add-comment {
+
+            display: flex;
+            padding: 21px 30px;
+            margin: 0 30px;
+            width: 100%;
+
+
+            .input-field {
+                flex-grow: 1;
+                display: flex;
+                position: relative;
+
+                .emote-picker {
+                    position: absolute;
+                    bottom: 100%;
+                    right: 2%;
+                    z-index: 999;
+                }
+
+                & > input {
+                    background-color: rgb(241, 238, 238);
+                    height: 100%;
+                    padding: 10px;
+                    width: 90%;
+                    border-radius: 10px 0 0 10px;
+                }
+                & > img {
+                    background-color: rgb(241, 238, 238);
+                    width: 40px;
+                    border-left: 1px solid rgb(214, 204, 204);
+                    border-radius: 0 10px 10px 0;
+                    padding: 8px;
+
+                    &:hover {
+                        cursor: pointer;
+                    }
+                    &:active {
+                        background-color: rgba(68, 67, 68, 0.445);
+                    }
                 }
             }
         }

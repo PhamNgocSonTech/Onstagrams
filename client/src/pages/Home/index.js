@@ -17,7 +17,6 @@ function Home() {
             <VideoInfor />
             <VideoInfor />
             <PostInfor />
-            {/* <Comment /> */}
         </>
     );
 }
