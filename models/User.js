@@ -20,6 +20,14 @@ const UserSchema = new mongoose.Schema(
       required: true,
       min: 6,
     },
+    firstname: {
+      type: String,
+      required: true
+    },
+    lastname: {
+      type: String,
+      required: true
+    },
     profilePicture: {
       type: String,
       default: "",
@@ -27,6 +35,9 @@ const UserSchema = new mongoose.Schema(
     coverPicture: {
       type: String,
       default: "",
+    },
+    cloudinary_id: {
+      type: String,
     },
     followers: {
       type: Array,

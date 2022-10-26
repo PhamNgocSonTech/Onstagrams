@@ -1,10 +1,41 @@
 const router = require("express").Router();
 const User = require("../models/User");
 const bcrypt = require("bcrypt");
-
+const cloudinary = require("../utils/cloudinary");
+const upload = require("../utils/multer");
 
 router.get("/", (req, res) => {
   res.send("Welcome to User Route!");
+});
+
+router.post("/upload-avatar/:username", upload.single("image"), async (req, res) => {
+  try {
+    // Upload image to cloudinary
+    const result = await cloudinary.uploader.upload(req.file.path);
+
+    // Create new user
+    let user = new User({
+      username: req.params.username,
+      avatar: result.secure_url,
+      cloudinary_id: result.public_id,
+    });
+    // Save user
+    await user.save();
+    res.json(user);
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+// SEARCH USER
+router.get("/search/:username", async (req, res) => {
+  try {
+    const userGet = await User.find({username:req.params.username });
+    res.status(200).json(userGet);
+
+  } catch (err) {
+    return res.status(500).json(err);
+  }
 });
 
 //GET USER BY ID
@@ -28,7 +59,32 @@ router.get("/getListUsers/", async (req, res) => {
 });
 
 //UPDATE USER
-router.put("/update/:id", async (req, res) => {
+// router.put("/update/:id", async (req, res) => {
+//   if (req.body.userId === req.params.id || req.body.isAdmin) {
+//     if (req.body.password) {
+//       try {
+//         const salt = await bcrypt.genSalt(10);
+//         req.body.password = await bcrypt.hash(req.body.password, salt);
+//       } catch (err) {
+//         return res.status(500).json(err);
+//       }
+//     }
+//     try {
+//       const userUpdate = await User.findByIdAndUpdate(req.params.id, {
+//         $set: req.body,
+//       });
+//       //console.log(userUpdate)
+//       res.status(200).json("Update User Success");
+//     } catch (err) {
+//       return res.status(500).json(err);
+//     }
+//   } else {
+//     return res.status(403).json("You can update only your account");
+//   }
+// });
+
+//UPDATE USER
+router.put("/update/:id", upload.single("image"), async (req, res) => {
   if (req.body.userId === req.params.id || req.body.isAdmin) {
     if (req.body.password) {
       try {
@@ -39,8 +95,11 @@ router.put("/update/:id", async (req, res) => {
       }
     }
     try {
+      const result = await cloudinary.uploader.upload(req.file.path);
       const userUpdate = await User.findByIdAndUpdate(req.params.id, {
         $set: req.body,
+        profilePicture: result.secure_url,
+        cloudinary_id: result.public_id,
       });
       //console.log(userUpdate)
       res.status(200).json("Update User Success");

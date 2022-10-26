@@ -18,6 +18,8 @@ router.post("/register", async(req, res) => {
                 
                     //get data from body input
                     username:  req.body.username,
+                    firstname: req.body.firstname,
+                    lastname: req.body.lastname,
                     email: req.body.email,
                     password: hashedPassword
                 })

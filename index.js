@@ -20,8 +20,8 @@ mongoose.connect(
      else console.log("Connected to MongoDB");
     }
   );
-// mongoose.connect(process.env.MONGO_URL, ()=>{
 
+// mongoose.connect(process.env.MONGO_URL, ()=>{
 //     console.log("Connected to MongoDB");
 // })
 
@@ -44,11 +44,4 @@ app.use("/api/users", userRoute)
 app.use("/api/auth", authRoute)
 app.use("/api/post", postRoute)
 
-
-
-console.log("Server is running on port is:", port)
-
-
-app.listen(port, () => {
-
-})
+app.listen(port, () => console.log("Server is running on port is:", port))
