@@ -17,12 +17,17 @@
         left: 20px;
 
         &:hover {
+            background-color: rgb(105, 98, 98);
             cursor: pointer;
+        }
+
+        &:active {
+            background-color: rgb(131, 122, 122);
         }
     }
 
     .img-section {
-        background-color: rgb(88, 84, 84);
+        background-color: rgb(119, 116, 116);
         width: 50%;
         height: 100%;
         object-fit: contain;
@@ -105,7 +110,7 @@
         .comments {
             border-top: 1px solid rgba(22, 24, 35, 0.2);
             border-bottom: 1px solid rgba(22, 24, 35, 0.2);
-            background-color: rgb(248, 248, 248);
+            background-color: rgba(248, 248, 248, 0.562);
             width: 100%;
             padding: 20px 32px;
             height: 378px;
@@ -143,13 +148,21 @@
             .comment-content {
                 margin-left: 12px;
                 flex-grow: 1;
-                h4 {
-                    font-weight: 300;
-                    margin-top: -2px;
+
+                & > h4 {
+                    margin-top: 2px;
+                    font-family: 'Comfortaa', cursive;
+                    font-weight: 500;
+                    font-size: 13px;
+                }
+
+                & > h3 {
+                    font-size: 15px;
+                    font-weight: bolder;
                 }
 
                 .cmt-footer {
-                    margin-top: 5px;
+                    margin-top: 4px;
 
                     .cmt-time {
                         opacity: 0.7;
@@ -196,7 +209,7 @@
                     width: 40px;
                     border-left: 1px solid rgb(214, 204, 204);
                     border-radius: 0 10px 10px 0;
-                    padding: 8px;
+                    padding: 9px;
 
                     &:hover {
                         cursor: pointer;

@@ -39,6 +39,10 @@ function Comment({ setIsShowComment }) {
         setCmt(e.target.value);
     }
 
+    function handleToggleEmotePicker() {
+        setIsShowEmotePicker(!isShowEmotePicker);
+    }
+
     function handleShowEmotePicker() {
         setIsShowEmotePicker(true);
     }
@@ -294,7 +298,7 @@ function Comment({ setIsShowComment }) {
                                 onFocus={handleHideEmotePicker}
                             />
                             <img
-                                onClick={handleShowEmotePicker}
+                                onClick={handleToggleEmotePicker}
                                 src={smile}
                                 alt=''
                             />
