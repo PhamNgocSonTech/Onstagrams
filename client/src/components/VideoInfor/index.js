@@ -100,7 +100,7 @@ function VideoInfor() {
                     <video
                         className={cn("video")}
                         controls
-                        src='https://v16-webapp.tiktok.com/18e07abd5e3483dcf1122824d48c2251/63593fa0/video/tos/alisg/tos-alisg-pve-0037/24efa522e39b404ea52ddf6a454908b0/?a=1988&ch=0&cr=0&dr=0&lr=tiktok&cd=0%7C0%7C1%7C0&cv=1&br=1858&bt=929&cs=0&ds=3&ft=kLO5qy-gZmo0PvoNEBkVQNLxDiHKJdmC0&mime_type=video_mp4&qs=0&rc=ZDU3ZGc6Z2k2ZjM6aDc8NEBpMzttbDo6ZjU2ZjMzODgzNEBhM182YTIvXi8xNS82Xy8wYSNnNl9wcjRfcGpgLS1kLy1zcw%3D%3D&l=2022102608085601025105818224075046&btag=80000'
+                        src='https://v16-webapp.tiktok.com/f6893ffa9d54e4c02115ea7acd365121/635ad5a5/video/tos/useast2a/tos-useast2a-pve-0037-aiso/56ae13d4966b4b178a5593a2ad329ac8/?a=1988&ch=0&cr=0&dr=0&lr=tiktok&cd=0%7C0%7C1%7C0&cv=1&br=2132&bt=1066&cs=0&ds=3&ft=kLO5qy-gZmo0Pq~-EBkVQzF.DiHKJdmC0&mime_type=video_mp4&qs=0&rc=ODc4Nzw2ZTkzPDU6ODxlN0BpajNteGk6ZnA2ZzMzZjgzM0AtMGNiLzAtXzUxYy5gMWEvYSMuLm02cjRnajBgLS1kL2Nzcw%3D%3D&l=2022102713010401024407506025081EE3&btag=80000'
                     />
                     <div className={cn("actions")}>
                         <div className={cn("action")}>
