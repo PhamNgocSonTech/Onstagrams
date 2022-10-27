@@ -3,8 +3,12 @@ import styles from "./Modal.module.scss";
 
 const cn = classNames.bind(styles);
 
-function Modal({ children }) {
-    return <div className={cn("wrapper")}>{children}</div>;
+function Modal({ children, className }) {
+    return (
+        <div className={cn("wrapper", { [className]: className })}>
+            {children}
+        </div>
+    );
 }
 
 export default Modal;

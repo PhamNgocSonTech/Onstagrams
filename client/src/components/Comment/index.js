@@ -6,7 +6,7 @@ import EmojiPicker from "emoji-picker-react";
 
 import Modal from "../common/Modal";
 import Button from "../common/Button";
-import close from "../../assets/image/modal/close.svg";
+import close from "../../assets/image/modal/close-white.svg";
 import black_heart from "../../assets/image/content/black_heart.svg";
 import pink_heart from "../../assets/image/content/pink_heart.svg";
 import comment from "../../assets/image/content/comment.svg";

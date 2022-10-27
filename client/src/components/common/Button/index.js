@@ -9,6 +9,7 @@ function Button({
     href,
     children,
     className,
+    classNameImg,
     leftIcon,
     onClick,
     primary = false,
@@ -18,7 +19,7 @@ function Button({
     let Btn = "button";
 
     let attributes = {
-        ...other
+        ...other,
     };
 
     // Inner Link
@@ -39,11 +40,16 @@ function Button({
             className={cn("wrapper", {
                 primary,
                 outline,
-                [className]: className
+                [className]: className,
             })}
             onClick={onClick}
         >
-            {leftIcon && <img src={leftIcon} />}
+            {leftIcon && (
+                <img
+                    src={leftIcon}
+                    className={cn({ [classNameImg]: classNameImg })}
+                />
+            )}
             {children}
         </Btn>
     );
