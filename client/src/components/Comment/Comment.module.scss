@@ -65,6 +65,11 @@
                     }
                 }
             }
+
+            .cap {
+                font-family: 'Be Vietnam Pro', sans-serif;
+                font-size: 15px;
+            }
         }
 
         .actions {
@@ -146,20 +151,21 @@
                     }
                 }
             }
+
             .comment-content {
                 margin-left: 12px;
                 flex-grow: 1;
 
                 & > h4 {
                     margin-top: 2px;
-                    font-family: 'Comfortaa', cursive;
+                    font-family: 'Be Vietnam Pro', sans-serif;
                     font-weight: 500;
-                    font-size: 13px;
+                    font-size: 15px;
                 }
 
                 & > h3 {
+                    font-family: 'Readex Pro', sans-serif;
                     font-size: 15px;
-                    font-weight: bolder;
                 }
 
                 .cmt-footer {
