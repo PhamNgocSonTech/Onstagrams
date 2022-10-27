@@ -9,6 +9,14 @@ const UserSchema = new mongoose.Schema(
       max: 20,
       unique: true,
     },
+    fullname: {
+      type: String,
+      required: true
+    },
+    gender: {
+      type: String, 
+      default: 'Male'
+    },
     email: {
       type: String,
       required: true,
@@ -20,24 +28,13 @@ const UserSchema = new mongoose.Schema(
       required: true,
       min: 6,
     },
-    firstname: {
+    avatar: {
       type: String,
-      required: true
-    },
-    lastname: {
-      type: String,
-      required: true
-    },
-    profilePicture: {
-      type: String,
-      default: "",
-    },
-    coverPicture: {
-      type: String,
-      default: "",
+      default: 'https://res.cloudinary.com/doapkbncj/image/upload/v1666857358/onstagram_v2/avt/default-avatar_et9ey8.jpg',
     },
     cloudinary_id: {
       type: String,
+      default: 'default-avatar_et9ey8'
     },
     followers: {
       type: Array,
@@ -56,10 +53,6 @@ const UserSchema = new mongoose.Schema(
       max: 50,
     },
     city: {
-      type: String,
-      max: 50,
-    },
-    from: {
       type: String,
       max: 50,
     },

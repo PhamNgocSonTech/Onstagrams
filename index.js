@@ -10,7 +10,6 @@ const authRoute = require('./route/auth')
 const postRoute = require('./route/post')
 
 
-
 dotenv.config()
 const port = process.env.PORT
 
@@ -25,6 +24,7 @@ mongoose.connect(
 //     console.log("Connected to MongoDB");
 // })
 
+//middleware
 app.use(express.json())
 app.use(helmet())
 app.use(morgan("dev"))
@@ -44,4 +44,5 @@ app.use("/api/users", userRoute)
 app.use("/api/auth", authRoute)
 app.use("/api/post", postRoute)
 
-app.listen(port, () => console.log("Server is running on port is:", port))
+
+app.listen(port, () => console.log("Server is running on port is:", port)) 

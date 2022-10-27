@@ -8,24 +8,24 @@ router.get("/", (req, res) => {
   res.send("Welcome to User Route!");
 });
 
-router.post("/upload-avatar/:username", upload.single("image"), async (req, res) => {
-  try {
-    // Upload image to cloudinary
-    const result = await cloudinary.uploader.upload(req.file.path);
+// router.post("/upload-avatar/:username", upload.single("image"), async (req, res) => {
+//   try {
+//     // Upload image to cloudinary
+//     const result = await cloudinary.uploader.upload(req.file.path);
 
-    // Create new user
-    let user = new User({
-      username: req.params.username,
-      avatar: result.secure_url,
-      cloudinary_id: result.public_id,
-    });
-    // Save user
-    await user.save();
-    res.json(user);
-  } catch (err) {
-    console.log(err);
-  }
-});
+//     // Create new user
+//     let user = new User({
+//       username: req.params.username,
+//       avatar: result.secure_url,
+//       cloudinary_id: result.public_id,
+//     });
+//     // Save user
+//     await user.save();
+//     res.json(user);
+//   } catch (err) {
+//     console.log(err);
+//   }
+// });
 
 // SEARCH USER
 router.get("/search/:username", async (req, res) => {
@@ -58,8 +58,10 @@ router.get("/getListUsers/", async (req, res) => {
   }
 });
 
+
+
 //UPDATE USER
-// router.put("/update/:id", async (req, res) => {
+// router.put("/update/:id", upload.single("img"), async (req, res) => {
 //   if (req.body.userId === req.params.id || req.body.isAdmin) {
 //     if (req.body.password) {
 //       try {
@@ -70,10 +72,10 @@ router.get("/getListUsers/", async (req, res) => {
 //       }
 //     }
 //     try {
-//       const userUpdate = await User.findByIdAndUpdate(req.params.id, {
+//         const userUpdate = await User.findByIdAndUpdate(req.params.id, {
 //         $set: req.body,
 //       });
-//       //console.log(userUpdate)
+//       console.log(userUpdate)
 //       res.status(200).json("Update User Success");
 //     } catch (err) {
 //       return res.status(500).json(err);
@@ -83,31 +85,26 @@ router.get("/getListUsers/", async (req, res) => {
 //   }
 // });
 
-//UPDATE USER
-router.put("/update/:id", upload.single("image"), async (req, res) => {
-  if (req.body.userId === req.params.id || req.body.isAdmin) {
-    if (req.body.password) {
-      try {
-        const salt = await bcrypt.genSalt(10);
-        req.body.password = await bcrypt.hash(req.body.password, salt);
-      } catch (err) {
-        return res.status(500).json(err);
-      }
+// UPDATE USER WITH IMG CLOUDINARY
+router.put("/update-cloudinary/:id", upload.single("img"), async (req, res) => {
+  try {
+    let user = await User.findById(req.params.id);
+    // Upload image to cloudinary
+    let result;
+    if (req.file) {
+      result = await cloudinary.uploader.upload(req.file.path, {upload_preset: 'avatar'});
+      // Delete image from cloudinary
+      await cloudinary.uploader.destroy(user.cloudinary_id);
     }
-    try {
-      const result = await cloudinary.uploader.upload(req.file.path);
-      const userUpdate = await User.findByIdAndUpdate(req.params.id, {
-        $set: req.body,
-        profilePicture: result.secure_url,
-        cloudinary_id: result.public_id,
-      });
-      //console.log(userUpdate)
-      res.status(200).json("Update User Success");
-    } catch (err) {
-      return res.status(500).json(err);
-    }
-  } else {
-    return res.status(403).json("You can update only your account");
+    const data = {
+      $set: req.body,
+      avatar: result?.secure_url || user.avatar,
+      cloudinary_id: result?.public_id || user.cloudinary_id,
+    };
+    user = await User.findByIdAndUpdate(req.params.id, data, { new: true });
+    res.json(user);
+  } catch (err) {
+    console.log(err);
   }
 });
 
@@ -115,7 +112,9 @@ router.put("/update/:id", upload.single("image"), async (req, res) => {
 router.delete("/delete/:id", async (req, res) => {
   if (req.body.userId === req.params.id || req.body.isAdmin) {
     try {
-      const userDelete = await User.findByIdAndDelete({ _id: req.params.id });
+      const userDelete = await User.findById(req.params.id);
+      await cloudinary.uploader.destroy(userDelete.cloudinary_id);
+      await userDelete.remove();
       res.status(200).json("Delete User Success");
     } catch (err) {
       return res.status(500).json(err);
@@ -123,6 +122,17 @@ router.delete("/delete/:id", async (req, res) => {
   } else {
     return res.status(403).json("Can't Delete");
   }
+});
+
+
+//DELETE ALL USER
+router.delete("/deleteAll", async (req, res) => {
+    try {
+      const userDelete = await User.deleteMany();
+      res.status(200).json("Delete User Success");
+    } catch (err) {
+      return res.status(500).json(err);
+    }
 });
 
 //FOLLOWER USER
