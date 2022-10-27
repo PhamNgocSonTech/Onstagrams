@@ -5,12 +5,10 @@ import Modal from "../../Modal";
 
 const cn = classNames.bind(styles);
 
-function Modal_Center({ children, className }) {
+function Modal_Center({ children, className, classNameWrapper }) {
     return (
-        <Modal className={cn("wrapper")}>
-            <div className={cn("modal-form", { [className]: className })}>
-                {children}
-            </div>
+        <Modal className={cn("wrapper", { [classNameWrapper]: classNameWrapper })}>
+            <div className={cn("modal-form", { [className]: className })}>{children}</div>
         </Modal>
     );
 }

@@ -11,6 +11,9 @@ import pink_heart from "../../assets/image/content/pink_heart.svg";
 import comment from "../../assets/image/content/comment.svg";
 import share from "../../assets/image/content/share.svg";
 
+import { useSelector } from "react-redux";
+import Login from "../Login";
+
 import FrameRecommendVideo from "../common/FrameRecommendVideo";
 
 const cn = classNames.bind(styles);
@@ -19,7 +22,9 @@ function PostInfor() {
     const [isUnderlineUsername, setIsUnderlineUsername] = useState(false);
     const [isLike, setIsLike] = useState(false);
     const [isFollow, setIsFollow] = useState(false);
-    const [isShowComment, setIsShowComment] = useState(false);
+    const [isShowPanel, setIsShowPanel] = useState(false);
+
+    const didLogin = useSelector((state) => state.loginState_reducer.isLogIn);
 
     const animations = {
         like: {
@@ -45,7 +50,7 @@ function PostInfor() {
     }
 
     function handleOpenCommentSection() {
-        setIsShowComment(true);
+        setIsShowPanel(true);
     }
 
     return (
@@ -77,8 +82,7 @@ function PostInfor() {
                 </div>
                 <div className={cn("video-des")}>
                     <span className={cn("cap")}>
-                        Bạn có đủ dũng cảm để tiếp tục tình yêu dù biết rằng sẽ
-                        không đem lại kết quả? 😂{" "}
+                        Bạn có đủ dũng cảm để tiếp tục tình yêu dù biết rằng sẽ không đem lại kết quả? 😂{" "}
                     </span>
                     <Button className={cn("hashtag")}>#sad</Button>
                     <Button className={cn("hashtag")}>#tinhyeu</Button>
@@ -147,8 +151,14 @@ function PostInfor() {
                     <p className={cn("fl-text")}>Follow</p>
                 </Button>
             )}
+
             {/* Comment Section */}
-            {isShowComment && <Comment setIsShowComment={setIsShowComment} />}
+            {isShowPanel &&
+                (didLogin ? (
+                    <Comment setIsShowComment={setIsShowPanel} />
+                ) : (
+                    <Login handleClosePanel={setIsShowPanel} />
+                ))}
         </FrameRecommendVideo>
     );
 }

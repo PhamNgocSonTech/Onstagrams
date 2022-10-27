@@ -1,0 +1,149 @@
+.overal-modal {
+    background-color: transparent;
+}
+
+.register-modal {
+    padding: 48px 0px 0px;
+
+    .header-modal {
+        .close-btn {
+            position: absolute;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: rgb(245, 245, 245);
+            width: 40px;
+            height: 40px;
+            padding: 10px;
+            border-radius: 50%;
+            right: 20px;
+            top: 20px;
+    
+            &:hover {
+                cursor: pointer;
+            }
+    
+            &:active {
+                background-color: rgb(231, 224, 224);
+            }
+        }
+
+        .back-btn {
+            position: absolute;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 40px;
+            height: 40px;
+            padding: 10px;
+            left: 20px;
+            top: 20px;
+            border-radius: 50%;
+
+            &:hover {
+                cursor: pointer;
+            }
+        }
+    }
+
+    .body-modal {
+        .text {
+            margin: 20px 0 20px 0;
+            text-align: center;
+            color: var(--primary-color);
+            font-family: 'Nunito', sans-serif;
+            word-spacing: 2px;
+        }
+
+        .register-section {
+            padding-right: 5px;
+            width: 375px;
+            padding-bottom: 20px;
+            margin: 0 auto;
+            overflow: auto;
+            max-height: 330px;
+            border-bottom: 1px solid rgb(190, 189, 189);
+
+            &::-webkit-scrollbar {
+                border-radius: 30px;
+                width: 4px;
+            }
+
+            &::-webkit-scrollbar-thumb {
+                border-radius: 30px;
+                background-color: rgba(0, 0, 0, .15);
+            }
+            &::-webkit-scrollbar-track {
+                border-radius: 30px;
+                background-color: rgba(0, 0, 0, 0);
+            }
+
+            .input-control {
+                width: 100%;
+                border-radius: 2px;
+                background-color: rgba(22, 24, 35, 0.06);
+                border: 1px solid rgba(22, 24, 35, 0.12);
+                padding-inline-start: 12px;
+                color: rgb(22, 24, 35);
+                line-height: 100%;
+                outline: none;
+                font-size: 16px;
+                height: 44px;
+                caret-color: rgb(254, 44, 85);
+                padding-inline-end: unset;
+                margin-bottom: 15px;
+                padding-right: 10px;
+            }
+
+            .gender-picker {
+                display: flex;
+                justify-content: space-between;
+                margin-bottom: 15px;
+
+                .gender-choose {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+
+                    .gender-label {
+                        margin-right: 5px;
+
+                        &:hover {
+                            cursor: pointer;
+                        }
+                    }
+                }
+            }
+
+            .submit {
+                width: 100%;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+        }
+    }
+
+    .footer-modal {
+        .login-recommend {
+            margin-top: 20px;
+
+            & > h3 {
+                font-weight: 300;
+                font-size: 18px;
+                text-align: center;
+            }
+            .login-btn {
+                margin-left: 10px;
+                font-weight: 600;
+                color: var(--primary-color);
+
+                &:hover {
+                    cursor: pointer;
+                    color: rgb(255, 0, 51);
+                }
+            }
+        }
+    }
+
+}

@@ -1,6 +1,8 @@
 import classNames from "classnames/bind";
 import styles from "./VideoInfor.module.scss";
 import { motion } from "framer-motion";
+import { useState } from "react";
+import { useSelector } from "react-redux";
 
 import FrameRecommendVideo from "../../components/common/FrameRecommendVideo";
 import Button from "../../components/common/Button";
@@ -10,7 +12,9 @@ import black_heart from "../../assets/image/content/black_heart.svg";
 import pink_heart from "../../assets/image/content/pink_heart.svg";
 import comment from "../../assets/image/content/comment.svg";
 import share from "../../assets/image/content/share.svg";
-import { useState } from "react";
+
+import Login from "../Login";
+import Comment from "../Comment";
 
 const cn = classNames.bind(styles);
 
@@ -18,6 +22,9 @@ function VideoInfor() {
     const [isUnderlineUsername, setIsUnderlineUsername] = useState(false);
     const [isLike, setIsLike] = useState(false);
     const [isFollow, setIsFollow] = useState(false);
+    const [isShowPanel, setIsShowPanel] = useState(false);
+
+    const didLogin = useSelector((state) => state.loginState_reducer.isLogIn);
 
     const animations = {
         like: {
@@ -40,6 +47,10 @@ function VideoInfor() {
 
     function handleChangeFollower() {
         setIsFollow(!isFollow);
+    }
+
+    function handleOpenCommentSection() {
+        setIsShowPanel(true);
     }
 
     return (
@@ -70,18 +81,14 @@ function VideoInfor() {
                     </h4>
                 </div>
                 <div className={cn("video-des")}>
-                    <span className={cn("cap")}>
-                        Huyền thoại vẫn luôn cháy như thế... {"  "}
-                    </span>
+                    <span className={cn("cap")}>Huyền thoại vẫn luôn cháy như thế... {"  "}</span>
                     <Button className={cn("hashtag")}>#lyrics</Button>
                     <Button className={cn("hashtag")}>#giacmocothat</Button>
                     <Button className={cn("hashtag")}>#nhachaymoingay</Button>
                     <Button className={cn("hashtag")}>#tinhyeu</Button>
                     <Button className={cn("hashtag")}>#tamtrang</Button>
                     <Button className={cn("hashtag")}>#tinhyeu</Button>
-                    <Button className={cn("hashtag")}>
-                        #voiceeffectsforyou
-                    </Button>
+                    <Button className={cn("hashtag")}>#voiceeffectsforyou</Button>
                 </div>
                 <Button
                     className={cn("hashtag", "music")}
@@ -111,7 +118,10 @@ function VideoInfor() {
                             <span className={cn("act-text")}>130K</span>
                         </div>
                         <div className={cn("action")}>
-                            <div className={cn("act-btn")}>
+                            <div
+                                className={cn("act-btn")}
+                                onClick={handleOpenCommentSection}
+                            >
                                 <img
                                     alt='img'
                                     src={comment}
@@ -149,6 +159,14 @@ function VideoInfor() {
                     <p className={cn("fl-text")}>Follow</p>
                 </Button>
             )}
+
+            {/* Comment Section */}
+            {isShowPanel &&
+                (didLogin ? (
+                    <Comment setIsShowComment={setIsShowPanel} />
+                ) : (
+                    <Login handleClosePanel={setIsShowPanel} />
+                ))}
         </FrameRecommendVideo>
     );
 }
