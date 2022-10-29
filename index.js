@@ -4,15 +4,19 @@ const mongoose = require('mongoose')
 const morgan = require('morgan')
 const helmet = require('helmet')
 const dotenv = require('dotenv')
-var bodyParser = require('body-parser')
+const bodyParser = require('body-parser')
+// const cookieSession = require('cookie-session')
+const passport = require('passport')
+// const cors = require('cors')
 const userRoute = require('./route/users')
 const authRoute = require('./route/auth')
 const postRoute = require('./route/post')
 
-
+// ENV Config
 dotenv.config()
-const port = process.env.PORT
+const port = process.env.PORT || 8080
 
+//MongoDB Connect
 mongoose.connect(
     process.env.MONGO_URL, (err) => {
      if(err) console.log(err) 
@@ -24,25 +28,41 @@ mongoose.connect(
 //     console.log("Connected to MongoDB");
 // })
 
-//middleware
+//MIDDLEWARE
 app.use(express.json())
 app.use(helmet())
 app.use(morgan("dev"))
 app.use(bodyParser.json())
+// app.use(passport.initialize());
+// app.use(passport.session());
 
 
-//route
-app.get("/", (req, res) => {
-    res.send("Welcome to Home Page")
-})
-
-// app.get("/users", (req, res) => {
-//     res.send("User")
-// })
-
+//ROUTE
 app.use("/api/users", userRoute)
 app.use("/api/auth", authRoute)
 app.use("/api/post", postRoute)
 
+
+// COOKIES SESSION
+
+// app.use(cookieSession({
+//   name: 'session',
+//   keys: 'ogdev',
+//   // Cookie Options
+//   maxAge: 24 * 60 * 60 * 1000 // 24 hours
+// }))
+
+
+// app.use(cors({
+//     origin: 'http://localhost:3000',
+//     methods: 'GET, POST, PUT, DELETE',
+//     credentials: true
+// }))
+
+
+// app.get("/", (req, res) => {
+//       res.send("Welcome to Home Page")
+//   })
+    
 
 app.listen(port, () => console.log("Server is running on port is:", port)) 

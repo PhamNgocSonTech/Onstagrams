@@ -9,10 +9,14 @@ const User = require('../models/User')
 
 // ********************************************//
 //CREATE POST
-    router.post("/", async(req, res) =>{
-    const newUser = await new Post(req.body)
+router.post("/", async(req, res) =>{
     try {
-        const savePost = await newUser.save()
+        const {desc, img} = req.body
+        const newPost = await new Post({
+            desc, img,
+            user: req.user._id
+        })
+        const savePost = await newPost.save()
         res.status(200).json(savePost)    
     }catch(err){
         res.status(500).json(err)    
@@ -122,4 +126,14 @@ router.delete("/delete/:id", async(req, res) =>{
             return res.status(500).json(err)
         }
     })
+
+//DELETE ALL POSTS
+router.delete("/deleteAll", async (req, res) => {
+    try {
+      const userDelete = await Post.deleteMany();
+      res.status(200).json("Delete Posts Success");
+    } catch (err) {
+      return res.status(500).json(err);
+    }
+});
 module.exports = router

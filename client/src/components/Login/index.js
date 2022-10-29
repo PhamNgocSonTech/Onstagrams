@@ -32,6 +32,12 @@ function Login({ handleClosePanel }) {
         setIsOpenPersonalLogInForm(true);
     }
 
+    const googleHandle = () => {
+        window.open('https://localhost:5000/api/auth/login-google', '_self')
+    }
+
+
+
     return (
         <ParentContext.Provider
             value={{
@@ -68,6 +74,7 @@ function Login({ handleClosePanel }) {
                             className={cn("btn-login")}
                             classNameImg={cn("img-login")}
                             leftIcon={google}
+                            onClick={googleHandle}
                             outline
                         >
                             Login with Google

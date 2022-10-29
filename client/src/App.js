@@ -2,6 +2,7 @@ import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import DefaultLayout from "./Default/Layout/DefaultLayout";
 import { pubRoutes } from "./Routes/PublicRoutes";
+import Login from "./components/Login/index"
 function App() {
   return (
     <BrowserRouter>
