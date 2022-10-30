@@ -151,7 +151,7 @@ function Header() {
                         outline
                         className={cn("size-upload-btn")}
                         leftIcon={plus}
-                        to='/'
+                        to='/upload'
                     >
                         Upload
                     </Button>
@@ -204,7 +204,6 @@ function Header() {
                             <Button
                                 onClick={handleClickLoginButton}
                                 primary
-                                to='/'
                             >
                                 Log in
                             </Button>

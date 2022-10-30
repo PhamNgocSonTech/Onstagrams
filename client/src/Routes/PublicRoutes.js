@@ -7,20 +7,20 @@ import Upload from "../pages/Upload";
 export const pubRoutes = [
     {
         path: "/",
-        element: Home
+        element: Home,
     },
     {
         path: "/following",
-        element: Follow
+        element: Follow,
     },
     {
         path: "/feedback",
         element: Feedback,
-        layout: OnlyHeader
+        layout: OnlyHeader,
     },
     {
         path: "/upload",
         element: Upload,
-        layout: null
-    }
+        layout: OnlyHeader,
+    },
 ];

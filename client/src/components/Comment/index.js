@@ -61,6 +61,7 @@ function Comment({ setIsShowComment }) {
         },
         dislike: {},
     };
+
     useEffect(() => {
         if (isShowEmotePicker) {
             const handleClickOutside = (event) => {
@@ -110,9 +111,7 @@ function Comment({ setIsShowComment }) {
                                     className={cn("following")}
                                     outline
                                 >
-                                    <p className={cn("fling-text")}>
-                                        Following
-                                    </p>
+                                    <p className={cn("fling-text")}>Following</p>
                                 </Button>
                             ) : (
                                 <Button
@@ -126,8 +125,7 @@ function Comment({ setIsShowComment }) {
                         </div>
 
                         <p className={cn("cap")}>
-                            Bạn có đủ dũng cảm để tiếp tục tình yêu dù biết rằng
-                            sẽ không đem lại kết quả? 😂
+                            Bạn có đủ dũng cảm để tiếp tục tình yêu dù biết rằng sẽ không đem lại kết quả? 😂
                         </p>
                     </div>
 
@@ -176,12 +174,8 @@ function Comment({ setIsShowComment }) {
                                 <h3>Đẹp trai nhưng ngu vãi lồn🍀</h3>
                                 <h4>Đúng vậy {":(("}</h4>
                                 <div className={cn("cmt-footer")}>
-                                    <span className={cn("cmt-time")}>
-                                        4d ago
-                                    </span>
-                                    <span className={cn("cmt-reply")}>
-                                        Reply
-                                    </span>
+                                    <span className={cn("cmt-time")}>4d ago</span>
+                                    <span className={cn("cmt-reply")}>Reply</span>
                                 </div>
                             </div>
                             <div className={cn("action-cmt")}>
@@ -203,12 +197,8 @@ function Comment({ setIsShowComment }) {
                                 <h3>Sói Ngây Ngô</h3>
                                 <h4>Chẳng có thứ gì tồn tại mãi mãi ^^</h4>
                                 <div className={cn("cmt-footer")}>
-                                    <span className={cn("cmt-time")}>
-                                        4d ago
-                                    </span>
-                                    <span className={cn("cmt-reply")}>
-                                        Reply
-                                    </span>
+                                    <span className={cn("cmt-time")}>4d ago</span>
+                                    <span className={cn("cmt-reply")}>Reply</span>
                                 </div>
                             </div>
                             <div className={cn("action-cmt")}>
@@ -230,12 +220,8 @@ function Comment({ setIsShowComment }) {
                                 <h3>LpVy2909</h3>
                                 <h4>Chấp nhận thôi -.-</h4>
                                 <div className={cn("cmt-footer")}>
-                                    <span className={cn("cmt-time")}>
-                                        4d ago
-                                    </span>
-                                    <span className={cn("cmt-reply")}>
-                                        Reply
-                                    </span>
+                                    <span className={cn("cmt-time")}>4d ago</span>
+                                    <span className={cn("cmt-reply")}>Reply</span>
                                 </div>
                             </div>
                             <div className={cn("action-cmt")}>
@@ -257,12 +243,8 @@ function Comment({ setIsShowComment }) {
                                 <h3>vợ Lee Jong Suk</h3>
                                 <h4>Cay đắng</h4>
                                 <div className={cn("cmt-footer")}>
-                                    <span className={cn("cmt-time")}>
-                                        4d ago
-                                    </span>
-                                    <span className={cn("cmt-reply")}>
-                                        Reply
-                                    </span>
+                                    <span className={cn("cmt-time")}>4d ago</span>
+                                    <span className={cn("cmt-reply")}>Reply</span>
                                 </div>
                             </div>
                             <div className={cn("action-cmt")}>
