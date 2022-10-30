@@ -10,8 +10,7 @@ import music from "../assets/image/sidebar/music.svg";
 
 import { Follow, Live, Home } from "../assets/image/sidebar/SideBarIcon";
 
-export const END_POINT_API =
-    "https://630b16fbed18e825164db3b3.mockapi.io/api/tiktok";
+export const END_POINT_API = "https://630b16fbed18e825164db3b3.mockapi.io/api/tiktok";
 
 export const MENU_SETTING = [
     {
@@ -23,108 +22,108 @@ export const MENU_SETTING = [
                 {
                     option: "English",
                     to: "/",
-                    href: ""
+                    href: "",
                 },
                 {
                     option: "العربية",
                     to: "/",
-                    href: ""
+                    href: "",
                 },
                 {
                     option: "বাঙ্গালি (ভারত)",
                     to: "/",
-                    href: ""
+                    href: "",
                 },
                 {
                     option: "Cebuano (Pilipinas)",
                     to: "/",
-                    href: ""
+                    href: "",
                 },
                 {
                     option: "Čeština (Česká republika)",
                     to: "/",
-                    href: ""
+                    href: "",
                 },
                 {
                     option: "Deutsch",
                     to: "/",
-                    href: ""
+                    href: "",
                 },
                 {
                     option: "Ελληνικά (Ελλάδα)",
                     to: "/",
-                    href: ""
+                    href: "",
                 },
                 {
                     option: "Suomi (Suomi)",
                     to: "/",
-                    href: ""
+                    href: "",
                 },
                 {
                     option: "Français",
                     to: "/",
-                    href: ""
+                    href: "",
                 },
                 {
                     option: "Suomi (Suomi)",
                     to: "/",
-                    href: ""
+                    href: "",
                 },
                 {
                     option: "Filipino (Pilipinas)",
                     to: "/",
-                    href: ""
+                    href: "",
                 },
                 {
                     option: "עברית (ישראל)",
                     to: "/",
-                    href: ""
+                    href: "",
                 },
                 {
                     option: "हिंदी",
                     to: "/",
-                    href: ""
+                    href: "",
                 },
                 {
                     option: "Magyar (Magyarország)",
                     to: "/",
-                    href: ""
+                    href: "",
                 },
                 {
                     option: "Bahasa Indonesia (Indonesia)",
                     to: "/",
-                    href: ""
+                    href: "",
                 },
                 {
                     option: "Italiano (Italia)",
                     to: "/",
-                    href: ""
+                    href: "",
                 },
                 {
                     option: "日本語（日本）",
                     to: "/",
-                    href: ""
+                    href: "",
                 },
                 {
                     option: "မြန်မာ (မြန်မာ)",
                     to: "/",
-                    href: ""
-                }
-            ]
-        }
+                    href: "",
+                },
+            ],
+        },
     },
     {
         option: "Feedback and help",
         href: "",
         icon: question,
-        to: "/feedback"
+        to: "/feedback",
     },
     {
         option: "Keyboard shortcuts",
         href: "",
         icon: keyboard,
-        to: "/"
-    }
+        to: "/",
+    },
 ];
 
 export const MENU_SETTING_USER = [
@@ -132,78 +131,78 @@ export const MENU_SETTING_USER = [
         option: "View Profile",
         href: "",
         icon: profile,
-        to: "/"
+        to: "/profile",
     },
     {
         option: "Get coins",
         href: "",
         icon: coin,
-        to: "/"
+        to: "/",
     },
     {
         option: "Settings",
         href: "",
         icon: setting,
-        to: "/"
-    }
+        to: "/",
+    },
 ];
 
 export const MAIN_NAV_SIDEBAR = [
     {
         title: "For You",
-        icon: Home
+        icon: Home,
     },
     {
         title: "Following",
-        icon: Follow
+        icon: Follow,
     },
-    {
-        title: "LIVE",
-        icon: Live
-    }
+    // {
+    //     title: "LIVE",
+    //     icon: Live
+    // }
 ];
 
 export const DICOVER_SECTION = [
     {
         title: "suthatla",
-        icon: difference
+        icon: difference,
     },
     {
         title: "mackedoi",
-        icon: difference
+        icon: difference,
     },
     {
         title: "sansangthaydoi",
-        icon: difference
+        icon: difference,
     },
     {
         title: "Yêu Đơn Phương Là Gì (MEE Remix) - Mee Media & h0n",
-        icon: music
+        icon: music,
     },
     {
         title: "Nghe lời mẹ ru - NSND Bạch Tuyết & Hứa Kim Tuyền",
-        icon: music
+        icon: music,
     },
     {
         title: "Thiên Thần Tình Yêu - RICKY STAR",
-        icon: music
+        icon: music,
     },
     {
         title: "7749hieuung",
-        icon: difference
+        icon: difference,
     },
     {
         title: "genzlife",
-        icon: difference
+        icon: difference,
     },
     {
         title: "Tình Đã Đầy Một Tim - Huyền Tâm Môn",
-        icon: music
+        icon: music,
     },
     {
         title: "Thằng Hầu (Thái Hoàng Remix) [Short Version] - Dunghoangpham",
-        icon: music
-    }
+        icon: music,
+    },
 ];
 
 export const FOOTER = [
@@ -211,93 +210,93 @@ export const FOOTER = [
         {
             title: "About",
             href: "",
-            to: ""
+            to: "",
         },
         {
             title: "Tiktok Browse",
             href: "",
-            to: ""
+            to: "",
         },
         {
             title: "Newsroom",
             href: "",
-            to: ""
+            to: "",
         },
         {
             title: "Contact",
             href: "",
-            to: ""
+            to: "",
         },
         {
             title: "Careers",
             href: "",
-            to: ""
+            to: "",
         },
         {
             title: "ByteDance",
             href: "",
-            to: ""
-        }
+            to: "",
+        },
     ],
     [
         {
             title: "TikTok for Good",
             href: "",
-            to: ""
+            to: "",
         },
         {
             title: "Advertise",
             href: "",
-            to: ""
+            to: "",
         },
         {
             title: "Developers",
             href: "",
-            to: ""
+            to: "",
         },
         {
             title: "Transparency",
             href: "",
-            to: ""
+            to: "",
         },
         {
             title: "TikTok Rewards",
             href: "",
-            to: ""
-        }
+            to: "",
+        },
     ],
     [
         {
             title: "Help",
             href: "",
-            to: ""
+            to: "",
         },
         {
             title: "Safety",
             href: "",
-            to: ""
+            to: "",
         },
         {
             title: "Terms",
             href: "",
-            to: ""
+            to: "",
         },
         {
             title: "Privacy",
             href: "",
-            to: ""
+            to: "",
         },
         {
             title: "Creator Portal",
             href: "",
-            to: ""
+            to: "",
         },
         {
             title: "Community Guidelines",
             href: "",
-            to: ""
-        }
-    ]
+            to: "",
+        },
+    ],
 ];
 
 export const convert_milions = (number) => {

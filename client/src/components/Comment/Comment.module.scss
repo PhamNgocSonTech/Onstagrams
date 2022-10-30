@@ -29,7 +29,7 @@
 
     .img-section {
         background-color: rgb(119, 116, 116);
-        width: 50%;
+        width: 60%;
         height: 100%;
         object-fit: contain;
     }
@@ -44,6 +44,7 @@
         border-bottom: 1px solid black;
 
         .owner-infor {
+            padding: 0 20px;
             .owner {
                 display: flex;
                 flex-direction: row;
@@ -116,7 +117,7 @@
         .comments {
             border-top: 1px solid rgba(22, 24, 35, 0.2);
             border-bottom: 1px solid rgba(22, 24, 35, 0.2);
-            background-color: rgba(248, 248, 248, 0.562);
+            background-color: rgb(255, 255, 255);
             width: 100%;
             padding: 20px 32px;
             height: 378px;
@@ -208,7 +209,7 @@
                     background-color: rgb(241, 238, 238);
                     height: 100%;
                     padding: 10px;
-                    width: 90%;
+                    width: 88%;
                     border-radius: 10px 0 0 10px;
                 }
                 & > img {

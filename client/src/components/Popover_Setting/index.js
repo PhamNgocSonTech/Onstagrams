@@ -30,7 +30,10 @@ function Popover_Setting({ menu, logIn = false, onHandleLogOut }) {
 
     return (
         <div className={cn("wrapper")}>
-            <img src={white_up_arrow} className={cn("arrow-popover")} />
+            <img
+                src={white_up_arrow}
+                className={cn("arrow-popover")}
+            />
             <Popover className={cn("pop-item")}>
                 {StandIn.length > 1 && (
                     // eslint-disable-next-line react/jsx-pascal-case
@@ -45,7 +48,7 @@ function Popover_Setting({ menu, logIn = false, onHandleLogOut }) {
                         <Button
                             key={index}
                             className={cn("but-item", {
-                                logout: item.divideBar
+                                logout: item.divideBar,
                             })}
                             leftIcon={item.icon}
                             to={item.to}
@@ -62,6 +65,7 @@ function Popover_Setting({ menu, logIn = false, onHandleLogOut }) {
                         className={cn("but-item", "logout")}
                         leftIcon={logout}
                         onClick={onHandleLogOut}
+                        to='/'
                     >
                         Log out
                     </Button>

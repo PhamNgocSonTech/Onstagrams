@@ -30,6 +30,10 @@
     &:hover {
         background: linear-gradient(0deg, rgba(0, 0, 0, 0.06), rgba(0, 0, 0, 0.06)),#FE2C55;
     }
+
+    &:active {
+        background: linear-gradient(0deg, rgba(0, 0, 0, 0.137), rgba(0, 0, 0, 0.151)),#FE2C55;
+    }
 }
 
 .outline {
@@ -38,5 +42,10 @@
 
     &:hover {
         background-color: rgba(22, 24, 35, 0.03);
+    }
+
+    &:active {
+        background-color: rgba(22, 24, 35, 0.068);
+
     }
 }

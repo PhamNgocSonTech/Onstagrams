@@ -88,6 +88,12 @@ function Header() {
         clearTimeout(id.current);
     };
 
+    const handleCheckAndShowLogIn = () => {
+        if (!didLogin) {
+            setIsShowLogInPanel(true);
+        }
+    };
+
     useEffect(() => {
         if (lastText) {
             getUsers("", {
@@ -104,10 +110,12 @@ function Header() {
     return (
         <header className={cn("header")}>
             <div className={cn("content")}>
-                <img
-                    src={logo}
-                    alt='Tiktok'
-                />
+                <Button to='/'>
+                    <img
+                        src={logo}
+                        alt='Tiktok'
+                    />
+                </Button>
                 <div className={cn("search")}>
                     <input
                         ref={input}
@@ -150,8 +158,9 @@ function Header() {
                     <Button
                         outline
                         className={cn("size-upload-btn")}
+                        onClick={handleCheckAndShowLogIn}
                         leftIcon={plus}
-                        to='/upload'
+                        to={didLogin && "/upload"}
                     >
                         Upload
                     </Button>

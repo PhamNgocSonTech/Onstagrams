@@ -16,7 +16,7 @@ import { getUsers } from "../../../utils/HttpRequest/user_request";
 const cn = classNames.bind(styles);
 export const TopPosition = createContext();
 
-function Sidebar() {
+function Sidebar({ className, isShowPopUp = true }) {
     const [SuggestdAccounts, setSuggestdAccounts] = useState([]);
     const [FollowingAccounts, setFollowingAccounts] = useState([]);
     let idLeave = useRef();
@@ -24,7 +24,7 @@ function Sidebar() {
 
     const [Profile, setProfile] = useState({
         index: -1,
-        user: null
+        user: null,
     });
 
     const handleScrollSideBar = (e) => {
@@ -36,7 +36,7 @@ function Sidebar() {
         idHover.current = setTimeout(() => {
             setProfile({
                 index,
-                user
+                user,
             });
         }, 1000);
     };
@@ -48,7 +48,7 @@ function Sidebar() {
             idLeave.current = setTimeout(() => {
                 setProfile({
                     index: -1,
-                    user: null
+                    user: null,
                 });
             }, 1000);
         }
@@ -61,7 +61,7 @@ function Sidebar() {
     const handleProfileLeave = () => {
         setProfile({
             index: -1,
-            user: null
+            user: null,
         });
     };
 
@@ -70,13 +70,13 @@ function Sidebar() {
             getUsers("", {
                 p: 1,
                 l: 5,
-                badge: true
+                badge: true,
             }),
             getUsers("", {
                 p: 1,
                 l: 5,
-                badge: false
-            })
+                badge: false,
+            }),
         ]).then(([SuggestedAcc, FollowingAcc]) => {
             setSuggestdAccounts(SuggestedAcc);
             setFollowingAccounts(FollowingAcc);
@@ -84,10 +84,16 @@ function Sidebar() {
     }, []);
 
     return (
-        <aside className={cn("sidebar")} onScroll={handleScrollSideBar}>
+        <aside
+            className={cn("sidebar", { [className]: className })}
+            onScroll={handleScrollSideBar}
+        >
             <MainBar />
 
-            <Sidebar_DivSecondary title="Suggested accounts" seeall>
+            <Sidebar_DivSecondary
+                title='Suggested accounts'
+                seeall
+            >
                 <div className={cn("container")}>
                     {SuggestdAccounts.map((user, index) => (
                         <AccountItem
@@ -100,30 +106,39 @@ function Sidebar() {
                         />
                     ))}
 
-                    {Profile.index === -1 || (
-                        <TopPosition.Provider
-                            value={{
-                                top: `${(Profile.index + 1) * 57}px`,
-                                onMouseLeave: handleProfileLeave,
-                                onMouseEnter: handleProfileEnter
-                            }}
-                        >
-                            <ProfilePopover
-                                className={cn("profile-popover")}
-                                userInfor={Profile.user}
-                            />
-                        </TopPosition.Provider>
-                    )}
+                    {isShowPopUp &&
+                        (Profile.index === -1 || (
+                            <TopPosition.Provider
+                                value={{
+                                    top: `${(Profile.index + 1) * 57}px`,
+                                    onMouseLeave: handleProfileLeave,
+                                    onMouseEnter: handleProfileEnter,
+                                }}
+                            >
+                                <ProfilePopover
+                                    className={cn("profile-popover")}
+                                    userInfor={Profile.user}
+                                />
+                            </TopPosition.Provider>
+                        ))}
                 </div>
             </Sidebar_DivSecondary>
 
-            <Sidebar_DivSecondary title="Following accounts" seeall>
+            <Sidebar_DivSecondary
+                title='Following accounts'
+                seeall
+            >
                 {FollowingAccounts.map((user, index) => (
-                    <AccountItem bold smdes userInfor={user} key={index} />
+                    <AccountItem
+                        bold
+                        smdes
+                        userInfor={user}
+                        key={index}
+                    />
                 ))}
             </Sidebar_DivSecondary>
 
-            <Sidebar_DivSecondary title="Discover">
+            <Sidebar_DivSecondary title='Discover'>
                 <div className={cn("tag")}>
                     {DICOVER_SECTION.map(({ title, icon }, index) => (
                         <Button
@@ -132,9 +147,7 @@ function Sidebar() {
                             leftIcon={icon}
                             className={cn("tag-btn")}
                         >
-                            <p className={cn("text-hidden-overflow")}>
-                                {title}
-                            </p>
+                            <p className={cn("text-hidden-overflow")}>{title}</p>
                         </Button>
                     ))}
                 </div>
