@@ -1,6 +1,7 @@
 const router = require('express').Router()
 const Post = require('../models/Post')
 const User = require('../models/User')
+const {verifyToken} = require('../utils/verifyToken')
 
 
 // router.get("/", async(req, res) =>{
@@ -9,17 +10,17 @@ const User = require('../models/User')
 
 // ********************************************//
 //CREATE POST
-router.post("/", async(req, res) =>{
+router.post("/", verifyToken, async(req, res) =>{
     try {
         const {desc, img} = req.body
         const newPost = await new Post({
             desc, img,
-            user: req.user._id
+            userId: req.user._id
         })
         const savePost = await newPost.save()
         res.status(200).json(savePost)    
     }catch(err){
-        res.status(500).json(err)    
+        res.status(500).json({msg: err.message})    
 
     }
 
@@ -27,17 +28,21 @@ router.post("/", async(req, res) =>{
 
 // ********************************************//
 //UPDATE POST
-router.post("/update/:id", async(req, res) =>{
+router.post("/update/:id", verifyToken, async(req, res) =>{
     try{
         const post = await Post.findById(req.params.id)
-        if(post.userId === req.body.userId){
-            await post.updateOne({$set: req.body})
-            res.status(200).json('Your post has been updated')
+        //if(post.userId === req.body.userId){
+            if(post){
+
+            post = await Post.findByIdAndUpdate(req.params.id, {
+                    $set: req.body
+                })
+            res.status(200).json(post)
         }else{
             res.status(403).json('You can only update your post')
         }
     }catch (err) {
-        res.status(500).json(err)
+        res.status(500).json({msg: err.message})
     }
 })
 
