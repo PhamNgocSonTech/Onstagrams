@@ -37,16 +37,19 @@ const UserSchema = new mongoose.Schema(
       default: 'default-avatar_et9ey8'
     },
     followers: {
-      type: Array,
-      default: [],
+      type: Array
     },
     followings: {
-      type: Array,
-      default: [],
+      type: Array
     },
     isAdmin: {
       type: Boolean,
       default: false,
+    },
+    verifed:{
+      type:Boolean,
+      required:true,
+      default:false
     },
     desc: {
       type: String,

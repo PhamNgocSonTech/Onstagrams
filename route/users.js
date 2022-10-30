@@ -30,11 +30,10 @@ router.get("/", (req, res) => {
 // SEARCH USER
 router.get("/search/:username", async (req, res) => {
   try {
-    const userGet = await User.find({username:req.params.username });
+    const userGet = await User.find({username: req.params.username});
     res.status(200).json(userGet);
-
   } catch (err) {
-    return res.status(500).json(err);
+    return res.status(500).json({msg: 'Something wrong'});
   }
 });
 
