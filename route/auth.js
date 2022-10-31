@@ -11,7 +11,9 @@ const dotenv = require('dotenv').config()
 const jwt = require('jsonwebtoken');
 const ResetToken = require("../models/ResetToken");
 
-//const mySecretKey = "#2@!@$ndja45883 r7##";
+//const JWT_KEY = "#2@!@$ndja45883 r7##";
+const JWT_KEY = 'myaccesstoken';
+
 
 //const CLIENT_URL = 'https://localhost:3000/'
 
@@ -40,15 +42,15 @@ router.post("/register", async(req, res) => {
         })
 
         const accessToken = jwt.sign({
-                    id:newUser._id,
+                    _id:newUser._id,
                     username:newUser.username
-          }, process.env.ACCESS_TOKEN);
+          }, JWT_KEY);
         
     
 
         await newUser.save()
 
-        res.json({
+        res.status(200).json({
             msg: 'Register Success!',
             accessToken,
             user: {
@@ -60,6 +62,31 @@ router.post("/register", async(req, res) => {
         return res.status(500).json({msg: err.message})
     }
 })
+
+
+// LOGIN NEW 
+router.post("/login", async(req, res) => {
+    try {
+        //const { email, password } = req.body
+        const user = await User.findOne({email: req.body.email});
+        if(!user)return res.status(400).json("User doesn't found")  
+        
+
+        const Comparepassword = await bcrypt.compare(req.body.password , user.password);
+        if(!Comparepassword) return res.status(400).json("Password error")
+        
+        const accessToken = jwt.sign({
+                  _id: user._id,
+                  username: user.username
+        }, JWT_KEY);
+        const {password , ...other} = user._doc
+        res.status(200).json({other , accessToken});
+                  
+    } catch (err) {
+          res.status(500).json({msg: err.message});        
+    }
+})
+
 
 //REGISTER OLD
 // router.post("/register",  async(req, res) => {
@@ -91,7 +118,8 @@ router.post("/register", async(req, res) => {
 //     }
 // })
 
-//LOGIN
+
+//LOGIN OLD
 // router.post("/login", async(req, res) => {
 // try {
 //     const user = await User.findOne({email:req.body.email})
@@ -104,36 +132,5 @@ router.post("/register", async(req, res) => {
 //     return res.status(401).json(err)
 // }
 // })
-
-
-// LOGIN NEW 
-router.post("/login", async(req, res) => {
-    try {
-        const user = await User.findOne({email:req.body.email});
-        if(!user){
-                return res.status(400).json("User doesn't found")  
-        }
-
-        const Comparepassword = await bcrypt.compare(req.body.password , user.password);
-        if(!Comparepassword){
-                  return res.status(400).json("Password error")
-        }
-        const accessToken = jwt.sign({
-                  id:user._id,
-                  username:user.username
-        }, process.env.ACCESS_TOKEN);
-        const {password , ...other} = user._doc
-        res.status(200).json({other , accessToken});
-                  
-    } catch (error) {
-          res.status(500).json("Internal error occured")        
-    }
-})
-
-
-
-// const createAccessToken = (payload) => {
-//     return jwt.sign(payload, process.env.ACCESS_TOKEN )
-// }
 
 module.exports = router

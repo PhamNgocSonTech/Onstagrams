@@ -10,6 +10,10 @@ const PostSchema = new mongoose.Schema(
         type: Array,
         default: [],
       },
+      video: {
+        type: Array,
+        default: [],
+      },
       userId: {
         type: mongoose.Types.ObjectId,
         ref: 'user',

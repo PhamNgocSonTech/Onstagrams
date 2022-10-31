@@ -1,11 +1,15 @@
 const jwt = require('jsonwebtoken');
-const JWTSEC = "#2@!@$ndja45883 r7##";
+//const JWTSEC = "#2@!@$ndja45883 r7##";
+const JWT_KEY = 'myaccesstoken';
 
-const verifyToken = (req , res , next)=>{
+const dotenv = require('dotenv').config()
+const User = require("../models/User");
+
+const verifyToken = async(req , res , next)=>{
           const authHeader = req.headers.token;
           if(authHeader){
                     const token = authHeader;
-                    jwt.verify(token , JWTSEC , (err , user)=>{
+                    jwt.verify(token, JWT_KEY, (err , user)=>{
                               if(err) return res.status(400).json("Some error occured");
                               req.user = user;
                               next();
@@ -13,6 +17,22 @@ const verifyToken = (req , res , next)=>{
           }else{
                     return res.status(400).json("Access token is not valid")
           }
+
+        // try {
+        //     const token = req.headers.token
+    
+        //     if(!token) return res.status(400).json({msg: "Invalid Authentication."})
+    
+        //     const decoded = jwt.verify(token, JWT_KEY)
+        //     if(!decoded) return res.status(400).json({msg: "Invalid Authentication."})
+    
+        //     const user = await User.findOne({_id: decoded.id})
+            
+        //     req.user = user
+        //     next()
+        // } catch (err) {
+        //     return res.status(500).json({msg: err.message})
+        // }
 }
 
 module.exports  = {verifyToken};

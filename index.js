@@ -38,7 +38,7 @@ app.use(bodyParser.json())
 
 
 //ROUTE
-app.use("/api/users", userRoute)
+app.use("/api/user", userRoute)
 app.use("/api/auth", authRoute)
 app.use("/api/post", postRoute)
 
