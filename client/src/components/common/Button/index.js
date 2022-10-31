@@ -12,6 +12,7 @@ function Button({
     classNameImg,
     leftIcon,
     onClick,
+    outlinePrimary,
     primary = false,
     outline = false,
     ...other
@@ -40,6 +41,7 @@ function Button({
             className={cn("wrapper", {
                 primary,
                 outline,
+                outlinePrimary,
                 [className]: className,
             })}
             onClick={onClick}

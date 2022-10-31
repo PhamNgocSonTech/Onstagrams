@@ -11,17 +11,24 @@ import link from "../../assets/image/profile/link.svg";
 import person from "../../assets/image/profile/person.svg";
 import image from "../../assets/image/profile/image.svg";
 import video from "../../assets/image/profile/video.svg";
+import follow from "../../assets/image/profile/follow.svg";
 
 import EmptyContent from "../../components/common/EmptyContent";
 import PhotoGallery from "../../components/PhotoGallery";
-
 import VideoGallery from "../../components/VideoGallery";
+import Tooltip from "../../components/common/Tooltip";
+
 import { useRef } from "react";
 
 const cn = classNames.bind(styles);
 
 function Profile() {
     const [tabChoose, setTabChoose] = useState(0);
+    // 1: My profile
+    // 0: Another person profile
+    const [viewType, setViewType] = useState(false);
+    const [isFollow, setIsFollow] = useState(false);
+
     const Content = PROFILE_TABS[tabChoose].content;
 
     const bar = useRef();
@@ -38,6 +45,18 @@ function Profile() {
         bar.current.style.left = tabChoose * 230 + "px";
     };
 
+    const handleFollowAccount = () => {
+        setIsFollow(true);
+    };
+
+    const handleUnfollowAccount = () => {
+        setIsFollow(false);
+    };
+
+    const handleShareAccount = () => {
+        setViewType(!viewType);
+    };
+
     return (
         <div className={cn("wrapper")}>
             <div className={cn("user-infor")}>
@@ -51,13 +70,45 @@ function Profile() {
                         <div className={cn("name")}>
                             <h2>pznguyenk1908</h2>
                             <h5>Alex Mine</h5>
-                            <Button
-                                leftIcon={edit}
-                                outline
-                                className={cn("profile-button")}
-                            >
-                                Edit profile
-                            </Button>
+
+                            {viewType ? (
+                                <Button
+                                    leftIcon={edit}
+                                    outline
+                                    className={cn("edit-profile-button")}
+                                >
+                                    Edit profile
+                                </Button>
+                            ) : isFollow ? (
+                                <div className={cn("message-section")}>
+                                    <Button
+                                        outlinePrimary
+                                        className={cn("message-profile-button")}
+                                    >
+                                        Message
+                                    </Button>
+                                    <div
+                                        className={cn("unfollow")}
+                                        onClick={handleUnfollowAccount}
+                                    >
+                                        <img
+                                            src={follow}
+                                            alt='follow'
+                                        />
+                                        <div className={cn("unfollow-tooltip")}>
+                                            <Tooltip>Unfollow</Tooltip>
+                                        </div>
+                                    </div>
+                                </div>
+                            ) : (
+                                <Button
+                                    primary
+                                    className={cn("follow-profile-button")}
+                                    onClick={handleFollowAccount}
+                                >
+                                    Follow
+                                </Button>
+                            )}
                         </div>
                     </div>
                     <div className={cn("bio-infor")}>
@@ -90,6 +141,7 @@ function Profile() {
                     className={cn("share")}
                     src={share}
                     alt=''
+                    onClick={handleShareAccount}
                 />
             </div>
             <div className={cn("user-gallery")}>

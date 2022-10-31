@@ -50,3 +50,17 @@
 
     }
 }
+
+.outlinePrimary {
+    background-color: transparent;
+    color: var(--primary-color);
+    border: 1px solid var(--primary-color);
+
+    &:hover {
+        background-color: rgba(254, 44, 85, 0.06);
+    }
+
+    &:active {
+        background-color: rgba(254, 44, 85, 0.16);
+    }
+}

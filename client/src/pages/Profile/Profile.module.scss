@@ -24,8 +24,54 @@
                     flex-direction: column;
                     padding: 0 20px;
     
-                    .profile-button {
+                    .edit-profile-button {
                         width: fit-content;
+                    }
+
+                    .follow-profile-button {
+                        justify-content: center;
+                        width: 192px;
+                    }
+
+                    .message-section {
+                        display: flex;
+                        .message-profile-button {
+                            width: 164px;
+                            height: 36px;
+                            justify-content: center;
+                        }
+                        .unfollow {
+                            width: 36px;
+                            height: 36px;
+                            border: 1px solid rgba(22, 24, 35, .12);
+                            border-radius: 4px;
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                            margin-left: 10px;
+                            position: relative;
+
+                            .unfollow-tooltip {
+                                position: absolute;
+                                display: none;
+                                left: -50%;
+                                bottom: -150%;
+                            }
+
+                            &:hover {
+                                cursor: pointer;
+                                background-color: rgba(22, 24, 35, .03);
+                            }
+
+                            &:hover .unfollow-tooltip {
+                                display: block;
+                            }
+
+                            &:active {
+                                cursor: pointer;
+                                background-color: rgba(22, 24, 35, 0.11);
+                            }
+                        }
                     }
     
                     & > h2 {
@@ -155,7 +201,7 @@
                 border-radius: 20px;
                 bottom: 0;
                 left: 0;
-                transition: all 0.5s;
+                transition: all 0.4s;
             }
         }
 
