@@ -8,7 +8,12 @@ import setting from "../assets/image/header/setting.svg";
 import difference from "../assets/image/sidebar/difference.svg";
 import music from "../assets/image/sidebar/music.svg";
 
-import { Follow, Live, Home } from "../assets/image/sidebar/SideBarIcon";
+import { Follow, Home } from "../assets/image/sidebar/SideBarIcon";
+import profile_share from "../assets/image/profile/profile_share.svg";
+
+import VideoGallery from "../components/VideoGallery";
+import PhotoGallery from "../components/PhotoGallery";
+import SharedGallery from "../components/SharedGallery";
 
 export const END_POINT_API = "https://630b16fbed18e825164db3b3.mockapi.io/api/tiktok";
 
@@ -297,6 +302,22 @@ export const FOOTER = [
             to: "",
         },
     ],
+];
+
+export const PROFILE_TABS = [
+    {
+        name: "Photos",
+        content: PhotoGallery,
+    },
+    {
+        name: "Videos",
+        content: VideoGallery,
+    },
+    {
+        name: "Shared",
+        icon: profile_share,
+        content: SharedGallery,
+    },
 ];
 
 export const convert_milions = (number) => {

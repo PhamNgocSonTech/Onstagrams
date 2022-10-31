@@ -1,0 +1,167 @@
+.wrapper {
+    padding: 32px 24px;
+
+    .user-infor {
+        max-width: 624px;
+        margin-bottom: 20px;
+        display: flex;
+
+        .infor-section {
+            display: flex;
+            flex-grow: 1;
+            flex-direction: column;
+            .name-infor {
+                display: flex;
+
+                img.avatar {
+                    width: 116px;
+                    height: 116px;
+                    border-radius: 50%;
+                }
+
+                .name {
+                    display: flex;
+                    flex-direction: column;
+                    padding: 0 20px;
+    
+                    .profile-button {
+                        width: fit-content;
+                    }
+    
+                    & > h2 {
+                        font-weight: 700;
+                        font-size: 31px;
+                        line-height: 38px;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                        text-align: left;
+                        font-family: 'Lexend Deca', sans-serif;
+                    }
+    
+                    & > h5 {
+                        font-weight: 600;
+                        font-size: 16px;
+                        line-height: 25px;
+                        text-overflow: ellipsis;
+                        height: 25px;
+                        overflow: hidden;
+                        max-width: 450px;
+                        white-space: nowrap;
+                        flex-grow: 1;
+                        margin-top: 2px;
+                        font-family: 'Lexend Deca', sans-serif;
+                    }
+                }
+            }
+
+            .bio-infor {
+                margin-top: 25px;
+                .follow-infor {
+
+                    span.follow {
+                        margin-right: 25px;
+                        opacity: 0.7;
+                        span.bold {
+                            margin-right: 10px;
+                            font-weight: 800;
+                            font-family: 'Lexend Deca', sans-serif;
+                            opacity: 1 !important;
+                        }
+                    }
+                }
+
+                .bio {
+                    margin-top: 10px;
+                    text-align: left;
+                    color: rgba(22, 24, 35, 1);
+                    font-family: ProximaNova,Arial,Tahoma,PingFangSC,sans-serif;
+                    font-weight: 400;
+                    font-size: 16px;
+                    line-height: 22px;
+                    white-space: pre-line;
+                }
+            }
+
+            .share-link {
+                .button-link {
+                    padding-left: 0;
+                    padding-right: 0;
+                    color: var(--primary-color);
+                }
+            }
+        }
+
+        .share {
+            height: 24px;
+
+            &:hover 
+            {
+                cursor: pointer;
+            }
+
+            &:active 
+            {
+                opacity: 0.6;
+            }
+        }
+    }
+
+    .user-gallery {
+        min-height: 490px;
+        min-width: 520px;
+
+        .tabs {
+            display: flex;
+            margin-bottom: 15px;
+            position: relative;
+
+            .tab-item {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 44px;
+                width: 230px;
+                border-bottom: 1px solid #ccc;
+                opacity: 0.5;
+
+                &.highlight {
+                    opacity: 0.8;
+                }
+
+                & > img {
+                    margin-right: 8px;
+                }
+
+                & > p {
+                    font-weight: 600;
+                    font-family: 'Lexend Deca', sans-serif;
+                    display: flex;
+                    align-items: center;
+                    height: 100%;
+                    font-size: 18px;
+                    line-height: 25px;
+                }
+
+                &:hover {
+                    cursor: pointer;
+                }
+            }
+
+            .bar {
+                position: absolute;
+                height: 3px;
+                width: 230px;
+                background-color: var(--primary-color);
+                border-radius: 20px;
+                bottom: 0;
+                left: 0;
+                transition: all 0.5s;
+            }
+        }
+
+        .content {
+            width: 100%;
+        }
+    }
+}
+
