@@ -70,7 +70,7 @@ function PersonalLogIn() {
             </div>
 
             <div className={cn("body-modal")}>
-                <h1 className={cn("text")}>Login</h1>
+                <h1 className={cn("text")}>Login now!</h1>
                 <div className={cn("register-section")}>
                     <form>
                         <input

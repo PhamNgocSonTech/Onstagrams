@@ -205,6 +205,7 @@ function Upload() {
                                         <EmojiPicker
                                             emojiStyle='facebook'
                                             onEmojiClick={handleEmoteClick}
+                                            lazyLoadEmojis={true}
                                         />
                                     </div>
                                 )}

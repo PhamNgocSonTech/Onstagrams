@@ -32,9 +32,9 @@ function Login({ handleClosePanel }) {
         setIsOpenPersonalLogInForm(true);
     }
 
-    // const googleHandle = () => {
-    //     window.open('https://localhost:5000/api/auth/login-google', '_self')
-    // }
+    const googleHandle = () => {
+        window.open('https://localhost:5000/api/auth/login-google', '_self')
+    }
 
 
 

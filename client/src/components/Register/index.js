@@ -128,6 +128,16 @@ function Register() {
                             </div>
                         </div>
                     </form>
+                    <div className={cn("policy-check")}>
+                        <input
+                            id='policy'
+                            type='checkbox'
+                        />
+                        <label htmlFor='policy'>
+                            By continuing, you agree to Onstagram’s Terms of Service and confirm that you have read
+                            Onstagram’s Privacy Policy.
+                        </label>
+                    </div>
                     <Button
                         primary
                         className={cn("submit")}

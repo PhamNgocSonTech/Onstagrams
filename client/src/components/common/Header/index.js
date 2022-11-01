@@ -238,7 +238,7 @@ function Header() {
                     )}
                 </div>
             </div>
-            {/* Handle Login */}
+            {/* Handle Login <Login handleClosePanel={setIsShowLogInPanel}*/}
             {isShowLogInPanel && <Login handleClosePanel={setIsShowLogInPanel} />}
         </header>
     );

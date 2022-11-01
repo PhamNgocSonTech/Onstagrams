@@ -4,6 +4,10 @@
     background-color: rgb(255, 255, 255);
     padding: 24px 56px;
 
+    .intro {
+        font-family: "Lexend Deca", sans-serif;
+    }
+
     .upload-section {
         margin-top: 20px;
         display: flex;
@@ -54,6 +58,8 @@
 
                     & > ul {
                         margin-top: 25px;
+                        font-size: 14px;
+                        opacity: 0.8;
                     }
                 }
             }
@@ -178,6 +184,7 @@
                             background-color: rgb(255, 255, 255);
                             border: 1px solid rgba(22, 24, 35, 0.12);
                             border-radius: 5px;
+                            font-family: "ProximaNova";
                             height: 100%;
                             padding: 5px 15px;
                             font-weight: 500;
