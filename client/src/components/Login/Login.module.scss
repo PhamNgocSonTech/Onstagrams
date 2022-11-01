@@ -31,22 +31,27 @@
         justify-content: center;
 
         .text {
-            margin: 20px 0 20px 0;
+            font-family: "Lexend Deca", sans-serif;
+            margin-top: 20px;
             text-align: center;
             color: var(--primary-color);
-            font-family: 'Nunito', sans-serif;
+            // font-family: 'Nunito', sans-serif;
             word-spacing: 2px;
         }
 
         .login-section {
             width: 375px;
-            padding-bottom: 40px;
+            // padding-bottom: 40px;
+            height: 280px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
             margin: 0 auto;
-            border-bottom: 1px solid rgb(146, 146, 146);
+            border-bottom: 1px solid rgba(146, 146, 146, 0.712);
 
             .btn-login {
-                height: 70px;
-                font-size: 18px;
+                height: 58px;
+                font-size: 16px;
                 width: 100%;
                 margin-left: 0;
                 font-weight: 500;
@@ -66,7 +71,7 @@
 
     .footer-modal {
         .register-recommend {
-            margin-top: 30px;
+            margin-top: 35px;
 
             & > h3 {
                 font-weight: 300;

@@ -51,7 +51,8 @@
             margin: 20px 0 20px 0;
             text-align: center;
             color: var(--primary-color);
-            font-family: 'Nunito', sans-serif;
+            font-family: "Lexend Deca", sans-serif;
+            font-size: 40px;
             word-spacing: 2px;
         }
 
@@ -68,8 +69,9 @@
             }
 
             .input-control {
+                font-family: "ProximaNova";
                 width: 100%;
-                border-radius: 2px;
+                border-radius: 4px;
                 background-color: rgba(166, 168, 179, 0.06);
                 border: 1px solid rgba(22, 24, 35, 0.12);
                 padding-inline-start: 12px;
@@ -77,7 +79,7 @@
                 line-height: 100%;
                 outline: none;
                 font-size: 16px;
-                height: 44px;
+                height: 45px;
                 caret-color: rgb(254, 44, 85);
                 padding-inline-end: unset;
                 margin-bottom: 15px;
@@ -135,6 +137,7 @@
                 font-weight: 300;
                 font-size: 18px;
                 text-align: center;
+                
             }
             .login-btn {
                 margin-left: 10px;

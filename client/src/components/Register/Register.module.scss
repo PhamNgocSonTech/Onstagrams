@@ -4,6 +4,7 @@
 
 .register-modal {
     padding: 48px 0px 0px;
+    height: 95% !important;
 
     .header-modal {
         .close-btn {
@@ -47,11 +48,12 @@
     }
 
     .body-modal {
+        font-family: "ProximaNova";
         .text {
-            margin: 20px 0 20px 0;
+            font-family: "Lexend Deca", sans-serif;
+            margin: 12px 0 12px 0;
             text-align: center;
             color: var(--primary-color);
-            font-family: 'Nunito', sans-serif;
             word-spacing: 2px;
         }
 
@@ -61,7 +63,7 @@
             padding-bottom: 20px;
             margin: 0 auto;
             overflow: auto;
-            max-height: 330px;
+            max-height: 460px;
             border-bottom: 1px solid rgb(190, 189, 189);
 
             &::-webkit-scrollbar {
@@ -78,9 +80,31 @@
                 background-color: rgba(0, 0, 0, 0);
             }
 
+            .policy-check {
+                margin-bottom: 6px;
+
+                & > label {
+                    font-size: 12px;
+                    &:hover {
+                        cursor: pointer;
+                    }
+                }
+
+                & > input {
+                    margin-right: 6px;
+                    position: relative;
+                    top: 2px;
+                    accent-color: var(--primary-color);
+                    &:hover {
+                        cursor: pointer;
+                    }
+                }
+            }
+
             .input-control {
+                font-family: "ProximaNova";
                 width: 100%;
-                border-radius: 2px;
+                border-radius: 4px;
                 background-color: rgba(166, 168, 179, 0.06);
                 border: 1px solid rgba(22, 24, 35, 0.12);
                 padding-inline-start: 12px;
@@ -88,7 +112,7 @@
                 line-height: 100%;
                 outline: none;
                 font-size: 16px;
-                height: 44px;
+                height: 45px;
                 caret-color: rgb(254, 44, 85);
                 padding-inline-end: unset;
                 margin-bottom: 15px;
@@ -110,6 +134,26 @@
 
                         &:hover {
                             cursor: pointer;
+                        }
+                    }
+
+                    input[type='radio'] {
+
+                        border:2px solid white;
+                        box-shadow:0 0 0 1px var(--primary-color);
+                        appearance:none;
+                        border-radius:50%;
+                        width:12px;
+                        height:12px;
+                        background-color:#fff;
+                        transition:all ease-in 0.2s;
+
+                        &:hover {
+                            cursor: pointer;
+                        }
+
+                        &:checked {
+                            background-color: var(--primary-color);
                         }
                     }
                 }

@@ -112,7 +112,7 @@ function VideoInfor() {
                                     alt='img'
                                     variants={animations}
                                     src={isLike ? pink_heart : black_heart}
-                                    animate={isLike ? "like" : "unlike"}
+                                    animate={isLike ? "like" : "dislike"}
                                 />
                             </div>
                             <span className={cn("act-text")}>130K</span>

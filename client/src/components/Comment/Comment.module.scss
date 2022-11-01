@@ -116,7 +116,6 @@
 
         .comments {
             border-top: 1px solid rgba(22, 24, 35, 0.2);
-            border-bottom: 1px solid rgba(22, 24, 35, 0.2);
             background-color: rgb(255, 255, 255);
             width: 100%;
             padding: 20px 32px;
@@ -159,14 +158,14 @@
 
                 & > h4 {
                     margin-top: 2px;
-                    font-family: 'Be Vietnam Pro', sans-serif;
+                    font-family: 'Baloo 2', cursive;
                     font-weight: 500;
-                    font-size: 14px;
+                    font-size: 16px;
                 }
 
                 & > h3 {
-                    font-family: 'Readex Pro', sans-serif;
-                    font-size: 13px;
+                    font-family: 'Baloo 2', cursive;
+                    font-size: 17px;
                 }
 
                 .cmt-footer {
@@ -188,7 +187,7 @@
         .add-comment {
 
             display: flex;
-            padding: 21px 30px;
+            padding: 15px 30px;
             margin: 0 30px;
             width: 100%;
 
@@ -206,8 +205,10 @@
                 }
 
                 & > input {
-                    background-color: rgb(241, 238, 238);
+                    font-family: 'Baloo 2', cursive;
+                    background-color: rgb(228, 224, 224);
                     height: 100%;
+                    font-size: 15px;
                     padding: 10px;
                     width: 88%;
                     border-radius: 10px 0 0 10px;

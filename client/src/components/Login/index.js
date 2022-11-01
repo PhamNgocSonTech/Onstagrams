@@ -33,10 +33,8 @@ function Login({ handleClosePanel }) {
     }
 
     const googleHandle = () => {
-        window.open('https://localhost:5000/api/auth/login-google', '_self')
-    }
-
-
+        window.open("https://localhost:5000/api/auth/login-google", "_self");
+    };
 
     return (
         <ParentContext.Provider
