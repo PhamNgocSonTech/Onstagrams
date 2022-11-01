@@ -1,0 +1,138 @@
+.edit-form {
+    width: 600px !important;
+    height: 95% !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow-y: auto !important;
+
+    .wrapper {
+
+        .header {
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 0.5px solid rgba(22, 24, 35, 0.2);
+
+            & > img {
+                opacity: 0.6;
+                &:hover {
+                    cursor: pointer;
+                    opacity: 0.5;
+                }
+                &:active {
+                    opacity: 0.4;
+                }
+            }
+        }
+
+        .body {
+            padding: 8px 24px 0px;
+            max-height: 490px;
+            overflow-y: scroll;
+
+            .edit-section {
+                padding: 16px 0px;
+                display: flex;
+                border-bottom: 0.5px solid rgba(22, 24, 35, 0.12);
+
+                .edit-label {
+                    font-weight: 600;
+                    line-height: 24px;
+                    font-size: 16px;
+                    width: 120px;
+                    margin-right: 24px;
+                }
+
+                .edit-input {
+                    width: 360px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    
+                    .avt-section {
+                        position: relative;
+                        display: flex;
+                        align-items: center;
+
+                        .current-avt {
+                            width: 96px;
+                            height: 96px;
+                            border-radius: 50%;
+                            object-fit: cover;
+                        }
+    
+                        .upload-photo {
+                            width: 32px;
+                            height: 32px;
+                            border-radius: 50%;
+                            background: rgb(255, 255, 255);
+                            border: 1px solid rgb(208, 208, 211);
+                            position: relative;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            position: absolute;
+                            bottom: 0;
+                            left: 0;
+                        }
+
+                        input[type='file'] {
+                            opacity: 0;
+                            position: absolute;
+                            left: 0;
+                            right: 0;
+                            bottom: 0;
+                            top: 0;
+
+                            &:hover {
+                                cursor: pointer;
+                            }
+                        }
+                    }
+
+                    .input-un {
+
+                        input {
+                            width: 360px;
+                            height: 38px;
+                            border-radius: 4px;
+                            background: rgba(22, 24, 35, 0.048);
+                            caret-color: rgb(254, 44, 85);
+                            font-size: 16px;
+                            color: rgb(22, 24, 35);
+                            line-height: 24px;
+                            outline: none;
+                            border: none;
+                            padding: 7px 12px;
+                            box-sizing: border-box;
+                        }
+
+                        .bio {
+                            width: 360px;
+                            border-radius: 4px;
+                            background: rgba(22, 24, 35, 0.048);
+                            caret-color: rgb(254, 44, 85);
+                            font-size: 16px;
+                            color: rgb(22, 24, 35);
+                            line-height: 24px;
+                            outline: none;
+                            border: none;
+                            box-sizing: border-box;
+                            height: 100px;
+                            padding: 12px;
+                            resize: none;
+                        }
+                    }
+                }
+            }
+        }
+
+        .footer {
+            display: flex;
+            margin-top: 10px;
+            margin-right: 24px;
+            justify-content: flex-end;
+        }
+    }
+}

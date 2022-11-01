@@ -17,6 +17,7 @@ import EmptyContent from "../../components/common/EmptyContent";
 import PhotoGallery from "../../components/PhotoGallery";
 import VideoGallery from "../../components/VideoGallery";
 import Tooltip from "../../components/common/Tooltip";
+import EditProfile from "../../components/EditProfile";
 
 import { useRef } from "react";
 
@@ -28,6 +29,8 @@ function Profile() {
     // 0: Another person profile
     const [viewType, setViewType] = useState(false);
     const [isFollow, setIsFollow] = useState(false);
+
+    const [isOpenEditPopUp, setIsOpenEditPopUp] = useState(false);
 
     const Content = PROFILE_TABS[tabChoose].content;
 
@@ -57,6 +60,10 @@ function Profile() {
         setViewType(!viewType);
     };
 
+    const handleOpenEditPopUp = () => {
+        setIsOpenEditPopUp(true);
+    };
+
     return (
         <div className={cn("wrapper")}>
             <div className={cn("user-infor")}>
@@ -76,6 +83,7 @@ function Profile() {
                                     leftIcon={edit}
                                     outline
                                     className={cn("edit-profile-button")}
+                                    onClick={handleOpenEditPopUp}
                                 >
                                     Edit profile
                                 </Button>
@@ -181,6 +189,9 @@ function Profile() {
 
                 <div className={cn("content")}>{<Content />}</div>
             </div>
+
+            {/* Edit PopUp */}
+            {isOpenEditPopUp && <EditProfile setIsOpenEditPopUp={setIsOpenEditPopUp} />}
         </div>
     );
 }

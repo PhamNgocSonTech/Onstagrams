@@ -68,4 +68,8 @@ html *::-webkit-scrollbar-track {
     background-color: rgba(0, 0, 0, 0);
 }
 
+input[type='file']::-webkit-file-upload-button { 
+    cursor: pointer;
+}
+
 
