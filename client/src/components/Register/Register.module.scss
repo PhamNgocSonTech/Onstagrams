@@ -4,6 +4,7 @@
 
 .register-modal {
     padding: 48px 0px 0px;
+    overflow: visible !important;
     height: 95% !important;
 
     .header-modal {
@@ -62,7 +63,6 @@
             width: 375px;
             padding-bottom: 20px;
             margin: 0 auto;
-            overflow: auto;
             max-height: 460px;
             border-bottom: 1px solid rgb(190, 189, 189);
 
@@ -97,6 +97,34 @@
                     accent-color: var(--primary-color);
                     &:hover {
                         cursor: pointer;
+                    }
+                }
+            }
+
+            .validate-input {
+                position: relative;
+                .infor-validation {
+                    position: absolute;
+                    right: -6%;
+                    bottom: 10px;
+                    opacity: 0.6;
+                    z-index: 999;
+                }
+                .tooltip-information {
+                    position: absolute;
+                    right: 0;
+                    bottom: -50%;
+                    z-index: 999;
+
+                    &.length-tooltip {
+                        position: absolute;
+                        z-index: 999;
+                        right: 0;
+                        bottom: -90%;
+                    }
+            
+                    span {
+                        white-space: nowrap;
                     }
                 }
             }

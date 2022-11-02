@@ -64,3 +64,11 @@
         background-color: rgba(254, 44, 85, 0.16);
     }
 }
+
+.disabled {
+    opacity: 0.3;
+
+    &:hover {
+        cursor: not-allowed;
+    }
+}

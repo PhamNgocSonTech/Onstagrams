@@ -12,7 +12,9 @@ function Button({
     classNameImg,
     leftIcon,
     onClick,
+    onSubmit,
     outlinePrimary,
+    disabled,
     primary = false,
     outline = false,
     ...other
@@ -43,8 +45,11 @@ function Button({
                 outline,
                 outlinePrimary,
                 [className]: className,
+                disabled: disabled,
             })}
             onClick={onClick}
+            onSubmit={onSubmit}
+            disabled={disabled}
         >
             {leftIcon && (
                 <img
