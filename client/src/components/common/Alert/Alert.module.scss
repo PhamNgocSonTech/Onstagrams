@@ -1,0 +1,17 @@
+.wrapper {
+    width: 100%;
+    padding: 10px;
+    background-color:#FEE2E6;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    span {
+        margin-left: 10px;
+        text-align: center;
+        color: red;
+        font-family: 'Lexend Deca', sans-serif;
+    }
+}

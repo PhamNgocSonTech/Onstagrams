@@ -28,7 +28,7 @@ import { rejectLogin } from "../../../reducers/LoginStateManager";
 
 const cn = classNames.bind(styles);
 
-function Header() {
+function Header({ isShowUploadBtn = true }) {
     const [popover_search, setPopover_search] = useState(false);
     const [isAppear, setIsAppear] = useState(false);
     const [clearBtn, setClearBtn] = useState(false);
@@ -155,15 +155,17 @@ function Header() {
                 </div>
 
                 <div className={cn("actions")}>
-                    <Button
-                        outline
-                        className={cn("size-upload-btn")}
-                        onClick={handleCheckAndShowLogIn}
-                        leftIcon={plus}
-                        to={didLogin && "/upload"}
-                    >
-                        Upload
-                    </Button>
+                    {isShowUploadBtn && (
+                        <Button
+                            outline
+                            className={cn("size-upload-btn")}
+                            onClick={handleCheckAndShowLogIn}
+                            leftIcon={plus}
+                            to={didLogin && "/upload"}
+                        >
+                            Upload
+                        </Button>
+                    )}
 
                     {didLogin ? (
                         <>

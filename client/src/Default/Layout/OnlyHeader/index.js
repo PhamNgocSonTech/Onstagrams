@@ -5,10 +5,10 @@ import Header from "../../../components/common/Header";
 
 const cn = classNames.bind(styles);
 
-function OnlyHeader({ children }) {
+function OnlyHeader({ children, isShowUploadBtn }) {
     return (
         <div className={cn("wrapper")}>
-            <Header />
+            <Header isShowUploadBtn={isShowUploadBtn} />
             <div className={cn("container")}>
                 <div className={cn("content")}>{children}</div>
             </div>

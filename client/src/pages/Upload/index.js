@@ -16,7 +16,6 @@ function Upload() {
     const [isShowEmotePicker, setIsShowEmotePicker] = useState(false);
     const [caption, setCaption] = useState("");
     const [hashTag, setHashTag] = useState("");
-    const [hashTagArray, setHashTagArray] = useState([]);
     const ref = useRef();
     const htip = useRef();
 

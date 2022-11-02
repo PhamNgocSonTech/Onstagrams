@@ -3,12 +3,14 @@ import styles from "./PersonalLogIn.module.scss";
 
 import Modal_Center from "../common/Modal/Modal_Center";
 import Button from "../common/Button";
+import Alert from "../common/Alert";
 
 import close from "../../assets/image/modal/close-dark.svg";
 import back from "../../assets/image/header/back.svg";
+import incorrect from "../../assets/image/login/incorrect.svg";
 
 import { ParentContext } from "../Login";
-import { useContext, useRef } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import { acceptLogin } from "../../reducers/LoginStateManager";
 
@@ -16,11 +18,19 @@ const cn = classNames.bind(styles);
 
 function PersonalLogIn() {
     const { setIsOpenPersonalLogInForm, setIsOpenRegisterForm, handleClosePanel } = useContext(ParentContext);
+    const [isShowAlertIncorrectLogin, setIsShowAlertIncorrectLogin] = useState(false);
+    const frm = useRef();
 
     const dispatch = useDispatch();
 
     const username = useRef();
     const password = useRef();
+
+    useEffect(() => {
+        frm.current.addEventListener("submit", (e) => {
+            e.preventDefault();
+        });
+    }, []);
 
     function handleBackToLogInForm() {
         setIsOpenPersonalLogInForm(false);
@@ -37,8 +47,13 @@ function PersonalLogIn() {
 
     function handleSubmitLogin() {
         if (username.current.value == "123" && password.current.value == "123") {
+            // Handle Login logic
+
+            // Handle Login logic
             handleClosePanel(false);
             dispatch(acceptLogin());
+        } else {
+            (username.current.value || password.current.value) && setIsShowAlertIncorrectLogin(true);
         }
     }
 
@@ -72,17 +87,29 @@ function PersonalLogIn() {
             <div className={cn("body-modal")}>
                 <h1 className={cn("text")}>Login now!</h1>
                 <div className={cn("register-section")}>
-                    <form>
+                    {isShowAlertIncorrectLogin && (
+                        <Alert
+                            leftImage={incorrect}
+                            content='Incorrect username or password'
+                        />
+                    )}
+
+                    <form
+                        id='login-form'
+                        ref={frm}
+                    >
                         <input
                             className={cn("input-control")}
                             type='text'
                             placeholder='User Name'
                             ref={username}
+                            required={true}
                         />
                         <input
                             className={cn("input-control")}
                             type='password'
                             placeholder='Password'
+                            required={true}
                             ref={password}
                         />
                     </form>
@@ -93,6 +120,7 @@ function PersonalLogIn() {
                         primary
                         className={cn("submit")}
                         onClick={handleSubmitLogin}
+                        form='login-form'
                     >
                         Log In
                     </Button>

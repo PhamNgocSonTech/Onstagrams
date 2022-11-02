@@ -24,6 +24,7 @@ export const pubRoutes = [
         path: "/upload",
         element: Upload,
         layout: OnlyHeader,
+        parameters: { isShowUploadBtn: false },
     },
     {
         path: "/profile",
