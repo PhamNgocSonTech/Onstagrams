@@ -7,11 +7,9 @@ const upload = require("../utils/multer");
 
 // const passport = require('passport')
 
-const dotenv = require('dotenv').config()
 const jwt = require('jsonwebtoken');
 const ResetToken = require("../models/ResetToken");
 
-//const JWT_KEY = "#2@!@$ndja45883 r7##";
 const JWT_KEY = 'myaccesstoken';
 
 

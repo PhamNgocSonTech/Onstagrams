@@ -48,7 +48,7 @@ router.get("/getListUsers/", async (req, res) => {
 //UPDATE PROFILE WITH TOKEN AND CHANGE AVATAR
 router.put("/updateProfile/:id", verifyToken, upload.single("img"), async (req, res) => {
  // try {
-    if (req.params.id === req.user._id || isAdmin) {
+    if (req.params.id === req.user._id) {
       if (req.body.password) {
         try {
           const salt = await bcrypt.genSalt(10);
@@ -80,8 +80,6 @@ router.put("/updateProfile/:id", verifyToken, upload.single("img"), async (req, 
             return res.status(500).json(err);
 
           }
-        
-      
     } else {
       return res.status(400).json("Your are not allow to update this user details ");
     }
@@ -90,7 +88,7 @@ router.put("/updateProfile/:id", verifyToken, upload.single("img"), async (req, 
   // }
 });
 
-// UPDATE USER WITH IMG CLOUDINARY
+//UPDATE USER WITH IMG CLOUDINARY
 // router.put("/update-cloudinary/:id", upload.single("img"), async (req, res) => {
 //   try {
 //     let user = await User.findById(req.params.id);
@@ -185,7 +183,6 @@ router.put("/:id/unfollow", async (req, res) => {
 });
 
 // FETCHING POST FROM FOLLOWING
-
 router.get('/fetchPostFlw/:id', verifyToken, async(req, res) => {
     try{
       const user = await User.findById(req.params.id)

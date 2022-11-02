@@ -1,15 +1,13 @@
 const jwt = require('jsonwebtoken');
-//const JWTSEC = "#2@!@$ndja45883 r7##";
 const JWT_KEY = 'myaccesstoken';
-
-const dotenv = require('dotenv').config()
+const dotenv = require('dotenv').config();
 const User = require("../models/User");
 
 const verifyToken = async(req , res , next)=>{
           const authHeader = req.headers.token;
           if(authHeader){
                     const token = authHeader;
-                    jwt.verify(token, JWT_KEY, (err , user)=>{
+                    jwt.verify(token, process.env.JWT_KEY, (err , user)=>{
                               if(err) return res.status(400).json("Some error occured");
                               req.user = user;
                               next();
