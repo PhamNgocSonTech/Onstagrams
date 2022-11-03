@@ -4,6 +4,7 @@ import styles from "./PersonalLogIn.module.scss";
 import Modal_Center from "../common/Modal/Modal_Center";
 import Button from "../common/Button";
 import Alert from "../common/Alert";
+import LoadingModal from "../common/LoadingModal";
 
 import close from "../../assets/image/modal/close-dark.svg";
 import back from "../../assets/image/header/back.svg";
@@ -12,16 +13,15 @@ import incorrect from "../../assets/image/login/incorrect.svg";
 import { ParentContext } from "../Login";
 import { useContext, useEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
-import { acceptLogin } from "../../reducers/LoginStateManager";
+import { setUserInfor } from "../../reducers/LoginStateManager";
 import { login } from "../../utils/HttpRequest/auth_request";
-import { getUsers2 } from "../../utils/HttpRequest/user_request";
 
 const cn = classNames.bind(styles);
 
 function PersonalLogIn() {
     const { setIsOpenPersonalLogInForm, setIsOpenRegisterForm, handleClosePanel } = useContext(ParentContext);
-    const [isShowAlertIncorrectLogin, setIsShowAlertIncorrectLogin] = useState(false);
-    const [dataUser, setDataUser] = useState({});
+    const [isShowAlertIncorrectLogin, setIsShowAlertIncorrectLogin] = useState("");
+    const [isShowLoadingModal, setisShowLoadingModal] = useState(false);
     const frm = useRef();
 
     const dispatch = useDispatch();
@@ -49,49 +49,32 @@ function PersonalLogIn() {
     }
 
     function handleSubmitLogin() {
-        loginFetch("hc19082001@gmail.com", "123123").then((res) => console.log(res));
+        if (username.current.value && password.current.value) {
+            loginAuthentication(username.current.value, password.current.value).then((res) => {
+                if (typeof res == "object") {
+                    const userInfor = {
+                        ...res.other,
+                        username: username.current.value,
+                        password: password.current.value,
+                    };
+                    dispatch(setUserInfor(userInfor));
+                    window.localStorage.setItem("accessToken", res.accessToken);
+                    handleClosePanel(false);
+                } else {
+                    setIsShowAlertIncorrectLogin(res);
+                }
+            });
+        }
     }
-
     // !Login request
     async function loginAuthentication(email, password) {
+        setisShowLoadingModal(true);
         const data = await login({
             email,
             password,
         });
+        setisShowLoadingModal(false);
         return data;
-    }
-
-    async function getListUserFetch() {
-        return await fetch("http://localhost:5000/api/user/getListUsers/")
-            .then((res) => res.json())
-            .then((data) => data);
-    }
-
-    async function loginFetch(email, password) {
-        return await fetch("http://localhost:5000/api/auth/login/", {
-            method: "POST",
-            crossDomain: true,
-            headers: {
-                "Content-Type": "application/json",
-                Accept: "application/json",
-                "Access-Control-Allow-Credentials": "true",
-                "Access-Control-Allow-Origin": "*",
-                "Access-Control-Allow-Headers": "content-type",
-            },
-            mode: "cors",
-            credentials: "include",
-            body: JSON.stringify({
-                email,
-                password,
-            }),
-        }).then((res) => res.json());
-    }
-
-    async function loginAxios(email, password) {
-        return await login({
-            email,
-            password,
-        }).then((res) => res);
     }
 
     return (
@@ -127,7 +110,7 @@ function PersonalLogIn() {
                     {isShowAlertIncorrectLogin && (
                         <Alert
                             leftImage={incorrect}
-                            content='Incorrect username or password'
+                            content={isShowAlertIncorrectLogin}
                         />
                     )}
 
@@ -177,6 +160,8 @@ function PersonalLogIn() {
                     </h3>
                 </div>
             </div>
+
+            {isShowLoadingModal && <LoadingModal />}
         </Modal_Center>
     );
 }

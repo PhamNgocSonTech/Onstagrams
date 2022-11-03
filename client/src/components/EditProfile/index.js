@@ -6,13 +6,13 @@ import Button from "../common/Button";
 import close from "../../assets/image/modal/close-dark.svg";
 import pencil from "../../assets/image/edit/pencil.svg";
 import { useState } from "react";
+import { useSelector } from "react-redux";
 
 const cn = classNames.bind(styles);
 
 function EditProfile({ setIsOpenEditPopUp }) {
-    const [image, setImage] = useState(
-        "https://p16-sign-sg.tiktokcdn.com/aweme/100x100/tiktok-obj/f0a142d7c5d563cbefbedaf71546e039.jpeg?x-expires=1667350800&x-signature=KrnrSnXsR0G04TIw5dLNP8QxENo%3D"
-    );
+    const didLogin = useSelector((state) => state.loginState_reducer.user);
+    const [image, setImage] = useState(didLogin.avatar);
 
     const handleChangeImage = (e) => {
         const upload_img = e.target.files[0];
@@ -72,7 +72,7 @@ function EditProfile({ setIsOpenEditPopUp }) {
                             <div className={cn("input-un")}>
                                 <input
                                     type='text'
-                                    value='pznguyenk1908'
+                                    value={didLogin.username}
                                 />
                             </div>
                         </div>
@@ -85,7 +85,7 @@ function EditProfile({ setIsOpenEditPopUp }) {
                             <div className={cn("input-un")}>
                                 <input
                                     type='text'
-                                    value='Alex Mine'
+                                    value={didLogin.fullname}
                                 />
                             </div>
                         </div>

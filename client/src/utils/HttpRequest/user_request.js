@@ -7,6 +7,9 @@ const usersConfig = axios.create({
 
 const usersConfig2 = axios.create({
     baseURL: `${END_POINT_API2}/user`,
+    validateStatus: function (status) {
+        return status >= 200 && status <= 500;
+    },
 });
 
 /**
@@ -18,7 +21,12 @@ export const getUsers = async (url, options = {}) => {
     return results.data;
 };
 
-export const getUsers2 = async () => {
+export const getAllUsers = async () => {
     const results = await usersConfig2.get("/getListUsers/");
     return results.data;
+};
+
+export const getUserById = async (id) => {
+    const results = await usersConfig2.get(`/get/${id}`);
+    return results;
 };

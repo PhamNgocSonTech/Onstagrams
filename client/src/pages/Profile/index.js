@@ -1,6 +1,7 @@
 import classNames from "classnames/bind";
 import styles from "./Profile.module.scss";
 import { useState } from "react";
+import { useSelector } from "react-redux";
 
 import { PROFILE_TABS } from "../../Default/constant";
 
@@ -31,6 +32,8 @@ function Profile() {
     const [isFollow, setIsFollow] = useState(false);
 
     const [isOpenEditPopUp, setIsOpenEditPopUp] = useState(false);
+
+    const didLogin = useSelector((state) => state.loginState_reducer.user);
 
     const Content = PROFILE_TABS[tabChoose].content;
 
@@ -71,12 +74,12 @@ function Profile() {
                     <div className={cn("name-infor")}>
                         <img
                             className={cn("avatar")}
-                            src='https://p16-sign-sg.tiktokcdn.com/aweme/100x100/tiktok-obj/f0a142d7c5d563cbefbedaf71546e039.jpeg?x-expires=1667350800&x-signature=KrnrSnXsR0G04TIw5dLNP8QxENo%3D'
+                            src={didLogin.avatar}
                             alt=''
                         />
                         <div className={cn("name")}>
-                            <h2>pznguyenk1908</h2>
-                            <h5>Alex Mine</h5>
+                            <h2>{didLogin.username}</h2>
+                            <h5>{didLogin.fullname}</h5>
 
                             {viewType ? (
                                 <Button

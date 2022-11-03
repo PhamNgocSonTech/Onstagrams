@@ -3,24 +3,18 @@ import { createSlice } from "@reduxjs/toolkit";
 export const LoginReducer = createSlice({
     name: "LOGIN_STATE_MANAGER",
     initialState: {
-        isLogIn: false,
+        user: null,
     },
     reducers: {
-        acceptLogin: (state) => {
-            state.isLogIn = true;
+        setUserInfor: (state, action) => {
+            state.user = action.payload;
         },
-        rejectLogin: (state) => {
-            state.isLogIn = false;
-        },
-        toggleLoginState: (state) => {
-            state.isLogIn = !state.isLogIn;
-        },
-        changeLoginState: (state, action) => {
-            state.isLogIn = action.payload;
+        removeUserInfor: (state) => {
+            state.user = null;
         },
     },
 });
 
-export const { acceptLogin, rejectLogin, toggleLoginState, changeLoginState } = LoginReducer.actions;
+export const { setUserInfor, removeUserInfor } = LoginReducer.actions;
 
 export default LoginReducer.reducer;

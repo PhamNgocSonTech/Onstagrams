@@ -24,7 +24,7 @@ import { getUsers } from "../../../utils/HttpRequest/user_request";
 
 import Login from "../../Login";
 import { useDispatch, useSelector } from "react-redux";
-import { rejectLogin } from "../../../reducers/LoginStateManager";
+import { removeUserInfor } from "../../../reducers/LoginStateManager";
 
 const cn = classNames.bind(styles);
 
@@ -37,7 +37,7 @@ function Header({ isShowUploadBtn = true }) {
     const [loading, setLoading] = useState(false);
     const [isShowLogInPanel, setIsShowLogInPanel] = useState(false);
 
-    const didLogin = useSelector((state) => state.loginState_reducer.isLogIn);
+    const didLogin = useSelector((state) => state.loginState_reducer.user);
     const dispatch = useDispatch();
 
     let lastText = useDebounce(SearchText, 500);
@@ -66,7 +66,9 @@ function Header({ isShowUploadBtn = true }) {
     };
 
     const handleLogOut = () => {
-        dispatch(rejectLogin());
+        dispatch(removeUserInfor());
+        window.localStorage.removeItem("accessToken");
+        console.log(didLogin);
         setIsAppear(false);
     };
 
@@ -170,7 +172,10 @@ function Header({ isShowUploadBtn = true }) {
                     {didLogin ? (
                         <>
                             <div className={cn("message-icon")}>
-                                <img src={send}></img>
+                                <img
+                                    src={send}
+                                    onClick={() => console.log(didLogin)}
+                                ></img>
                                 <PopUpNotification className={cn("number-notifi")}>10</PopUpNotification>
                                 <div className={cn("tooltip-messages")}>
                                     <Tooltip>Messages</Tooltip>
@@ -190,7 +195,7 @@ function Header({ isShowUploadBtn = true }) {
                                 onMouseEnter={handleMouseEnter}
                             >
                                 <img
-                                    src='https://p16-sign-sg.tiktokcdn.com/aweme/720x720/tiktok-obj/f0a142d7c5d563cbefbedaf71546e039.jpeg?x-expires=1666807200&x-signature=2khdBPAW0xVwDOgtKUnMQQEUlFk%3D'
+                                    src={didLogin.avatar}
                                     className={cn("avt")}
                                     alt='avt'
                                 />

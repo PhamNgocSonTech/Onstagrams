@@ -3,6 +3,9 @@ import { END_POINT_API, END_POINT_API2 } from "../../Default/constant";
 
 const usersConfig = axios.create({
     baseURL: `${END_POINT_API2}/auth`,
+    validateStatus: function (status) {
+        return status >= 200 && status <= 500;
+    },
 });
 
 /**
@@ -10,15 +13,8 @@ const usersConfig = axios.create({
  * options: https://localhost:5000/api/auth/{url}&{params}
  */
 
-export const login = async (body = {}) => {
-    const results = await usersConfig.post("/login", {
-        data: body,
-        headers: {
-            "Access-Control-Allow-Origin": "*",
-            "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
-        },
-        withCredentials: false,
-    });
+export const login = async (body) => {
+    const results = await usersConfig.post("/login/", body);
     return results.data;
 };
 
