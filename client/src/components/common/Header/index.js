@@ -171,7 +171,7 @@ function Header({ isShowUploadBtn = true }) {
                         <>
                             <div className={cn("message-icon")}>
                                 <img src={send}></img>
-                                <PopUpNotification className={cn("number-notifi")}>9</PopUpNotification>
+                                <PopUpNotification className={cn("number-notifi")}>10</PopUpNotification>
                                 <div className={cn("tooltip-messages")}>
                                     <Tooltip>Messages</Tooltip>
                                 </div>

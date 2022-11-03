@@ -13,12 +13,14 @@ import { ParentContext } from "../Login";
 import { useContext, useEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import { acceptLogin } from "../../reducers/LoginStateManager";
+import { login } from "../../utils/HttpRequest/auth_request";
 
 const cn = classNames.bind(styles);
 
 function PersonalLogIn() {
     const { setIsOpenPersonalLogInForm, setIsOpenRegisterForm, handleClosePanel } = useContext(ParentContext);
     const [isShowAlertIncorrectLogin, setIsShowAlertIncorrectLogin] = useState(false);
+    const [dataUser, setDataUser] = useState({});
     const frm = useRef();
 
     const dispatch = useDispatch();
@@ -46,15 +48,16 @@ function PersonalLogIn() {
     }
 
     function handleSubmitLogin() {
-        if (username.current.value == "123" && password.current.value == "123") {
-            // Handle Login logic
+        loginAuthentication(username.current.value, password.current.value).then((res) => console.log(res));
+    }
 
-            // Handle Login logic
-            handleClosePanel(false);
-            dispatch(acceptLogin());
-        } else {
-            (username.current.value || password.current.value) && setIsShowAlertIncorrectLogin(true);
-        }
+    // !Login request
+    async function loginAuthentication(email, password) {
+        const data = await login({
+            email,
+            password,
+        });
+        return data;
     }
 
     return (

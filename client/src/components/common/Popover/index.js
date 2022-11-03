@@ -7,7 +7,6 @@ const cn = classNames.bind(styles);
 
 function Popover({ children, className }) {
     const position = useContext(TopPosition);
-    console.log(position);
     return (
         <div
             className={cn("wrapper", [className])}

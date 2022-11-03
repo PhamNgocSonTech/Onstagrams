@@ -16,9 +16,16 @@ import { getUsers } from "../../../utils/HttpRequest/user_request";
 const cn = classNames.bind(styles);
 export const TopPosition = createContext();
 
-function Sidebar({ className, isShowPopUp = true }) {
+function Sidebar({
+    className,
+    isShowPopUp = true,
+    followerAccounts = false,
+    suggestAcounts = true,
+    followingAccounts = true,
+}) {
     const [SuggestdAccounts, setSuggestdAccounts] = useState([]);
     const [FollowingAccounts, setFollowingAccounts] = useState([]);
+    const [FollowerAccounts, setFollowerAccounts] = useState([]);
     let idLeave = useRef();
     let idHover = useRef();
 
@@ -28,8 +35,7 @@ function Sidebar({ className, isShowPopUp = true }) {
     });
 
     const handleScrollSideBar = (e) => {
-        // console.log(e.target.scrollTop);
-        console.log(e.target.pageYOffset);
+        // console.log(e.target.pageYOffset);
     };
 
     const handleHover = (user, index) => {
@@ -77,9 +83,15 @@ function Sidebar({ className, isShowPopUp = true }) {
                 l: 5,
                 badge: false,
             }),
-        ]).then(([SuggestedAcc, FollowingAcc]) => {
+            getUsers("", {
+                p: 1,
+                l: 5,
+                badge: true,
+            }),
+        ]).then(([SuggestedAcc, FollowingAcc, FollowerAcc]) => {
             setSuggestdAccounts(SuggestedAcc);
             setFollowingAccounts(FollowingAcc);
+            setFollowerAccounts(FollowerAcc);
         });
     }, []);
 
@@ -90,53 +102,73 @@ function Sidebar({ className, isShowPopUp = true }) {
         >
             <MainBar />
 
-            <Sidebar_DivSecondary
-                title='Suggested accounts'
-                seeall
-            >
-                <div className={cn("container")}>
-                    {SuggestdAccounts.map((user, index) => (
+            {followerAccounts && (
+                <Sidebar_DivSecondary
+                    title='Follower accounts'
+                    seeall
+                >
+                    {FollowerAccounts.map((user, index) => (
                         <AccountItem
-                            onMouseEnter={() => handleHover(user, index)}
-                            onMouseLeave={handleLeave}
                             bold
                             smdes
                             userInfor={user}
                             key={index}
                         />
                     ))}
+                </Sidebar_DivSecondary>
+            )}
 
-                    {isShowPopUp &&
-                        (Profile.index === -1 || (
-                            <TopPosition.Provider
-                                value={{
-                                    top: `${(Profile.index + 1) * 57}px`,
-                                    onMouseLeave: handleProfileLeave,
-                                    onMouseEnter: handleProfileEnter,
-                                }}
-                            >
-                                <ProfilePopover
-                                    className={cn("profile-popover")}
-                                    userInfor={Profile.user}
-                                />
-                            </TopPosition.Provider>
+            {suggestAcounts && (
+                <Sidebar_DivSecondary
+                    title='Suggested accounts'
+                    seeall
+                >
+                    <div className={cn("container")}>
+                        {SuggestdAccounts.map((user, index) => (
+                            <AccountItem
+                                onMouseEnter={() => handleHover(user, index)}
+                                onMouseLeave={handleLeave}
+                                bold
+                                smdes
+                                userInfor={user}
+                                key={index}
+                            />
                         ))}
-                </div>
-            </Sidebar_DivSecondary>
 
-            <Sidebar_DivSecondary
-                title='Following accounts'
-                seeall
-            >
-                {FollowingAccounts.map((user, index) => (
-                    <AccountItem
-                        bold
-                        smdes
-                        userInfor={user}
-                        key={index}
-                    />
-                ))}
-            </Sidebar_DivSecondary>
+                        {isShowPopUp &&
+                            (Profile.index === -1 || (
+                                <TopPosition.Provider
+                                    value={{
+                                        top: `${(Profile.index + 1) * 57}px`,
+                                        onMouseLeave: handleProfileLeave,
+                                        onMouseEnter: handleProfileEnter,
+                                    }}
+                                >
+                                    <ProfilePopover
+                                        className={cn("profile-popover")}
+                                        userInfor={Profile.user}
+                                    />
+                                </TopPosition.Provider>
+                            ))}
+                    </div>
+                </Sidebar_DivSecondary>
+            )}
+
+            {followingAccounts && (
+                <Sidebar_DivSecondary
+                    title='Following accounts'
+                    seeall
+                >
+                    {FollowingAccounts.map((user, index) => (
+                        <AccountItem
+                            bold
+                            smdes
+                            userInfor={user}
+                            key={index}
+                        />
+                    ))}
+                </Sidebar_DivSecondary>
+            )}
 
             <Sidebar_DivSecondary title='Discover'>
                 <div className={cn("tag")}>
