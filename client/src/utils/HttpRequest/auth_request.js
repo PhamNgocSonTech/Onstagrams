@@ -1,8 +1,8 @@
 import axios from "axios";
-import { END_POINT_API } from "../../Default/constant";
+import { END_POINT_API, END_POINT_API2 } from "../../Default/constant";
 
 const usersConfig = axios.create({
-    baseURL: `${END_POINT_API}/auth`,
+    baseURL: `${END_POINT_API2}/auth`,
 });
 
 /**
@@ -11,7 +11,14 @@ const usersConfig = axios.create({
  */
 
 export const login = async (body = {}) => {
-    const results = await usersConfig.post("/login", { data: body });
+    const results = await usersConfig.post("/login", {
+        data: body,
+        headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
+        },
+        withCredentials: false,
+    });
     return results.data;
 };
 
