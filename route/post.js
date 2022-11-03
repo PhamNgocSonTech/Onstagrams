@@ -64,21 +64,21 @@ router.delete("/delete/:id", async(req, res) =>{
 
 // ********************************************//
 //COMMENT 
-router.put("/comment/post" , verifyToken , async(req , res)=>{
-    // try {
-          const {comment , postId} = req.body;
+router.put("/comment/post/:id" , verifyToken , async(req , res)=>{
+     try {
+          const {comment} = req.body;
           const commentObj={
-                user:req.user._id,
+                userId:req.user._id,
                 username:req.user.username,
                 comment,
           }
-          const post = await Post.findById(postId);
+          const post = await Post.findById(req.params.id);
           post.comments.push(commentObj);
           await post.save();
           res.status(200).json(post);
-    // } catch (error) {
-    //       return res.status(500).json("Internal server error")
-    // }
+    } catch (err) {
+          return res.status(500).json({msg: err.message})
+    }
 })
 // ********************************************//
 //LIKE AND DISLIKE POST

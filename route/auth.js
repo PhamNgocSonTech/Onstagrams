@@ -13,7 +13,8 @@ const ResetToken = require("../models/ResetToken")
 const nodemailer = require('nodemailer')
 const {generateOTP} = require('../utils/mail')
 
-const JWT_KEY = 'myaccesstoken'
+const dotenv = require('dotenv').config()
+//const JWT_KEY = 'myaccesstoken'
 
 
 //const CLIENT_URL = 'https://localhost:3000/'
@@ -45,7 +46,7 @@ router.post("/register", async(req, res) => {
         const accessToken = jwt.sign({
                     _id:newUser._id,
                     username:newUser.username
-          }, JWT_KEY);
+          }, process.env.JWT_KEY);
         
     
 
@@ -79,7 +80,7 @@ router.post("/login", async(req, res) => {
         const accessToken = jwt.sign({
                   _id: user._id,
                   username: user.username
-        }, JWT_KEY);
+        }, process.env.JWT_KEY);
         const {password , ...other} = user._doc
         res.status(200).json({other , accessToken});
                   

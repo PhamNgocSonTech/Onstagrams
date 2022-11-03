@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const JWT_KEY = 'myaccesstoken';
+//const JWT_KEY = 'myaccesstoken';
 const dotenv = require('dotenv').config();
 const User = require("../models/User");
 
