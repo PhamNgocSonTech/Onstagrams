@@ -34,7 +34,7 @@ function Register() {
 
     /**
      * 0: Fullname ->
-     * 1: Username -> ^[\w-#]{5,20}$
+     * 1: Username -> ^[a-z0-9-#]{5,20}$
      * 2: Email -> ^\w{5,15}@[a-z]{5,8}\.[a-z]{2,3}(\.[a-z]{2,3})?$
      * 3: Password -> ^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$
      * 4: Password 2 -> = Password1
@@ -94,7 +94,7 @@ function Register() {
 
     // Validate Functions
     const validateUsername = (str) => {
-        return new RegExp(/^[\w-#]{5,20}$/).test(str);
+        return new RegExp(/^[a-z0-9-#]{5,20}$/).test(str);
     };
 
     const validateEmail = (str) => {
@@ -190,10 +190,11 @@ function Register() {
                                 />
                             </div>
                             {isShowUsernamePopupValidate && (
-                                <div className={cn("tooltip-information")}>
+                                <div className={cn("tooltip-information", "length-tooltip")}>
                                     <Tooltip>
                                         <span>
-                                            Limit in 5 to 20 characters, just accepct '#', '-' special character
+                                            Limit in 5 to 20 characters, just '#', '-' special character, only
+                                            lowercase, no spaces
                                         </span>
                                     </Tooltip>
                                 </div>

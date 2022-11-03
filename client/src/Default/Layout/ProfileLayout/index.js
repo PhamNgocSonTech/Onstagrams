@@ -14,6 +14,9 @@ function ProfileLayout({ children }) {
                 <Sidebar
                     className={cn("sidebar-custom")}
                     isShowPopUp={false}
+                    followerAccounts={true}
+                    followingAccounts={true}
+                    suggestAcounts={false}
                 />
                 <div className={cn("content")}>{children}</div>
             </div>

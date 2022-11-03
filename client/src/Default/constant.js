@@ -15,7 +15,7 @@ import VideoGallery from "../components/VideoGallery";
 import PhotoGallery from "../components/PhotoGallery";
 import SharedGallery from "../components/SharedGallery";
 
-export const END_POINT_API = "https://630b16fbed18e825164db3b3.mockapi.io/api/tiktok";
+export const END_POINT_API = "http://localhost:5000/api";
 
 export const MENU_SETTING = [
     {
