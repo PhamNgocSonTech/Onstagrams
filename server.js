@@ -40,7 +40,10 @@ app.use(bodyParser.json())
 // })
 // app.use(passport.initialize());
 // app.use(passport.session());
-
+app.use(cors({
+  origin: true,
+  credentials: true
+}))
 
 //ROUTE
 app.use("/api/user", userRoute);
@@ -57,17 +60,3 @@ app.listen(port, () => console.log("Server is running on port is:", port));
 //   maxAge: 24 * 60 * 60 * 1000 // 24 hours
 // }))
 
-
-app.use(cors({
-    origin: 'http://localhost:3000',
-    methods: 'GET, POST, PUT, DELETE',
-    credentials: true
-}))
-
-
-// app.get("/", (req, res) => {
-//       res.send("Welcome to Home Page")
-//   })
-    
-
-app.listen(port, () => console.log("Server is running on port is:", port)) 
