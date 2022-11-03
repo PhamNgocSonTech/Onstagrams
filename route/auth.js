@@ -1,16 +1,20 @@
-const router = require('express').Router();
+const router = require('express').Router()
 const User = require('../models/User')
 const bcrypt = require('bcrypt')
 
-const cloudinary = require("../utils/cloudinary");
-const upload = require("../utils/multer");
+const cloudinary = require('../utils/cloudinary')
+const upload = require('../utils/multer')
 
-// const passport = require('passport')
+//const passport = require('passport')
 
-const jwt = require('jsonwebtoken');
-const ResetToken = require("../models/ResetToken");
+const jwt = require('jsonwebtoken')
+const ResetToken = require("../models/ResetToken")
 
-const JWT_KEY = 'myaccesstoken';
+const nodemailer = require('nodemailer')
+const {generateOTP} = require('../utils/mail')
+
+const dotenv = require('dotenv').config()
+//const JWT_KEY = 'myaccesstoken'
 
 
 //const CLIENT_URL = 'https://localhost:3000/'
@@ -19,7 +23,7 @@ const JWT_KEY = 'myaccesstoken';
 router.post("/register", async(req, res) => {
     try {
         const { fullname, username, email, password, gender } = req.body
-        let newUserName = username.toLowerCase().replace(/ /g, '')
+        // let newUserName = username.toLowerCase().replace(/ /g, '')
 
         const userName = await User.findOne({username: username})
         if(userName) return res.status(400).json({msg: "This user name already exists."})
@@ -36,13 +40,13 @@ router.post("/register", async(req, res) => {
         // const passwordHash = await bcrypt.hash(password, 12)
 
         const newUser = new User({
-            fullname, username: newUserName, email, password: hashedPassword, gender
+            fullname, username, email, password: hashedPassword, gender
         })
 
         const accessToken = jwt.sign({
                     _id:newUser._id,
                     username:newUser.username
-          }, JWT_KEY);
+          }, process.env.JWT_KEY);
         
     
 
@@ -76,7 +80,7 @@ router.post("/login", async(req, res) => {
         const accessToken = jwt.sign({
                   _id: user._id,
                   username: user.username
-        }, JWT_KEY);
+        }, process.env.JWT_KEY);
         const {password , ...other} = user._doc
         res.status(200).json({other , accessToken});
                   

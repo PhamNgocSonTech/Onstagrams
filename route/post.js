@@ -63,8 +63,26 @@ router.delete("/delete/:id", async(req, res) =>{
 })
 
 // ********************************************//
+//COMMENT 
+router.put("/comment/post/:id" , verifyToken , async(req , res)=>{
+     try {
+          const {comment} = req.body;
+          const commentObj={
+                userId:req.user._id,
+                username:req.user.username,
+                comment,
+          }
+          const post = await Post.findById(req.params.id);
+          post.comments.push(commentObj);
+          await post.save();
+          res.status(200).json(post);
+    } catch (err) {
+          return res.status(500).json({msg: err.message})
+    }
+})
+// ********************************************//
 //LIKE AND DISLIKE POST
-    router.put("/like/:id", verifyToken, async (req, res) => {
+router.put("/like/:id", verifyToken, async (req, res) => {
         try {
             const post = await Post.findById(req.params.id)
             if(!post.likes.includes(req.user.userId)){
@@ -82,7 +100,7 @@ router.delete("/delete/:id", async(req, res) =>{
 
 // ********************************************//
 //GET POST
-    router.get("/getPost/:id", async (req, res) => {
+router.get("/getPost/:id", async (req, res) => {
     try {
       const postGet = await Post.findById(req.params.id);
       res.status(200).json(postGet);
@@ -93,7 +111,7 @@ router.delete("/delete/:id", async(req, res) =>{
 
 // ********************************************//
 //GET ALL POST
-    router.get("/getListPosts/", async (req, res) => {
+router.get("/getListPosts/", async (req, res) => {
     try {
       const postGet = await Post.find();
       res.status(200).json(postGet);
@@ -104,7 +122,7 @@ router.delete("/delete/:id", async(req, res) =>{
 
 // ********************************************//
 //GET ALL TIMELINE POST
-    router.get("/timeline/:userId", async (req, res) => {
+router.get("/timeline/:userId", async (req, res) => {
     try {
         const currentUser = await User.findById(req.params.userId)
         const userPost = await Post.find({userId: currentUser._id})
@@ -121,7 +139,7 @@ router.delete("/delete/:id", async(req, res) =>{
 
 // ********************************************//
 //GET USER'S ALL POSTS
-    router.get("/profile/:username", async (req, res) => {
+router.get("/profile/:username", async (req, res) => {
         try {
             const user = await User.findOne({username: req.params.username})
             const post = await Post.find({userId: user._id})
@@ -132,6 +150,7 @@ router.delete("/delete/:id", async(req, res) =>{
         }
     })
 
+// ********************************************//
 //DELETE ALL POSTS
 router.delete("/deleteAll", async (req, res) => {
     try {

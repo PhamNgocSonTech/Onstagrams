@@ -115,18 +115,18 @@ router.put("/updateProfile/:id", verifyToken, upload.single("img"), async (req, 
 
 
 //DELETE USER
-router.delete("/delete/:id", async (req, res) => {
-  if (req.body.userId === req.params.id || req.body.isAdmin) {
-    try {
+router.delete("/delete/:id", verifyToken, async (req, res) => {
+  try {
+      if (req.user._id === req.params.id) {
       const userDelete = await User.findById(req.params.id);
       await cloudinary.uploader.destroy(userDelete.cloudinary_id);
       await userDelete.remove();
       res.status(200).json("Delete User Success");
-    } catch (err) {
-      return res.status(500).json(err);
+    } else {
+      return res.status(403).json("Can't Delete");
     }
-  } else {
-    return res.status(403).json("Can't Delete");
+  } catch (err) {
+    return res.status(500).json({msg: err.message});
   }
 });
 
@@ -182,7 +182,7 @@ router.put("/:id/unfollow", async (req, res) => {
   }
 });
 
-// FETCHING POST FROM FOLLOWING
+//FETCHING POST FROM FOLLOWING
 router.get('/fetchPostFlw/:id', verifyToken, async(req, res) => {
     try{
       const user = await User.findById(req.params.id)
