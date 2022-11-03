@@ -24,7 +24,7 @@ function VideoInfor() {
     const [isFollow, setIsFollow] = useState(false);
     const [isShowPanel, setIsShowPanel] = useState(false);
 
-    const didLogin = useSelector((state) => state.loginState_reducer.isLogIn);
+    const didLogin = useSelector((state) => state.loginState_reducer.user);
 
     const animations = {
         like: {

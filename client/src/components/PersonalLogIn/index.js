@@ -52,12 +52,7 @@ function PersonalLogIn() {
         if (username.current.value && password.current.value) {
             loginAuthentication(username.current.value, password.current.value).then((res) => {
                 if (typeof res == "object") {
-                    const userInfor = {
-                        ...res.other,
-                        username: username.current.value,
-                        password: password.current.value,
-                    };
-                    dispatch(setUserInfor(userInfor));
+                    dispatch(setUserInfor(res.other));
                     window.localStorage.setItem("accessToken", res.accessToken);
                     handleClosePanel(false);
                 } else {
