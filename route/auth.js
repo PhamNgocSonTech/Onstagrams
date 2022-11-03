@@ -12,6 +12,7 @@ const ResetToken = require("../models/ResetToken")
 
 const nodemailer = require('nodemailer')
 const {generateOTP} = require('../utils/mail')
+const VerificationMail = require('../models/VerificationMail')
 
 const dotenv = require('dotenv').config()
 //const JWT_KEY = 'myaccesstoken'
@@ -47,19 +48,43 @@ router.post("/register", async(req, res) => {
                     _id: newUser._id,
                     username: newUser.username
           }, process.env.JWT_KEY);
-        
-    
-
-        await newUser.save()
-
-        res.status(200).json({
-            msg: 'Register Success!',
-            accessToken,
-            user: {
-                ...newUser._doc,
-                password: ''
-            }
+        const OTP = generateOTP();
+        const verificationMail = await VerificationMail.create({
+            user: newUser._id,
+            token: OTP
         })
+        verificationMail.save();
+        await newUser.save()
+        const transport = nodemailer.createTransport({
+            host: "smtp.mailtrap.io",
+            port: 2525,
+            auth: {
+              user: process.env.USER,
+              pass: process.env.PASS
+            }
+          });
+          transport.sendMail({
+            from:"onstgram-dev@gmail.com",
+            to:newUser.email,
+            subject:"Verify your email using OTP",
+            html:`<h1>Your OTP CODE ${OTP}</h1>`
+          })
+          res.status(200).json({
+            Status:"Pending" , 
+            msg:"Register Success! Please check your email", 
+            accessToken,
+            user:{
+                ...newUser._id
+            }
+            })
+        // res.status(200).json({
+        //     msg: 'Register Success!',
+        //     accessToken,
+        //     user: {
+        //         ...newUser._doc,
+        //         password: ''
+        //     }
+        // })
     } catch (err) {
         return res.status(500).json({msg: err.message})
     }
@@ -86,7 +111,7 @@ router.post("/login", async(req, res) => {
                   
     } catch (err) {
           res.status(500).json({msg: err.message});        
-    }
+    }     
 })
 
 

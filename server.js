@@ -33,9 +33,20 @@ app.use(express.json())
 app.use(helmet())
 app.use(morgan("dev"))
 app.use(bodyParser.json())
+// app.use((req,res,next)=>{
+//   //res.setHeader('Access-Control-Allow-Origin','*');
+//   res.set('Access-Control-Allow-Origin', '*');
+//   res.setHeader('Access-Control-Allow-Methods','GET,POST,PUT,PATCH,DELETE');
+//   res.setHeader('Access-Control-Allow-Methods','Content-Type','Authorization');
+//   next(); 
+// })
 // app.use(passport.initialize());
 // app.use(passport.session());
 
+app.use(cors({
+  origin: true,
+  credentials: true,
+}));
 
 //ROUTE
 app.use("/api/user", userRoute)
@@ -53,11 +64,11 @@ app.use("/api/post", postRoute)
 // }))
 
 
-app.use(cors({
-    origin: 'http://localhost:3000',
-    methods: 'GET, POST, PUT, DELETE',
-    credentials: true
-}))
+// app.use(cors({
+//     origin: 'http://localhost:3000',
+//     methods: 'GET, POST, PUT, DELETE',
+//     credentials: true
+// }))
 
 
 // app.get("/", (req, res) => {
