@@ -15,10 +15,10 @@ const {generateOTP} = require('../utils/mail')
 const VerificationMail = require('../models/VerificationMail')
 
 const dotenv = require('dotenv').config()
-//const JWT_KEY = 'myaccesstoken'
-
+let refreshTokens = []
 
 //const CLIENT_URL = 'https://localhost:3000/'
+
 
 //REGISTER NEW
 router.post("/register", async(req, res) => {
@@ -47,51 +47,85 @@ router.post("/register", async(req, res) => {
         const accessToken = jwt.sign({
                     _id: newUser._id,
                     username: newUser.username
-          }, process.env.JWT_KEY);
-        const OTP = generateOTP();
-        const verificationMail = await VerificationMail.create({
-            user: newUser._id,
-            token: OTP
-        })
-        verificationMail.save();
-        await newUser.save()
-        const transport = nodemailer.createTransport({
-            host: "smtp.mailtrap.io",
-            port: 2525,
-            auth: {
-              user: process.env.USER,
-              pass: process.env.PASS
-            }
-          });
-          transport.sendMail({
-            from:"onstgram-dev@gmail.com",
-            to:newUser.email,
-            subject:"Verify your email using OTP",
-            html:`<h1>Your OTP CODE ${OTP}</h1>`
-          })
-          res.status(200).json({
-            Status:"Pending" , 
-            msg:"Register Success! Please check your email", 
-            accessToken,
-            user:{
-                ...newUser._id
-            }
-            })
-        // res.status(200).json({
-        //     msg: 'Register Success!',
-        //     accessToken,
-        //     user: {
-        //         ...newUser._doc,
-        //         password: ''
-        //     }
+          }, process.env.ACCESS_TOKEN_SECRET, {expiresIn: '60s'});
+        // const OTP = generateOTP();
+        // const verificationMail = await VerificationMail.create({
+        //     user: newUser._id,
+        //     token: OTP
         // })
+        // verificationMail.save();
+        await newUser.save()
+        // const transport = nodemailer.createTransport({
+        //     host: "smtp.mailtrap.io",
+        //     port: 2525,
+        //     service: 'Gmail',
+        //     auth: {
+        //       user: process.env.USER,
+        //       pass: process.env.PASS
+        //     }
+        //   });
+        //   transport.sendMail({
+        //     from:"onstgrams-dev",
+        //     to:newUser.email,
+        //     subject:"Verify your email using OTP",
+        //     html:`<h1>Your OTP CODE ${OTP}</h1>`
+        //   })
+        //   res.status(200).json({
+        //     Status:"Pending" , 
+        //     msg:"Register Success! Please check your email", 
+        //     accessToken,
+        //     })
+        res.status(200).json({
+            msg: 'Register Success!',
+            accessToken,
+            user: {
+                ...newUser._doc,
+                password: ''
+            }
+        })
     } catch (err) {
         return res.status(500).json({msg: err.message})
     }
 })
 
+// router.post('/verify/mail', async(req, res) => {
+//     const {user, otp} = req.body
+//     const getUser = await User.findById(user)
+//     if(!getUser) return res.status(400).json('User not found')
+//     if(getUser.verifed === true)return res.status(400).json('User already verify mail')
+//     const getToken = await VerificationMail.findOne({user: getUser._id})
+//     if(!getToken)return res.status(400).json('Token not found')
+//     const checkMatch = await bcrypt.compareSync(otp, getToken.token)
+//     if(!checkMatch)return res.status(400).json('Token not valid')
+//     getUser.verifed = true;
+//     await VerificationMail.findByIdAndDelete(token._id)
+//     getUser.save()
+//     const accessToken = jwt.sign({
+//         _id: getUser._id,
+//         username: getUser.username
+//     }, process.env.ACCESS_TOKEN_SECRET, {expiresIn: 60 * 60 * 24 });
+//     const {password , ...other} = getUser._doc
+
+//     const transport = nodemailer.createTransport({
+//         host: "smtp.mailtrap.io",
+//         port: 2525,
+//         auth: {
+//           user: process.env.USER,
+//           pass: process.env.PASS
+//         }
+//       });
+//       transport.sendMail({
+//         from:"onstgrams-dev",
+//         to:getUser.email,
+//         subject:"Successfully verify your email",
+//         html:`Now you can login Onstagrams`
+//       })
+//       return res.status(200).json({other , accessToken})
+
+// })
 
 // LOGIN NEW 
+
 router.post("/login", async(req, res) => {
     try {
         //const { email, password } = req.body
@@ -101,18 +135,47 @@ router.post("/login", async(req, res) => {
 
         const Comparepassword = await bcrypt.compare(req.body.password , user.password);
         if(!Comparepassword) return res.status(400).json("Password error")
-        
-        const accessToken = jwt.sign({
-                  _id: user._id,
-                  username: user.username
-        }, process.env.JWT_KEY);
+        let data = {
+            _id: user._id,
+            username: user.username
+        }
+        const accessToken = jwt.sign(data, process.env.ACCESS_TOKEN_SECRET, {expiresIn: '60s'});
+        const refreshToken = jwt.sign(data, process.env.REFRESH_TOKEN_SECRET);
+        refreshTokens.push(refreshToken);
         const {password , ...other} = user._doc
-        res.status(200).json({other , accessToken});
+        res.status(200).json({other , accessToken, refreshToken});
                   
     } catch (err) {
           res.status(500).json({msg: err.message});        
     }     
 })
+
+router.post('/refreshToken', async (req, res) => {
+    const refreshToken = req.body.token
+    if(!refreshToken) return res.status(401).json('Refresh token not valid')
+    if(!refreshTokens.includes(refreshToken)) return res.status(401).json('Refresh token not found')
+    jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET,(err, data) =>{
+        console.log(err, data)
+        if(err) res.status(403)
+        const accessToken = jwt.sign(
+            {username: data.username},
+            process.env.ACCESS_TOKEN_SECRET, {expiresIn: '60s'})
+        res.status(200).json({accessToken})
+    } )
+})
+router.post('/logout', (req, res) => {
+    const refreshToken = req.body.token;
+    refreshTokens = refreshTokens.filter((refToken) => refToken !== refreshToken);
+    res.status(200).json('Logout Success');
+  });
+
+// router.post("/logout", verifyToken, async (req, res) => {
+//         try {
+//             req.user.token
+//         }catch(err){
+//             return res.status(500).json({msg: err.message})
+//         }
+// })
 
 
 //REGISTER OLD

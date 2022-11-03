@@ -14,7 +14,8 @@ const UserSchema = new mongoose.Schema(
       required: true
     },
     gender: {
-      type: String, 
+      type: String,
+      enum: ['Male', 'Female', 'Secret'],
       default: 'Male'
     },
     email: {
@@ -54,10 +55,6 @@ const UserSchema = new mongoose.Schema(
     city: {
       type: String,
       max: 50,
-    },
-    relationship: {
-      type: Number,
-      enum: [1, 2, 3],
     },
   },
   { timestamps: true }

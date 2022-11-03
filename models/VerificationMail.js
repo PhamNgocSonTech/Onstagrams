@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-
+const bcrypt = require('bcrypt')
 const VerificationMailSchema = new mongoose.Schema({
     user: {
         type: mongoose.Schema.Types.ObjectId,
@@ -17,9 +17,9 @@ const VerificationMailSchema = new mongoose.Schema({
     }
 })
 
-VerificationMailSchema.pre("save", async(next) => {
+VerificationMailSchema.pre("save", async function(next){
     const salt = await bcrypt.genSalt(10)
-    if(this.isModified("token")){
+    if(this.isModified('token')){
             const hashCode = await bcrypt.hash(this.token, salt)
             this.token = hashCode
     }

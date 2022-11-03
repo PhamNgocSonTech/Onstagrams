@@ -7,7 +7,7 @@ const verifyToken = async(req , res , next)=>{
           const authHeader = req.headers.token;
           if(authHeader){
                     const token = authHeader;
-                    jwt.verify(token, process.env.JWT_KEY, (err , user)=>{
+                    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err , user)=>{
                               if(err) return res.status(400).json("Some error occured");
                               req.user = user;
                               next();
