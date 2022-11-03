@@ -44,8 +44,8 @@ router.post("/register", async(req, res) => {
         })
 
         const accessToken = jwt.sign({
-                    _id:newUser._id,
-                    username:newUser.username
+                    _id: newUser._id,
+                    username: newUser.username
           }, process.env.JWT_KEY);
         
     
