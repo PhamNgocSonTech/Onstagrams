@@ -2,7 +2,7 @@ import axios from "axios";
 import { END_POINT_API } from "../../Default/constant";
 
 const usersConfig = axios.create({
-    baseURL: `${END_POINT_API}/user`,
+    baseURL: `${END_POINT_API}/users`,
 });
 
 /**
