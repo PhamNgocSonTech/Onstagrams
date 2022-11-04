@@ -22,7 +22,7 @@ router.get("/search/:username", async (req, res) => {
 });
 
 //GET USER BY ID
-router.get("/get/:id", async (req, res) => {
+router.get("/get/:id", verifyToken, async (req, res) => {
     try {
         const userGet = await User.findById(req.params.id);
         res.status(200).json(userGet);
@@ -59,7 +59,7 @@ router.put("/updateProfile/:id", verifyToken, upload.single("img"), async (req, 
             let result;
             if (req.file) {
                 result = await cloudinary.uploader.upload(req.file.path, {
-                    upload_preset: "avatar",
+                    upload_preset: "post_upload",
                 });
                 // Delete image from cloudinary
                 await cloudinary.uploader.destroy(user.cloudinary_id);

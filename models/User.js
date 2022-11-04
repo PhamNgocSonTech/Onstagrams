@@ -15,7 +15,7 @@ const UserSchema = new mongoose.Schema(
     },
     gender: {
       type: String,
-      enum: ['Male', 'Female', 'Secret'],
+      enum: [1, 2, 3],
       default: 'Male'
     },
     email: {
@@ -37,6 +37,14 @@ const UserSchema = new mongoose.Schema(
       type: String,
       default: 'default-avatar_et9ey8'
     },
+    bio: {
+      type: String,
+      max: 50,
+    },
+    external: {
+      type: String,
+      max: 50,
+    },
     followers: {
       type: Array
     },
@@ -48,14 +56,7 @@ const UserSchema = new mongoose.Schema(
       required:true,
       default:false
     },
-    desc: {
-      type: String,
-      max: 50,
-    },
-    city: {
-      type: String,
-      max: 50,
-    },
+   
   },
   { timestamps: true }
 );

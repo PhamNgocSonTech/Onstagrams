@@ -9,16 +9,32 @@ const upload = require('../utils/multer')
 
 const jwt = require('jsonwebtoken')
 const ResetToken = require("../models/ResetToken")
+const {verifyToken} = require('../utils/verifyToken')
 
 const nodemailer = require('nodemailer')
+const {OAuth2Client} = require('google-auth-library')
+
 const {generateOTP} = require('../utils/mail')
 const VerificationMail = require('../models/VerificationMail')
 
 const dotenv = require('dotenv').config()
 let refreshTokens = []
-
+const GOOGLE_MAILER_CLIENT_ID = '251967640945-nnrjjfil8gjer0cpp7d1fd4rlghnhhs4.apps.googleusercontent.com'
+const GOOGLE_MAILER_CLIENT_SECRET = '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'
+const GOOGLE_MAILER_REFRESH_TOKEN = '1//04_aADufrusQvCgYIARAAGAQSNwF-L9IrwKbNDwCSsNqfZLbgQDEZNghvJlZYzmithGcdbnEyKeUq1q7KKm8oOiuEHK3skQFF8hI'
+const ADMIN_EMAIL_ADDRESS = 'phamgocson7a1@gmail.com'
 //const CLIENT_URL = 'https://localhost:3000/'
 
+// CONFIG FOR GOOGLE SEND MAIL
+// Khởi tạo OAuth2Client với Client ID và Client Secret 
+const myOAuth2Client = new OAuth2Client(
+    GOOGLE_MAILER_CLIENT_ID,
+    GOOGLE_MAILER_CLIENT_SECRET
+  )
+  // Set Refresh Token vào OAuth2Client Credentials
+  myOAuth2Client.setCredentials({
+    refresh_token: GOOGLE_MAILER_REFRESH_TOKEN
+  })
 
 //REGISTER NEW
 router.post("/register", async(req, res) => {
@@ -44,40 +60,58 @@ router.post("/register", async(req, res) => {
             fullname, username, email, password: hashedPassword, gender
         })
 
-        const accessToken = jwt.sign({
+        const accessTokenJWT = jwt.sign({
                     _id: newUser._id,
                     username: newUser.username
-          }, process.env.ACCESS_TOKEN_SECRET, {expiresIn: '60s'});
-        // const OTP = generateOTP();
-        // const verificationMail = await VerificationMail.create({
-        //     user: newUser._id,
-        //     token: OTP
-        // })
-        // verificationMail.save();
-        await newUser.save()
-        // const transport = nodemailer.createTransport({
-        //     host: "smtp.mailtrap.io",
-        //     port: 2525,
-        //     service: 'Gmail',
-        //     auth: {
-        //       user: process.env.USER,
-        //       pass: process.env.PASS
+          }, process.env.ACCESS_TOKEN_SECRET, {expiresIn: '30m'});
+          await newUser.save()
+          // const OTP = generateOTP();
+          // const verificationMail = await VerificationMail.create({
+          //     user: newUser._id,
+          //     token: OTP
+          // })
+          // verificationMail.save();
+
+        //Lấy AccessToken từ RefreshToken (bởi vì Access Token cứ một khoảng thời gian ngắn sẽ bị hết hạn)
+        //Vì vậy mỗi lần sử dụng Access Token, chúng ta sẽ generate ra một thằng mới là chắc chắn nhất.
+       //const myAccessTokenObject = await myOAuth2Client.getAccessToken()
+        //Access Token sẽ nằm trong property 'token' trong Object mà chúng ta vừa get được ở trên
+       //const accessTokenGG = myAccessTokenObject?.token
+
+
+        // const transporter = nodemailer.createTransport({
+        //     service: 'gmail',
+        //         auth: {
+        //         type: 'OAuth2',
+        //         user: ADMIN_EMAIL_ADDRESS,
+        //         clientId: GOOGLE_MAILER_CLIENT_ID,
+        //         clientSecret: GOOGLE_MAILER_CLIENT_SECRET,
+        //         refresh_token: GOOGLE_MAILER_REFRESH_TOKEN,
+        //         accessToken: myAccessTokenObject,
         //     }
         //   });
-        //   transport.sendMail({
+        //   const mailOptions = {
         //     from:"onstgrams-dev",
         //     to:newUser.email,
         //     subject:"Verify your email using OTP",
-        //     html:`<h1>Your OTP CODE ${OTP}</h1>`
-        //   })
+        //     html:`<h1>Hello I'm SonAdmin in Onstgrams Web, I Send Your OTP CODE ${OTP}</h1>`
+        //   }
+        //   transporter.sendMail(mailOptions, function(err, data) {
+        //     if (err) {
+        //       console.log("Error " + err);
+        //     } else {
+        //       console.log("Email sent successfully");
+        //     }
+        //   });
+        //   await transport.sendMail(mailOptions)
         //   res.status(200).json({
         //     Status:"Pending" , 
         //     msg:"Register Success! Please check your email", 
-        //     accessToken,
+        //     accessTokenJWT,
         //     })
         res.status(200).json({
             msg: 'Register Success!',
-            accessToken,
+            accessTokenJWT,
             user: {
                 ...newUser._doc,
                 password: ''
@@ -87,6 +121,55 @@ router.post("/register", async(req, res) => {
         return res.status(500).json({msg: err.message})
     }
 })
+
+
+router.post('/sendMail/:id', verifyToken,  async(req, res) => {
+    const newUser = await User.findById(req.params.id)
+    const OTP = generateOTP();
+          const verificationMail = await VerificationMail.create({
+              user: req.user._id,
+              token: OTP
+          })
+          verificationMail.save();
+
+        //Lấy AccessToken từ RefreshToken (bởi vì Access Token cứ một khoảng thời gian ngắn sẽ bị hết hạn)
+        //Vì vậy mỗi lần sử dụng Access Token, chúng ta sẽ generate ra một thằng mới là chắc chắn nhất.
+       const myAccessTokenObject = await myOAuth2Client.getAccessToken()
+        //Access Token sẽ nằm trong property 'token' trong Object mà chúng ta vừa get được ở trên
+       const ggToken = myAccessTokenObject?.token
+
+        const transporter = nodemailer.createTransport({
+            service: 'gmail',
+                auth: {
+                type: 'OAuth2',
+                user: ADMIN_EMAIL_ADDRESS,
+                clientId: GOOGLE_MAILER_CLIENT_ID,
+                clientSecret: GOOGLE_MAILER_CLIENT_SECRET,
+                refresh_token: GOOGLE_MAILER_REFRESH_TOKEN,
+                accessToken: ggToken,
+            }
+          });
+          const mailOptions = {
+            from:"onstgrams-dev",
+            to:req.user.email,
+            subject:"Verify your email using OTP",
+            html:`<h1>Hello I'm SonAdmin in Onstgrams Web, I Send Your OTP CODE ${OTP}</h1>`
+          }
+          await  transporter.sendMail(mailOptions, function(err, data) {
+            if (err) {
+              console.log("Error " + err);
+            } else {
+              console.log("Email sent successfully");
+            }
+          });
+        //   await transporter.sendMail(mailOptions)
+        //   res.status(200).json({
+        //     Status:"Pending" , 
+        //     msg:"Register Success! Please check your email", 
+        //     accessTokenJWT,
+        //     })
+})
+
 
 // router.post('/verify/mail', async(req, res) => {
 //     const {user, otp} = req.body
@@ -139,7 +222,7 @@ router.post("/login", async(req, res) => {
             _id: user._id,
             username: user.username
         }
-        const accessToken = jwt.sign(data, process.env.ACCESS_TOKEN_SECRET, {expiresIn: '60s'});
+        const accessToken = jwt.sign(data, process.env.ACCESS_TOKEN_SECRET, {expiresIn: '30m'});
         const refreshToken = jwt.sign(data, process.env.REFRESH_TOKEN_SECRET);
         refreshTokens.push(refreshToken);
         const {password , ...other} = user._doc
@@ -159,7 +242,7 @@ router.post('/refreshToken', async (req, res) => {
         if(err) res.status(403)
         const accessToken = jwt.sign(
             {username: data.username},
-            process.env.ACCESS_TOKEN_SECRET, {expiresIn: '60s'})
+            process.env.ACCESS_TOKEN_SECRET, {expiresIn: '30m'})
         res.status(200).json({accessToken})
     } )
 })

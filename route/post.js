@@ -2,7 +2,8 @@ const router = require('express').Router()
 const Post = require('../models/Post')
 const User = require('../models/User')
 const {verifyToken} = require('../utils/verifyToken')
-
+const cloudinary = require("../utils/cloudinary");
+const upload = require("../utils/multer");
 
 // router.get("/", async(req, res) =>{
 //     res.send("Post")
@@ -10,13 +11,14 @@ const {verifyToken} = require('../utils/verifyToken')
 
 // ********************************************//
 //CREATE POST
-router.post("/", verifyToken, async(req, res) =>{
+router.post("/:id", verifyToken, upload.single("image"), async(req, res) =>{
     try {
-        const {desc, img} = req.body
+        const {desc, img, video} = req.body
         const newPost = await new Post({
-            desc, img,
+            desc, img, video,
             userId: req.user._id
         })
+
         const savePost = await newPost.save()
         res.status(200).json(savePost)    
     }catch(err){
@@ -99,10 +101,10 @@ router.put("/like/:id", verifyToken, async (req, res) => {
     })
 
 // ********************************************//
-//GET POST
+//GET POST BY USERID
 router.get("/getPost/:id", async (req, res) => {
     try {
-      const postGet = await Post.findById(req.params.id);
+      const postGet = await Post.find({userId: req.params.id});
       res.status(200).json(postGet);
     } catch (err) {
       return res.status(500).json(err);
