@@ -27,7 +27,7 @@ export const pubRoutes = [
         parameters: { isShowUploadBtn: false },
     },
     {
-        path: "/profile",
+        path: "/profile/:id",
         element: Profile,
         layout: ProfileLayout,
     },

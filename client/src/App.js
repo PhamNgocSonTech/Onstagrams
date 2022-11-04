@@ -10,22 +10,22 @@ import jwt_decode from "jwt-decode";
 import { useDispatch } from "react-redux";
 
 function App() {
+    const dispatch = useDispatch();
     const getUser = (id) => {
         return getUserById(id).then((user) => user);
     };
 
-    const dispatch = useDispatch();
-
-    const token = window.localStorage.getItem("accessToken") ?? "NoneToken";
-    try {
-        const decode = jwt_decode(token);
-        getUser(decode._id).then((user) => {
-            if (user.status === 200) {
-                console.log(user);
-                dispatch(setUserInfor(user.data));
-            }
-        });
-    } catch (Ex) {}
+    useEffect(() => {
+        const token = window.localStorage.getItem("accessToken") ?? "NoneToken";
+        try {
+            const decode = jwt_decode(token);
+            getUser(decode._id).then((user) => {
+                if (user.status === 200) {
+                    dispatch(setUserInfor(user.data));
+                }
+            });
+        } catch (Ex) {}
+    }, []);
 
     return (
         <BrowserRouter>

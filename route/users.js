@@ -22,7 +22,7 @@ router.get("/search/:username", async (req, res) => {
 });
 
 //GET USER BY ID
-router.get("/get/:id", verifyToken, async (req, res) => {
+router.get("/get/:id", async (req, res) => {
     try {
         const userGet = await User.findById(req.params.id);
         res.status(200).json(userGet);

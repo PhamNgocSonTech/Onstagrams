@@ -137,7 +137,7 @@ export const MENU_SETTING_USER = [
         option: "View Profile",
         href: "",
         icon: profile,
-        to: "/profile",
+        to: `/profile/MyProfile`,
     },
     {
         option: "Get coins",
@@ -320,6 +320,43 @@ export const PROFILE_TABS = [
         content: SharedGallery,
     },
 ];
+
+export const addProfileTags = (imgs) => {
+    return [
+        {
+            name: "Photos",
+            frame: PhotoGallery,
+            contents: imgs,
+        },
+        {
+            name: "Videos",
+            frame: VideoGallery,
+        },
+        {
+            name: "Shared",
+            icon: profile_share,
+            frame: SharedGallery,
+        },
+    ];
+};
+
+export const addContentProfileTabs = (images) => {
+    return [
+        {
+            name: "Photos",
+            content: PhotoGallery,
+        },
+        {
+            name: "Videos",
+            content: VideoGallery,
+        },
+        {
+            name: "Shared",
+            icon: profile_share,
+            content: SharedGallery,
+        },
+    ];
+};
 
 export const convert_milions = (number) => {
     if (number < 1000) {
