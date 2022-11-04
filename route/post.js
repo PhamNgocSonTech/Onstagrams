@@ -11,30 +11,32 @@ const upload = require("../utils/multer");
 
 // ********************************************//
 //CREATE POST
-router.post("/", verifyToken, upload.single("img"), async(req, res) =>{
+router.post("/", verifyToken, upload.array("img", 10), async(req, res) =>{
     try {
-        const {desc, image, video} = req.body
-      
+        const {desc, video} = req.body
+        const imgFiles = req.files
+        if(!imgFiles)return res.status(500).json({msg: 'No image file'})
+        let multiplePicturePromise = imgFiles.map((picture) =>
+        cloudinary.uploader.upload(picture.path,{upload_preset: "post_upload"}));
+        let imageResponses = await Promise.all(multiplePicturePromise);
+        //res.status(200).json({ images: imageResponses });
         //let user = await User.findById(req.params.id);
         // Upload image to cloudinary
-        const data = {
-            image: req.file.path,
-        };
-        //if (req.file) {
-            result = await cloudinary.uploader.upload(data, {
-                upload_preset: "post_upload",
-            });
-            // Delete image from cloudinary
-            // await cloudinary.uploader.destroy(user.cloudinary_id);
-        //}
-       
-        //user = await User.findByIdAndUpdate(req.params.id, data, { new: true });
-        //await updateuser.save();
-        //res.status(200).json(user);
+        // const data = {
+        //     image: req.file,
+        // };
+
+        // if (req.file) {
+        //     result = await cloudinary.uploader.upload(req.file.path, {
+        //         upload_preset: "post_upload",
+        //     });
+        //     // Delete image from cloudinary
+        //     // await cloudinary.uploader.destroy(user.cloudinary_id);
+        // }
         const newPost = await new Post({
             desc, 
-            //$push:{image:result?.secure_url},
-            image: result.secure_url, 
+            img: imageResponses, 
+            video,
             userId: req.user._id
         })
         const savePost = await newPost.save()

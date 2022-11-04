@@ -59,7 +59,7 @@ router.put("/updateProfile/:id", verifyToken, upload.single("img"), async (req, 
             let result;
             if (req.file) {
                 result = await cloudinary.uploader.upload(req.file.path, {
-                    upload_preset: "post_upload",
+                    upload_preset: "avatar",
                 });
                 // Delete image from cloudinary
                 await cloudinary.uploader.destroy(user.cloudinary_id);
