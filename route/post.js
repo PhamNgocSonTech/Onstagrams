@@ -11,14 +11,32 @@ const upload = require("../utils/multer");
 
 // ********************************************//
 //CREATE POST
-router.post("/:id", verifyToken, upload.single("image"), async(req, res) =>{
+router.post("/", verifyToken, upload.single("img"), async(req, res) =>{
     try {
-        const {desc, img, video} = req.body
+        const {desc, image, video} = req.body
+      
+        //let user = await User.findById(req.params.id);
+        // Upload image to cloudinary
+        // const data = {
+        //     image: req.file,
+        // };
+        if (req.file) {
+            result = await cloudinary.uploader.upload(req.file.path, {
+                upload_preset: "post_upload",
+            });
+            // Delete image from cloudinary
+            // await cloudinary.uploader.destroy(user.cloudinary_id);
+        }
+       
+        //user = await User.findByIdAndUpdate(req.params.id, data, { new: true });
+        //await updateuser.save();
+        //res.status(200).json(user);
         const newPost = await new Post({
-            desc, img, video,
+            desc, 
+            //$push:{image:result?.secure_url},
+            image: result.secure_url, 
             userId: req.user._id
         })
-
         const savePost = await newPost.save()
         res.status(200).json(savePost)    
     }catch(err){
