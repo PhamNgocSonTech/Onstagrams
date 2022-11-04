@@ -17,16 +17,16 @@ router.post("/", verifyToken, upload.single("img"), async(req, res) =>{
       
         //let user = await User.findById(req.params.id);
         // Upload image to cloudinary
-        // const data = {
-        //     image: req.file,
-        // };
-        if (req.file) {
-            result = await cloudinary.uploader.upload(req.file.path, {
+        const data = {
+            image: req.file.path,
+        };
+        //if (req.file) {
+            result = await cloudinary.uploader.upload(data, {
                 upload_preset: "post_upload",
             });
             // Delete image from cloudinary
             // await cloudinary.uploader.destroy(user.cloudinary_id);
-        }
+        //}
        
         //user = await User.findByIdAndUpdate(req.params.id, data, { new: true });
         //await updateuser.save();

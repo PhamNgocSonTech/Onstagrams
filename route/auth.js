@@ -39,7 +39,7 @@ const myOAuth2Client = new OAuth2Client(
 //REGISTER NEW
 router.post("/register", async(req, res) => {
     try {
-        const { fullname, username, email, password, gender } = req.body
+        const { fullname, username, email, password, gender, bio, external } = req.body
         // let newUserName = username.toLowerCase().replace(/ /g, '')
 
         const userName = await User.findOne({username: username})
@@ -57,7 +57,7 @@ router.post("/register", async(req, res) => {
         // const passwordHash = await bcrypt.hash(password, 12)
 
         const newUser = new User({
-            fullname, username, email, password: hashedPassword, gender
+            fullname, username, email, password: hashedPassword, gender, bio, external
         })
 
         const accessTokenJWT = jwt.sign({
