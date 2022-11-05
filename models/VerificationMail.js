@@ -25,4 +25,4 @@ VerificationMailSchema.pre("save", async function(next){
     }
     next()
 })
-module.exports = mongoose.model('VerificationMailSchema', VerificationMailSchema)
+module.exports = mongoose.model('VerificationMail', VerificationMailSchema)

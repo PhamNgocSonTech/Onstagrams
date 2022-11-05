@@ -13,27 +13,24 @@ const {verifyToken} = require('../utils/verifyToken')
 
 const nodemailer = require('nodemailer')
 const {OAuth2Client} = require('google-auth-library')
-
-const {generateOTP} = require('../utils/mail')
+const mailConfig = require('../utils/mail')
+const {generateOTP} = require('../utils/generateOTP')
 const VerificationMail = require('../models/VerificationMail')
 
 const dotenv = require('dotenv').config()
 let refreshTokens = []
-const GOOGLE_MAILER_CLIENT_ID = '251967640945-nnrjjfil8gjer0cpp7d1fd4rlghnhhs4.apps.googleusercontent.com'
-const GOOGLE_MAILER_CLIENT_SECRET = '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'
-const GOOGLE_MAILER_REFRESH_TOKEN = '1//04_aADufrusQvCgYIARAAGAQSNwF-L9IrwKbNDwCSsNqfZLbgQDEZNghvJlZYzmithGcdbnEyKeUq1q7KKm8oOiuEHK3skQFF8hI'
-const ADMIN_EMAIL_ADDRESS = 'phamgocson7a1@gmail.com'
-//const CLIENT_URL = 'https://localhost:3000/'
+
 
 // CONFIG FOR GOOGLE SEND MAIL
 // Khởi tạo OAuth2Client với Client ID và Client Secret 
+
 const myOAuth2Client = new OAuth2Client(
-    GOOGLE_MAILER_CLIENT_ID,
-    GOOGLE_MAILER_CLIENT_SECRET
+    process.env.GOOGLE_MAILER_CLIENT_ID,
+    process.env.GOOGLE_MAILER_CLIENT_SECRET
   )
   // Set Refresh Token vào OAuth2Client Credentials
   myOAuth2Client.setCredentials({
-    refresh_token: GOOGLE_MAILER_REFRESH_TOKEN
+    refresh_token: process.env.GOOGLE_MAILER_REFRESH_TOKEN
   })
 
 //REGISTER NEW
@@ -65,147 +62,93 @@ router.post("/register", async(req, res) => {
                     username: newUser.username
           }, process.env.ACCESS_TOKEN_SECRET, {expiresIn: '30m'});
           await newUser.save()
-          // const OTP = generateOTP();
-          // const verificationMail = await VerificationMail.create({
-          //     user: newUser._id,
-          //     token: OTP
-          // })
-          // verificationMail.save();
+          
+          const OTP = generateOTP();
+          const verificationMail = await VerificationMail.create({
+              user: newUser._id,
+              token: OTP
+          })
+          verificationMail.save();
+          
+          let transporter = nodemailer.createTransport({
+            host: mailConfig.HOST,
+            auth: {
+            type: "OAuth2",
+            user: mailConfig.FROM_EMAIL_ADDRESS,
+            clientId: mailConfig.GOOGLE_CLIENT_ID,
+            clientSecret: mailConfig.GOOGLE_SECRET_ID,
+            refreshToken: mailConfig.GOOGLE_REFRESH_TOKEN                              
+            },
+          });
+         
+          let mailOptions = {
+            from: `Admin_Onstagram💎 <${mailConfig.FROM_EMAIL_ADDRESS}>`, 
+            to: newUser.email, 
+            subject: 'Verify your email using OTP from Onstagrams', 
+            html:`<h1>Hello ✔ <span>${newUser.username}</span> I'm SonAdmin in Onstgrams Web, I Send Your OTP CODE IS => ${OTP} </h1>`, 
+          };
 
-        //Lấy AccessToken từ RefreshToken (bởi vì Access Token cứ một khoảng thời gian ngắn sẽ bị hết hạn)
-        //Vì vậy mỗi lần sử dụng Access Token, chúng ta sẽ generate ra một thằng mới là chắc chắn nhất.
-       //const myAccessTokenObject = await myOAuth2Client.getAccessToken()
-        //Access Token sẽ nằm trong property 'token' trong Object mà chúng ta vừa get được ở trên
-       //const accessTokenGG = myAccessTokenObject?.token
-
-
-        // const transporter = nodemailer.createTransport({
-        //     service: 'gmail',
-        //         auth: {
-        //         type: 'OAuth2',
-        //         user: ADMIN_EMAIL_ADDRESS,
-        //         clientId: GOOGLE_MAILER_CLIENT_ID,
-        //         clientSecret: GOOGLE_MAILER_CLIENT_SECRET,
-        //         refresh_token: GOOGLE_MAILER_REFRESH_TOKEN,
-        //         accessToken: myAccessTokenObject,
-        //     }
-        //   });
-        //   const mailOptions = {
-        //     from:"onstgrams-dev",
-        //     to:newUser.email,
-        //     subject:"Verify your email using OTP",
-        //     html:`<h1>Hello I'm SonAdmin in Onstgrams Web, I Send Your OTP CODE ${OTP}</h1>`
-        //   }
-        //   transporter.sendMail(mailOptions, function(err, data) {
-        //     if (err) {
-        //       console.log("Error " + err);
-        //     } else {
-        //       console.log("Email sent successfully");
-        //     }
-        //   });
-        //   await transport.sendMail(mailOptions)
-        //   res.status(200).json({
-        //     Status:"Pending" , 
-        //     msg:"Register Success! Please check your email", 
-        //     accessTokenJWT,
-        //     })
-        res.status(200).json({
-            msg: 'Register Success!',
+          await transporter.sendMail(mailOptions)
+          res.status(200).json({
+            Status:"Pending" , 
+            msg:"Register Success! Please check your email", 
             accessTokenJWT,
-            user: {
-                ...newUser._doc,
-                password: ''
-            }
-        })
+            })
+        // res.status(200).json({
+        //     msg: 'Register Success!',
+        //     accessTokenJWT,
+        //     user: {
+        //         ...newUser._doc,
+        //         password: ''
+        //     }
+        // })
     } catch (err) {
         return res.status(500).json({msg: err.message})
     }
 })
 
 
-router.post('/sendMail/:id', verifyToken,  async(req, res) => {
-    const newUser = await User.findById(req.params.id)
-    const OTP = generateOTP();
-          const verificationMail = await VerificationMail.create({
-              user: req.user._id,
-              token: OTP
-          })
-          verificationMail.save();
+router.post('/verify/mail', async(req, res) => {
+    const {userId, otp} = req.body
+    const getUser = await User.findById(userId)
+    if(!getUser) return res.status(400).json('User not found')
+    if(getUser.verifed === true)return res.status(400).json('User already verify mail')
+    const getToken = await VerificationMail.findOne({user: getUser._id})
+    if(!getToken)return res.status(400).json('Token not found')
+    const checkMatch = await bcrypt.compareSync(otp, getToken.token)
+    if(!checkMatch)return res.status(400).json('Token not valid')
+    getUser.verifed = true;
+    await VerificationMail.findByIdAndDelete(getToken._id)
+    getUser.save()
+    const accessToken = jwt.sign({
+        _id: getUser._id,
+        username: getUser.username
+    }, process.env.ACCESS_TOKEN_SECRET, {expiresIn: 60 * 60 * 24 });
+    const {password , ...other} = getUser._doc
 
-        //Lấy AccessToken từ RefreshToken (bởi vì Access Token cứ một khoảng thời gian ngắn sẽ bị hết hạn)
-        //Vì vậy mỗi lần sử dụng Access Token, chúng ta sẽ generate ra một thằng mới là chắc chắn nhất.
-       const myAccessTokenObject = await myOAuth2Client.getAccessToken()
-        //Access Token sẽ nằm trong property 'token' trong Object mà chúng ta vừa get được ở trên
-       const ggToken = myAccessTokenObject?.token
+    let transporter = nodemailer.createTransport({
+      host: mailConfig.HOST,
+      auth: {
+      type: "OAuth2",
+      user: mailConfig.FROM_EMAIL_ADDRESS,
+      clientId: mailConfig.GOOGLE_CLIENT_ID,
+      clientSecret: mailConfig.GOOGLE_SECRET_ID,
+      refreshToken: mailConfig.GOOGLE_REFRESH_TOKEN                              
+      },
+    });
+   
+    let mailOptions = {
+      from: `Admin_Onstagram💎 <${mailConfig.FROM_EMAIL_ADDRESS}>`, 
+      to: getUser.email, 
+      subject: 'Successfully verify your email', 
+      html:`<h1>Now you can login Onstagrams</h1>`, 
+    };
 
-        const transporter = nodemailer.createTransport({
-            service: 'gmail',
-                auth: {
-                type: 'OAuth2',
-                user: ADMIN_EMAIL_ADDRESS,
-                clientId: GOOGLE_MAILER_CLIENT_ID,
-                clientSecret: GOOGLE_MAILER_CLIENT_SECRET,
-                refresh_token: GOOGLE_MAILER_REFRESH_TOKEN,
-                accessToken: ggToken,
-            }
-          });
-          const mailOptions = {
-            from:"onstgrams-dev",
-            to:req.user.email,
-            subject:"Verify your email using OTP",
-            html:`<h1>Hello I'm SonAdmin in Onstgrams Web, I Send Your OTP CODE ${OTP}</h1>`
-          }
-          await  transporter.sendMail(mailOptions, function(err, data) {
-            if (err) {
-              console.log("Error " + err);
-            } else {
-              console.log("Email sent successfully");
-            }
-          });
-        //   await transporter.sendMail(mailOptions)
-        //   res.status(200).json({
-        //     Status:"Pending" , 
-        //     msg:"Register Success! Please check your email", 
-        //     accessTokenJWT,
-        //     })
+    await transporter.sendMail(mailOptions)
+ 
+      return res.status(200).json({other , accessToken})
+
 })
-
-
-// router.post('/verify/mail', async(req, res) => {
-//     const {user, otp} = req.body
-//     const getUser = await User.findById(user)
-//     if(!getUser) return res.status(400).json('User not found')
-//     if(getUser.verifed === true)return res.status(400).json('User already verify mail')
-//     const getToken = await VerificationMail.findOne({user: getUser._id})
-//     if(!getToken)return res.status(400).json('Token not found')
-//     const checkMatch = await bcrypt.compareSync(otp, getToken.token)
-//     if(!checkMatch)return res.status(400).json('Token not valid')
-//     getUser.verifed = true;
-//     await VerificationMail.findByIdAndDelete(token._id)
-//     getUser.save()
-//     const accessToken = jwt.sign({
-//         _id: getUser._id,
-//         username: getUser.username
-//     }, process.env.ACCESS_TOKEN_SECRET, {expiresIn: 60 * 60 * 24 });
-//     const {password , ...other} = getUser._doc
-
-//     const transport = nodemailer.createTransport({
-//         host: "smtp.mailtrap.io",
-//         port: 2525,
-//         auth: {
-//           user: process.env.USER,
-//           pass: process.env.PASS
-//         }
-//       });
-//       transport.sendMail({
-//         from:"onstgrams-dev",
-//         to:getUser.email,
-//         subject:"Successfully verify your email",
-//         html:`Now you can login Onstagrams`
-//       })
-//       return res.status(200).json({other , accessToken})
-
-// })
 
 // LOGIN NEW 
 
@@ -252,7 +195,44 @@ router.post('/logout', (req, res) => {
     res.status(200).json('Logout Success');
   });
 
-// router.post("/logout", verifyToken, async (req, res) => {
+
+router.post('/send/mail', async (req, res) => {
+  let subject = "Hello ✔️ This is mail for test send mail from Onstagrams"
+  let contentHtml = '<b>Hello Mail Send Success</b>'
+  // Generate test SMTP service account from ethereal.email
+ // const info =  mailer.sendMail('khahankhung@gmail.com',subject,contentHtml)
+  let transporter = nodemailer.createTransport({
+    host: mailConfig.HOST,
+    //port: 465,
+    //secure: true,
+    auth: {
+    type: "OAuth2",
+    user: mailConfig.FROM_EMAIL_ADDRESS,
+    clientId: mailConfig.GOOGLE_CLIENT_ID,
+    clientSecret: mailConfig.GOOGLE_SECRET_ID,
+    refreshToken: mailConfig.GOOGLE_REFRESH_TOKEN                              
+    },
+  });
+ 
+  let info = await transporter.sendMail({
+    from: '"Admin_Onstagram💎" <phamngocson7a1@gmail.com>', 
+    to: "khahankhung@gmail.com", 
+    subject: "Hello ✔ This is mail for test send mail from Onstagrams", 
+    //text: "Hello For Test", 
+    html: "<b>Hello Mail Send Success</b>", 
+  });
+
+  console.log("Message sent: %s", info.messageId);
+
+  console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
+
+
+
+
+})
+
+
+//router.post("/logout", verifyToken, async (req, res) => {
 //         try {
 //             req.user.token
 //         }catch(err){
