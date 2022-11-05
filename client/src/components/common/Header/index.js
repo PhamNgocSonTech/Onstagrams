@@ -16,7 +16,7 @@ import { useState, useRef, useEffect } from "react";
 import Popover_Search from "../../Popover_Search";
 import Button from "../Button";
 import Popover_Setting from "../../Popover_Setting";
-import { MENU_SETTING, MENU_SETTING_USER } from "../../../Default/constant";
+import { MENU_SETTING, MENU_SETTING_USER, export_MENU_SETTING_USER } from "../../../Default/constant";
 import PopUpNotification from "../PopUpNotification";
 import Tooltip from "../Tooltip";
 import useDebounce from "../../../CustomHooks/useDebounce";
@@ -207,7 +207,7 @@ function Header({ isShowUploadBtn = true }) {
                                     {isAppear && (
                                         // eslint-disable-next-line react/jsx-pascal-case
                                         <Popover_Setting
-                                            menu={[...MENU_SETTING_USER, ...MENU_SETTING]}
+                                            menu={[...export_MENU_SETTING_USER(), ...MENU_SETTING]}
                                             logIn
                                             onHandleLogOut={handleLogOut}
                                         />

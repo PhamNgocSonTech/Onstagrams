@@ -3,7 +3,9 @@ import styles from "./Profile.module.scss";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
-import { addProfileTags, PROFILE_TABS } from "../../Default/constant";
+import { getListSrcFromAllPosts } from "../../utils/GetListSource/getListSrcFromAllPosts";
+
+import { addProfileTags } from "../../Default/constant";
 import { getUserById } from "../../utils/HttpRequest/user_request";
 import { getPostByIdUser } from "../../utils/HttpRequest/post_request";
 
@@ -25,9 +27,12 @@ function Profile() {
     const [user, setUser] = useState({ followers: [], followings: [] });
     const [src, setSrc] = useState({ img: [], video: [] });
     const { id } = useParams();
+    // 1: My profile
+    // 0: Another person profile
+    const [viewType, setViewType] = useState(false);
+    const [isFollow, setIsFollow] = useState(false);
 
     useEffect(() => {
-        console.log(id);
         const getUser = (id) => {
             return getUserById(id).then((user) => user);
         };
@@ -35,47 +40,36 @@ function Profile() {
             return getPostByIdUser(id).then((src) => src);
         };
 
-        if (id === "MyProfile") {
-            // My Profile
-            const token = window.localStorage.getItem("accessToken");
-            try {
-                const decode = jwt_decode(token);
-                getUser(decode._id).then((user) => {
-                    setUser(user.data);
-                });
-                getImageAndVideo(decode._id).then((src) => {
-                    src.length > 0 && setSrc(src[0]);
-                });
-            } catch (Ex) {}
-        } else {
-            // Another Profile
-            getUser(id).then((user) => {
-                setUser(user.data);
-            });
-            getImageAndVideo(id).then((src) => {
-                src.length > 0 && setSrc(src[0]);
-            });
-        }
+        // token => parse => id
+
+        const token = window.localStorage.getItem("accessToken");
+        try {
+            const decode = jwt_decode(token); // => If OK => My View
+            decode._id === id && setViewType(true);
+        } catch (Ex) {}
+
+        getUser(id).then((user) => {
+            setUser(user.data);
+        });
+        getImageAndVideo(id).then((src) => {
+            src.length > 0 && setSrc(getListSrcFromAllPosts(src));
+        });
     }, []);
     const [tabChoose, setTabChoose] = useState(0);
-    // 1: My profile
-    // 0: Another person profile
-    const [viewType, setViewType] = useState(false);
-    const [isFollow, setIsFollow] = useState(false);
 
     const [isOpenEditPopUp, setIsOpenEditPopUp] = useState(false);
 
     var Frame, contents;
     if (tabChoose === 0) {
         // Image
-        Frame = addProfileTags(src.img)[0].frame;
-        contents = addProfileTags(src.img)[0].contents;
+        Frame = addProfileTags(src.img, src.video)[0].frame;
+        contents = addProfileTags(src.img, src.video)[0].contents;
     }
 
     if (tabChoose === 1) {
         // Video
-        Frame = addProfileTags(src.video)[1].frame;
-        contents = addProfileTags(src.video)[1].contents;
+        Frame = addProfileTags(src.img, src.video)[1].frame;
+        contents = addProfileTags(src.img, src.video)[1].contents;
     }
 
     if (tabChoose === 2) {
@@ -106,9 +100,7 @@ function Profile() {
         setIsFollow(false);
     };
 
-    const handleShareAccount = () => {
-        setViewType(!viewType);
-    };
+    const handleShareAccount = () => {};
 
     const handleOpenEditPopUp = () => {
         setIsOpenEditPopUp(true);
@@ -182,18 +174,20 @@ function Profile() {
                             </span>
                         </div>
                         <div className={cn("bio")}>
-                            <p>Contact: hc19082001@gmail.com</p>
+                            <p>{user.bio}</p>
                         </div>
                     </div>
-                    <div className={cn("share-link")}>
-                        <Button
-                            leftIcon={link}
-                            href='https://www.facebook.com/pz.hcnguyen.k1908'
-                            className={cn("button-link")}
-                        >
-                            https://www.facebook.com/pz.hcnguyen.k1908
-                        </Button>
-                    </div>
+                    {user.external && (
+                        <div className={cn("share-link")}>
+                            <Button
+                                leftIcon={link}
+                                href={user.external}
+                                className={cn("button-link")}
+                            >
+                                {user.external}
+                            </Button>
+                        </div>
+                    )}
                 </div>
                 <img
                     className={cn("share")}
@@ -237,7 +231,14 @@ function Profile() {
                     ></div>
                 </div>
 
-                <div className={cn("content")}>{<Frame contents={contents} />}</div>
+                <div className={cn("content")}>
+                    {
+                        <Frame
+                            contents={contents}
+                            isMyProfile={viewType}
+                        />
+                    }
+                </div>
             </div>
 
             {/* Edit PopUp */}

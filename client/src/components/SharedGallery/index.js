@@ -6,12 +6,14 @@ import person from "../../assets/image/profile/person.svg";
 
 const cn = classNames.bind(styles);
 
-function SharedGallery() {
+function SharedGallery({ isMyProfile = false }) {
+    let m_title = isMyProfile ? "Share your first photo" : "This person doesn't share any moment";
+    let m_ps = isMyProfile ? "Your moments will appear here!" : "Follow and messeage now to see moments each other";
     return (
         <EmptyContent
             icon={person}
-            action='Share'
-            keyword='moment'
+            title={m_title}
+            ps={m_ps}
         ></EmptyContent>
     );
 }

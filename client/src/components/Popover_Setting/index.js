@@ -65,7 +65,6 @@ function Popover_Setting({ menu, logIn = false, onHandleLogOut }) {
                         className={cn("but-item", "logout")}
                         leftIcon={logout}
                         onClick={onHandleLogOut}
-                        to='/'
                     >
                         Log out
                     </Button>

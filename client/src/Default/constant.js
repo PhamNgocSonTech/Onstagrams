@@ -4,6 +4,7 @@ import question from "../assets/image/header/question.svg";
 import profile from "../assets/image/header/profile.svg";
 import coin from "../assets/image/header/coin.svg";
 import setting from "../assets/image/header/setting.svg";
+import jwt_decode from "jwt-decode";
 
 import difference from "../assets/image/sidebar/difference.svg";
 import music from "../assets/image/sidebar/music.svg";
@@ -131,27 +132,55 @@ export const MENU_SETTING = [
         to: "/",
     },
 ];
+console.log("Do you log in ??");
+export const export_MENU_SETTING_USER = () => {
+    var id_user = {};
+    const token = window.localStorage.getItem("accessToken");
+    try {
+        id_user = jwt_decode(token);
+    } catch (Ex) {}
+    return [
+        {
+            option: "View Profile",
+            href: "",
+            icon: profile,
+            to: `/profile/${id_user._id}`,
+        },
+        {
+            option: "Get coins",
+            href: "",
+            icon: coin,
+            to: "/",
+        },
+        {
+            option: "Settings",
+            href: "",
+            icon: setting,
+            to: "/",
+        },
+    ];
+};
 
-export const MENU_SETTING_USER = [
-    {
-        option: "View Profile",
-        href: "",
-        icon: profile,
-        to: `/profile/MyProfile`,
-    },
-    {
-        option: "Get coins",
-        href: "",
-        icon: coin,
-        to: "/",
-    },
-    {
-        option: "Settings",
-        href: "",
-        icon: setting,
-        to: "/",
-    },
-];
+// export const MENU_SETTING_USER = [
+//     {
+//         option: "View Profile",
+//         href: "",
+//         icon: profile,
+//         to: `/profile/${id_user._id}`,
+//     },
+//     {
+//         option: "Get coins",
+//         href: "",
+//         icon: coin,
+//         to: "/",
+//     },
+//     {
+//         option: "Settings",
+//         href: "",
+//         icon: setting,
+//         to: "/",
+//     },
+// ];
 
 export const MAIN_NAV_SIDEBAR = [
     {
@@ -321,7 +350,7 @@ export const PROFILE_TABS = [
     },
 ];
 
-export const addProfileTags = (imgs) => {
+export const addProfileTags = (imgs, videos) => {
     return [
         {
             name: "Photos",
@@ -331,6 +360,7 @@ export const addProfileTags = (imgs) => {
         {
             name: "Videos",
             frame: VideoGallery,
+            contents: videos,
         },
         {
             name: "Shared",

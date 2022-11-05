@@ -6,8 +6,9 @@ import image from "../../assets/image/profile/image.svg";
 
 const cn = classNames.bind(styles);
 
-function PhotoGallery({ contents = [] }) {
-    console.log(contents.length);
+function PhotoGallery({ contents = [], isMyProfile = false }) {
+    let m_title = isMyProfile ? "Upload your first photo" : "This person doesn't have any photos";
+    let m_ps = isMyProfile ? "Your photo will appear here!" : "Follow and messeage now to share moments each other";
     return contents.length > 0 ? (
         <div className={cn("photos")}>
             {contents.map((photo, index) => {
@@ -27,8 +28,8 @@ function PhotoGallery({ contents = [] }) {
     ) : (
         <EmptyContent
             icon={image}
-            keyword='photo'
-            action='Upload'
+            title={m_title}
+            ps={m_ps}
         />
     );
 }

@@ -15,16 +15,20 @@ function App() {
         return getUserById(id).then((user) => user);
     };
 
+    const token = window.localStorage.getItem("accessToken");
     useEffect(() => {
-        const token = window.localStorage.getItem("accessToken") ?? "NoneToken";
+        console.log(`Check localStorage to get access token`);
         try {
             const decode = jwt_decode(token);
             getUser(decode._id).then((user) => {
                 if (user.status === 200) {
                     dispatch(setUserInfor(user.data));
+                    console.log(`Saved user into redux`);
                 }
             });
-        } catch (Ex) {}
+        } catch (Ex) {
+            console.log(`Not have token => Force login`);
+        }
     }, []);
 
     return (
