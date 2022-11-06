@@ -1,6 +1,6 @@
 .login-modal {
     padding: 48px 0px 0px;
-    height: 68% !important;
+    height: 66% !important;
 
     .header-modal {
         .close-btn {
@@ -64,6 +64,7 @@
             display: flex;
             flex-direction: row;
             justify-content: space-between;
+            margin-bottom: 10px;
             border-bottom: 1px solid #ccc;
 
             .input-control {

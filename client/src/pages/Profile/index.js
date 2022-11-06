@@ -17,6 +17,7 @@ import share from "../../assets/image/profile/share.svg";
 import link from "../../assets/image/profile/link.svg";
 import follow from "../../assets/image/profile/follow.svg";
 import not_auth from "../../assets/image/profile/not_auth.svg";
+import veriyfed from "../../assets/image/verify/verifyed.svg";
 
 import Tooltip from "../../components/common/Tooltip";
 import EditProfile from "../../components/EditProfile";
@@ -148,7 +149,7 @@ function Profile() {
                                     >
                                         Edit profile
                                     </Button>
-                                    {!user.verifed && (
+                                    {!user.verifed ? (
                                         <div
                                             className={cn("auth")}
                                             onMouseEnter={() => setIsShowVerifyPopUp(true)}
@@ -172,6 +173,27 @@ function Profile() {
                                                     setIsShowForm={setIsShowVeryfyForm}
                                                     setHandlePopup={setIsShowVerifyPopUp}
                                                 />
+                                            )}
+                                        </div>
+                                    ) : (
+                                        <div
+                                            className={cn("auth")}
+                                            onMouseEnter={() => setIsShowVerifyPopUp(true)}
+                                            onMouseLeave={handleLeaveVerify}
+                                        >
+                                            <img src={veriyfed} />
+                                            {isShowVerifyPopUp && (
+                                                <div onMouseEnter={handleEnterAgain}>
+                                                    <Popover className={cn("pop-up-auth")}>
+                                                        <p>
+                                                            Your account{" "}
+                                                            <strong style={{ color: "green" }}>
+                                                                has been verifyed
+                                                            </strong>{" "}
+                                                            by Onstagrams
+                                                        </p>
+                                                    </Popover>
+                                                </div>
                                             )}
                                         </div>
                                     )}
