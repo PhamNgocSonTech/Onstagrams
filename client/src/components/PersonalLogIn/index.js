@@ -148,7 +148,7 @@ function PersonalLogIn({ isShowDoneRegister = "" }) {
                         <input
                             className={cn("input-control")}
                             type='text'
-                            placeholder='User Name'
+                            placeholder='Email'
                             ref={username}
                             required={true}
                         />
