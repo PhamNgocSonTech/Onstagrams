@@ -45,12 +45,8 @@ const UserSchema = new mongoose.Schema(
       type: String,
       max: 50,
     },
-    followers: {
-      type: Array
-    },
-    followings: {
-      type: Array
-    },
+    followers: [{type: mongoose.Types.ObjectId, ref: 'user'}],
+    followings: [{type: mongoose.Types.ObjectId, ref: 'user'}],
     verifed:{
       type:Boolean,
       required:true,

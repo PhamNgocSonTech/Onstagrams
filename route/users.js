@@ -193,18 +193,23 @@ router.get("/fetchPostFlw/:id", verifyToken, async (req, res) => {
 });
 
 //get user with followers and followings by id
-router.get("/getFollowing/:id", async(req , res)=>{
+router.get("/getFriend/:id", async(req , res)=>{
     try {
-        const user = await User.findById(req.params.id)
-        .select("-password -email -avatar -gender -cloudinary_id -verifed")
-        if(!user){
-            return res.status(400).json("User not found")
-        }
-        //const {...followings}= user._doc;
-        res.status(200).json(user);
-    } catch (err) {
-        return res.status(500).json({msg: err.message})
-    }
+        const user = await User.findById(req.params.id);
+        const friends = await Promise.all(
+          user.followings.map((friendId) => {
+            return User.findById(friendId);
+          })
+        );
+        let friendList = [];
+        friends.map((friend) => {
+          const { _id, username, fullname, followings, followers } = friend;
+          friendList.push({ _id, username, fullname, followings, followers});
+        });
+        res.status(200).json(friendList)
+      } catch (err) {
+        res.status(500).json(err);
+      }
 })
 
 

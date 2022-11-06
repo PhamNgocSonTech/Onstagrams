@@ -69,7 +69,8 @@ router.post("/register", async(req, res) => {
               token: OTP
           })
           verificationMail.save();
-          
+          /**
+           */
           let transporter = nodemailer.createTransport({
             host: mailConfig.HOST,
             auth: {
@@ -93,6 +94,9 @@ router.post("/register", async(req, res) => {
             Status:"Pending" , 
             msg:"Register Success! Please check your email", 
             accessTokenJWT,
+            user: {
+                      ...newUser._doc,
+                  }
             })
         // res.status(200).json({
         //     msg: 'Register Success!',
