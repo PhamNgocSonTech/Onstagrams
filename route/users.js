@@ -73,7 +73,7 @@ router.put("/updateProfile/:id", verifyToken, upload.single("img"), async (req, 
             //await updateuser.save();
             res.status(200).json(user);
         } catch (err) {
-            return res.status(500).json(err);
+            return res.status(500).json({msg: err.message});
         }
     } else {
         return res.status(400).json("Your are not allow to update this user details ");
@@ -136,19 +136,25 @@ router.delete("/deleteAll", async (req, res) => {
 
 //FOLLOWER USER
 router.put("/:id/follow", verifyToken, async (req, res) => {
-    if (req.body.userId !== req.params.id) {
+    if (req.user._id !== req.params.id) {
         try {
-            const user = await User.findById(req.params.id);
-            const otherUser = await User.findById(req.body.userId);
-            if (!user.followers.includes(req.body.userId)) {
-                await user.updateOne({ $push: { followings: req.body.userId } });
-                await otherUser.updateOne({ $push: { followers: req.params.id } });
-                res.status(200).json("User has been followed");
-            } else {
-                res.status(403).json("You already follow this user");
-            }
+            const user = await User.find({_id: req.params.id, followers: req.user._id})
+            if(user.length > 0 ) return res.status(500).json('You followed this user')
+            //get id user want to follow
+            //push that id user to my followers
+            const newUser = await User.findOneAndUpdate({_id: req.params.id}, {
+                $push: {followers: req.user._id}
+            })
+
+            await User.findOneAndUpdate({_id: req.user._id}, {
+                $push: {followings: req.params.id}
+            })
+            res.status(200).json({
+                msg:"User has been followed", 
+            })
+            
         } catch (err) {
-            res.status(500).json(err);
+            res.status(500).json({msg: err.message});
         }
     } else {
         res.status(403).json("You can't follow yourself");
@@ -157,19 +163,21 @@ router.put("/:id/follow", verifyToken, async (req, res) => {
 
 //UNFOLLOWER USER
 router.put("/:id/unfollow", verifyToken, async (req, res) => {
-    if (req.body.userId !== req.params.id) {
+    if (req.user._id !== req.params.id) {
         try {
-            const user = await User.findById(req.params.id);
-            const otherUser = await User.findById(req.body.userId);
-            if (user.followers.includes(req.body.userId)) {
-                await user.updateOne({ $pull: {  followings: req.body.userId } });
-                await otherUser.updateOne({ $pull: { followers: req.params.id } });
-                res.status(200).json("User has been unfollowed");
-            } else {
-                res.status(403).json("You don't follow this user");
-            }
+            const newUser = await User.findOneAndUpdate({_id: req.params.id}, {
+                $pull: {followers: req.user._id}
+            })
+
+            await User.findOneAndUpdate({_id: req.user._id}, {
+                $pull: {followings: req.params.id}
+            })
+            res.status(200).json({
+                msg:"User has been unfollowed", 
+            })
+            
         } catch (err) {
-            res.status(500).json(err);
+            res.status(500).json({msg: err.message});
         }
     } else {
         res.status(403).json("You can't unfollow yourself");

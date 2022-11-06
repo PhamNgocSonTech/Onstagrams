@@ -86,7 +86,7 @@ router.post("/register", async(req, res) => {
             from: `Admin_Onstagram💎 <${mailConfig.FROM_EMAIL_ADDRESS}>`, 
             to: newUser.email, 
             subject: 'Verify your email using OTP from Onstagrams', 
-            html:`<h1>Hello ✔ <span>${newUser.username}</span> I'm SonAdmin in Onstgrams Web, I Send Your OTP CODE IS => ${OTP} </h1>`, 
+            html:`<h1>Hello ✔ <span style="color:blue;text-align:center;">${newUser.username}</span> <p>I'm SonAdmin in Onstgrams Web,I Send Your OTP CODE IS => <span style="color:red;">${OTP}</span> </p></h1>`, 
           };
 
           await transporter.sendMail(mailOptions)
@@ -115,19 +115,19 @@ router.post("/register", async(req, res) => {
 router.post('/verify/mail', async(req, res) => {
     const {userId, otp} = req.body
     const getUser = await User.findById(userId)
-    if(!getUser) return res.status(400).json('User not found')
-    if(getUser.verifed === true)return res.status(400).json('User already verify mail')
+    if(!getUser) return res.status(400).json('User Not Found')
+    if(getUser.verifed === true)return res.status(400).json('User Already Verify Mail')
     const getToken = await VerificationMail.findOne({user: getUser._id})
-    if(!getToken)return res.status(400).json('Token not found')
+    if(!getToken)return res.status(400).json('OTP Not Found')
     const checkMatch = await bcrypt.compareSync(otp, getToken.token)
-    if(!checkMatch)return res.status(400).json('Token not valid')
+    if(!checkMatch)return res.status(400).json('WRONG OTP')
     getUser.verifed = true;
     await VerificationMail.findByIdAndDelete(getToken._id)
     getUser.save()
     const accessToken = jwt.sign({
         _id: getUser._id,
         username: getUser.username
-    }, process.env.ACCESS_TOKEN_SECRET, {expiresIn: 60 * 60 * 24 });
+    }, process.env.ACCESS_TOKEN_SECRET, {expiresIn: '30m' });
     const {password , ...other} = getUser._doc
 
     let transporter = nodemailer.createTransport({
