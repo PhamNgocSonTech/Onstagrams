@@ -18,7 +18,7 @@ export const ParentContext = createContext();
 
 function Login({ handleClosePanel }) {
     const [isOpenRegisterForm, setIsOpenRegisterForm] = useState(false);
-    const [isOpenPersonalLogInForm, setIsOpenPersonalLogInForm] = useState(false);
+    const [isOpenPersonalLogInForm, setIsOpenPersonalLogInForm] = useState({ open: false, panel: "" });
 
     function handleCloseModal() {
         handleClosePanel(false);
@@ -29,14 +29,12 @@ function Login({ handleClosePanel }) {
     }
 
     function handleOpenPersonalLogInForm() {
-        setIsOpenPersonalLogInForm(true);
+        setIsOpenPersonalLogInForm({ open: true, panel: "" });
     }
 
     const googleHandle = () => {
-        window.open('https://localhost:5000/api/auth/login-google', '_self')
-    }
-
-
+        window.open("https://localhost:5000/api/auth/login-google", "_self");
+    };
 
     return (
         <ParentContext.Provider
@@ -107,7 +105,7 @@ function Login({ handleClosePanel }) {
 
                 {/* Handle Open Another Form */}
                 {isOpenRegisterForm && <Register />}
-                {isOpenPersonalLogInForm && <PersonalLogIn />}
+                {isOpenPersonalLogInForm.open && <PersonalLogIn isShowDoneRegister={isOpenPersonalLogInForm.panel} />}
             </Modal_Center>
         </ParentContext.Provider>
     );

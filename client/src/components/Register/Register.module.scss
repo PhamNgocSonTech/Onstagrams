@@ -60,11 +60,12 @@
 
         .register-section {
             padding-right: 5px;
-            width: 375px;
+            width: 385px;
             padding-bottom: 20px;
             margin: 0 auto;
             max-height: 460px;
             border-bottom: 1px solid rgb(190, 189, 189);
+            overflow-y: auto;
 
             &::-webkit-scrollbar {
                 border-radius: 30px;
@@ -105,8 +106,8 @@
                 position: relative;
                 .infor-validation {
                     position: absolute;
-                    right: -6%;
-                    bottom: 10px;
+                    top: 2px;
+                    right: 4px;
                     opacity: 0.6;
                     z-index: 999;
                 }

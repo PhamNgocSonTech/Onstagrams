@@ -23,9 +23,48 @@
                     display: flex;
                     flex-direction: column;
                     padding: 0 20px;
-    
-                    .edit-profile-button {
-                        width: fit-content;
+
+                    .ed {
+                        display: flex;
+
+                        .edit-profile-button {
+                            width: fit-content;
+                        }
+
+                        .auth {
+                            position: relative;
+                            display: flex;
+                            align-items: flex-end;
+                            margin-left: 15px;
+
+                            img {
+                                padding: 0 10px;
+                            }
+                            .pop-up-auth {
+                                position: absolute;
+                                z-index: 999;
+                                left: 0;
+                                top: 100%;
+                                padding: 12px;
+                                
+
+                                p {
+                                    white-space: nowrap;
+                                    font-family: ProximaNova;
+                                    strong {
+                                        color: var(--primary-color);
+
+                                        &:hover {
+                                            cursor: pointer;
+                                            opacity: 0.8;
+                                        }
+                                        &:active {
+                                            opacity: 0.6;
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
 
                     .follow-profile-button {
@@ -78,10 +117,11 @@
                         font-weight: 700;
                         font-size: 31px;
                         line-height: 38px;
-                        overflow: hidden;
+                        overflow-x: hidden;
                         text-overflow: ellipsis;
                         text-align: left;
                         font-family: 'Lexend Deca', sans-serif;
+                        position: relative;
                     }
     
                     & > h5 {

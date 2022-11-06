@@ -9,6 +9,7 @@ import LoadingModal from "../common/LoadingModal";
 import close from "../../assets/image/modal/close-dark.svg";
 import back from "../../assets/image/header/back.svg";
 import incorrect from "../../assets/image/login/incorrect.svg";
+import success from "../../assets/image/login/success.svg";
 
 import { ParentContext } from "../Login";
 import { useContext, useEffect, useRef, useState } from "react";
@@ -18,9 +19,10 @@ import { login } from "../../utils/HttpRequest/auth_request";
 
 const cn = classNames.bind(styles);
 
-function PersonalLogIn() {
+function PersonalLogIn({ isShowDoneRegister = "" }) {
     const { setIsOpenPersonalLogInForm, setIsOpenRegisterForm, handleClosePanel } = useContext(ParentContext);
     const [isShowAlertIncorrectLogin, setIsShowAlertIncorrectLogin] = useState("");
+    const [isShowAlertSuccessRegister, setIsShowAlertSuccessRegister] = useState(isShowDoneRegister);
     const [isShowLoadingModal, setisShowLoadingModal] = useState(false);
     const frm = useRef();
 
@@ -36,11 +38,11 @@ function PersonalLogIn() {
     }, []);
 
     function handleBackToLogInForm() {
-        setIsOpenPersonalLogInForm(false);
+        setIsOpenPersonalLogInForm({ open: false, panel: "" });
     }
 
     function handleOpenRegisterForm() {
-        setIsOpenPersonalLogInForm(false);
+        setIsOpenPersonalLogInForm({ open: false, panel: "" });
         setIsOpenRegisterForm(true);
     }
 
@@ -55,8 +57,10 @@ function PersonalLogIn() {
                     dispatch(setUserInfor(res.other));
                     window.localStorage.setItem("accessToken", res.accessToken);
                     handleClosePanel(false);
+                    window.location.reload(true);
                 } else {
                     setIsShowAlertIncorrectLogin(res);
+                    setIsShowAlertSuccessRegister("");
                 }
             });
         }
@@ -106,6 +110,15 @@ function PersonalLogIn() {
                         <Alert
                             leftImage={incorrect}
                             content={isShowAlertIncorrectLogin}
+                            type='failed'
+                        />
+                    )}
+
+                    {isShowAlertSuccessRegister && (
+                        <Alert
+                            leftImage={success}
+                            content={isShowAlertSuccessRegister}
+                            type='success'
                         />
                     )}
 

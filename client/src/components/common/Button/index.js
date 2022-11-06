@@ -36,7 +36,6 @@ function Button({
         Btn = "a";
         attributes.href = href;
     }
-
     return (
         <Btn
             {...attributes}

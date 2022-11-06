@@ -142,7 +142,6 @@ export const export_MENU_SETTING_USER = () => {
     return [
         {
             option: "View Profile",
-            href: "",
             icon: profile,
             to: `/profile/${id_user._id}`,
         },

@@ -7,16 +7,22 @@ import Button from "../common/Button";
 import Tooltip from "../common/Tooltip";
 
 import { ParentContext } from "../Login";
+import Alert from "../common/Alert";
 
+import incorrect from "../../assets/image/login/incorrect.svg";
 import close from "../../assets/image/modal/close-dark.svg";
 import back from "../../assets/image/header/back.svg";
 import question from "../../assets/image/register/question.svg";
 import information from "../../assets/image/register/information.svg";
+import { register } from "../../utils/HttpRequest/auth_request";
+import LoadingModal from "../common/LoadingModal";
 
 const cn = classNames.bind(styles);
 
 function Register() {
     const { setIsOpenRegisterForm, setIsOpenPersonalLogInForm, handleClosePanel } = useContext(ParentContext);
+
+    const [isIncorrectResponse, setIsIncorrectResponse] = useState("");
 
     const [isCheck, setIsCheck] = useState(false);
     const [radioChoose, setRadioChoose] = useState(3);
@@ -31,6 +37,12 @@ function Register() {
 
     const [isChangeWrongUsernameIcon, setIsChangeWrongUsernameIcon] = useState(false);
     const [isChangeWrongPasswordIcon, setIsChangeWrongPasswordIcon] = useState(false);
+
+    const [isShowModal, setIsShowModal] = useState(false);
+
+    function registerAccount(data) {
+        return register(data).then((res) => res);
+    }
 
     /**
      * 0: Fullname ->
@@ -59,7 +71,7 @@ function Register() {
 
     function handleOpenLoginForm() {
         setIsOpenRegisterForm(false);
-        setIsOpenPersonalLogInForm(true);
+        setIsOpenPersonalLogInForm({ open: true, panel: "" });
     }
 
     function handleChangeRadio(value) {
@@ -110,6 +122,8 @@ function Register() {
     };
 
     function onHandleSubmitData() {
+        // Validate Fullname
+        const validated_FN = registerData[0];
         // Validate Username
         const validated_UN = validateUsername(registerData[1]);
         (!validated_UN && registerData[1] == undefined) || validated_UN || setIsChangeWrongUsernameIcon(true);
@@ -127,9 +141,27 @@ function Register() {
         validated_PW2 || setIsShowWrongPassword(true);
 
         // Check all
-        if (validated_UN && validated_EM && validated_PW && validated_PW2) {
-            console.log("CREATED ACCOUNT !");
+        if (validated_FN && validated_UN && validated_EM && validated_PW && validated_PW2) {
+            setIsShowModal(true);
+            const user_final_data = {
+                username: registerData[1],
+                fullname: registerData[0],
+                email: registerData[2],
+                password: registerData[3],
+                gender: radioChoose,
+            };
+            registerAccount(user_final_data).then((res) => {
+                setIsShowModal(false);
+                if (res.status === 200) {
+                    setIsOpenRegisterForm(false);
+                    setIsOpenPersonalLogInForm({ open: true, panel: res.data.msg });
+                } else {
+                    setIsIncorrectResponse(res.data.msg);
+                }
+            });
         }
+        // setIsOpenRegisterForm(false);
+        // setIsOpenPersonalLogInForm({ open: true, panel: true });
     }
 
     return (
@@ -138,6 +170,7 @@ function Register() {
             classNameWrapper={cn("overal-modal")}
         >
             <div className={cn("header-modal")}>
+                {isShowModal && <LoadingModal />}
                 <div
                     className={cn("back-btn")}
                     onClick={handleBackLogInForm}
@@ -162,6 +195,14 @@ function Register() {
             <div className={cn("body-modal")}>
                 <h1 className={cn("text")}>Register</h1>
                 <div className={cn("register-section")}>
+                    {isIncorrectResponse && (
+                        <Alert
+                            leftImage={incorrect}
+                            content={isIncorrectResponse}
+                            type='failed'
+                        />
+                    )}
+
                     <form
                         id='form-register'
                         ref={frm}

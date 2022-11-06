@@ -1,5 +1,5 @@
 import axios from "axios";
-import { END_POINT_API, END_POINT_API2 } from "../../Default/constant";
+import { END_POINT_API2 } from "../../Default/constant";
 
 const usersConfig = axios.create({
     baseURL: `${END_POINT_API2}/auth`,
@@ -18,7 +18,12 @@ export const login = async (body) => {
     return results.data;
 };
 
-export const register = async (options = {}) => {
-    const results = await usersConfig.post("/register", { params: options });
-    return results.data;
+export const register = async (body) => {
+    const results = await usersConfig.post("/register/", body);
+    return results;
+};
+
+export const verifyEmail = async (userId, otp) => {
+    const results = await usersConfig.post("/verify/mail/", { userId, otp });
+    return results;
 };
