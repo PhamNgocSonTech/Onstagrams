@@ -192,17 +192,38 @@ router.get("/fetchPostFlw/:id", verifyToken, async (req, res) => {
     }
 });
 
-//get user with followers and followings by id
-router.get("/getFriend/:id", async(req , res)=>{
+
+// GET DETAIL USER FOLLOWINGS BY ID
+router.get("/getUserFollowings/:id", async(req, res)=>{
     try {
         const user = await User.findById(req.params.id);
-        const friends = await Promise.all(
+        const friendFollowing = await Promise.all(
           user.followings.map((friendId) => {
             return User.findById(friendId);
           })
         );
         let friendList = [];
-        friends.map((friend) => {
+        friendFollowing.map((friend) => {
+          const { _id, username, fullname, followings, followers } = friend;
+          friendList.push({ _id, username, fullname, followings, followers});
+        });
+        res.status(200).json(friendList)
+      } catch (err) {
+        res.status(500).json(err);
+      }
+})
+
+// GET DETAIL USER FOLLOWERS BY ID
+router.get("/getUserFollowers/:id", async(req, res)=>{
+    try {
+        const user = await User.findById(req.params.id);
+        const friendsFollower = await Promise.all(
+          user.followers.map((friendId) => {
+            return User.findById(friendId);
+          })
+        );
+        let friendList = [];
+        friendsFollower.map((friend) => {
           const { _id, username, fullname, followings, followers } = friend;
           friendList.push({ _id, username, fullname, followings, followers});
         });

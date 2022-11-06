@@ -52,20 +52,18 @@ router.post("/", verifyToken, upload.array("img", 10), async(req, res) =>{
 router.put("/updatePost/:id", verifyToken, async(req, res) => {
     try {
         let post = await Post.findById(req.params.id)
-        if(post == 0){
-            return res.status(400).json('Post not found')
-        }
+        if(!post)return res.status(400).json('Post not found')
+        
         const data = {
             $set: req.body
         }
+        
         post = await Post.findByIdAndUpdate(req.params.id, data)
         res.status(200).json(post)
         
     }catch(err){
         return res.status(500).json({msg: err.message})
     }
-      
-   
 })
 
 // ********************************************//
