@@ -8,12 +8,12 @@ const verifyToken = async(req , res , next)=>{
           if(authHeader){
                     const token = authHeader;
                     jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err , user)=>{
-                              if(err) return res.status(400).json("Some error occured");
+                              if(err) return res.status(400).json("Token Expires");
                               req.user = user;
                               next();
                     } )
           }else{
-                    return res.status(400).json("Access token is not valid")
+                    return res.status(400).json("Access Token Not Found")
           }
 
         // try {

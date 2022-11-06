@@ -49,21 +49,32 @@ router.post("/", verifyToken, upload.array("img", 10), async(req, res) =>{
 
 // ********************************************//
 //UPDATE POST
-router.put("/updatePost/:id", verifyToken, async(req, res) => {
+router.put("/updatePost/:id", verifyToken, upload.array("img", 10), async(req, res) => {
     try {
-        let post = await Post.findById(req.params.id)
-        if(!post)return res.status(400).json('Post not found')
-        
+        const {desc} = req.body
+        let post = await Post.findById(req.params.id);
+        if(!post) return res.status(500).json('Post not found')
+       
+        const imgFiles = req.files
+        //if(imgFiles){
+            let multiplePicturePromise = imgFiles.map((picture) =>
+            cloudinary.uploader.upload(picture.path,{upload_preset: "post_upload"}));
+            let imageResponses = await Promise.all(multiplePicturePromise);
+                //Delete image from cloudinary
+                //await cloudinary.uploader.destroy(user.cloudinary_id);
+       //}
         const data = {
-            $set: req.body
-        }
-        
-        post = await Post.findByIdAndUpdate(req.params.id, data)
-        res.status(200).json(post)
-        
-    }catch(err){
-        return res.status(500).json({msg: err.message})
+            desc,
+            img: imageResponses || post.img,
+            //cloudinary_id: multiplePicturePromise?.public_id || post.cloudinary_id,
+        };
+        post = await Post.findByIdAndUpdate(req.params.id, data);
+        const updatPost = await post.save();
+        res.status(200).json(updatPost);
+    } catch (err) {
+        return res.status(500).json(err);
     }
+    
 })
 
 // ********************************************//
