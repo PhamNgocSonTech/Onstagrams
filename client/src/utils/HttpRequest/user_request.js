@@ -30,3 +30,13 @@ export const getUserById = async (id) => {
     const results = await usersConfig2.get(`/get/${id}`);
     return results;
 };
+
+export const followUserHasId = async (id, accessToken) => {
+    const results = await usersConfig2.put(`/${id}/follow`, {}, { headers: { token: accessToken } });
+    return results;
+};
+
+export const unfollowUserHasId = async (id, accessToken) => {
+    const results = await usersConfig2.put(`/${id}/unfollow`, {}, { headers: { token: accessToken } });
+    return results;
+};

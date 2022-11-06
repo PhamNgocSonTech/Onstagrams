@@ -6,7 +6,7 @@ import { useParams } from "react-router-dom";
 import { getListSrcFromAllPosts } from "../../utils/GetListSource/getListSrcFromAllPosts";
 
 import { addProfileTags } from "../../Default/constant";
-import { getUserById } from "../../utils/HttpRequest/user_request";
+import { getUserById, followUserHasId, unfollowUserHasId } from "../../utils/HttpRequest/user_request";
 import { getPostByIdUser } from "../../utils/HttpRequest/post_request";
 
 import Popover from "../../components/common/Popover";
@@ -16,11 +16,13 @@ import edit from "../../assets/image/profile/edit.svg";
 import share from "../../assets/image/profile/share.svg";
 import link from "../../assets/image/profile/link.svg";
 import follow from "../../assets/image/profile/follow.svg";
+import friend from "../../assets/image/profile/friend.svg";
 import not_auth from "../../assets/image/profile/not_auth.svg";
 import veriyfed from "../../assets/image/verify/verifyed.svg";
 
 import Tooltip from "../../components/common/Tooltip";
 import EditProfile from "../../components/EditProfile";
+import Login from "../../components/Login";
 import jwt_decode from "jwt-decode";
 
 const cn = classNames.bind(styles);
@@ -30,12 +32,16 @@ function Profile() {
     const [src, setSrc] = useState({ img: [], video: [] });
     const [isShowVerifyPopUp, setIsShowVerifyPopUp] = useState(false);
     const [isShowVeryfyForm, setIsShowVeryfyForm] = useState(false);
+    const [isShowLogin, setisShowLogin] = useState(false);
     const { id } = useParams();
     const idTimmer = useRef();
     // 1: My profile
     // 0: Another person profile
     const [viewType, setViewType] = useState(false);
     const [isFollow, setIsFollow] = useState(false);
+    const [isFollowEachOther, setIsFollowEachOther] = useState(false);
+    const [followerNum, setFollowerNum] = useState(0);
+    const [followingNum, setFollowingNum] = useState(0);
 
     const handleVerify = () => {
         setIsShowVeryfyForm(true);
@@ -59,6 +65,16 @@ function Profile() {
 
         getUser(id).then((user) => {
             setUser(user.data);
+            if (token) {
+                // Logged in => Check you follow this person or not
+                const myid = jwt_decode(token); // This is my id
+                user.data.followers.includes(myid._id) && setIsFollow(true);
+                user.data.followers.includes(myid._id) &&
+                    user.data.followings.includes(myid._id) &&
+                    setIsFollowEachOther(true);
+            }
+            setFollowerNum(user.data.followers.length);
+            setFollowingNum(user.data.followings.length);
         });
         getImageAndVideo(id).then((src) => {
             src.length > 0 && setSrc(getListSrcFromAllPosts(src));
@@ -102,11 +118,34 @@ function Profile() {
     };
 
     const handleFollowAccount = () => {
-        setIsFollow(true);
+        const token = window.localStorage.getItem("accessToken");
+
+        if (token) {
+            // You are logged in
+            const myid = jwt_decode(token); // This is my id
+            followUserHasId(user._id, token).then((res) => {
+                if (res.status === 200) {
+                    setIsFollow(true);
+                    setFollowerNum((oldFl) => ++oldFl);
+                    if (user.followings.includes(myid._id)) {
+                        setIsFollowEachOther(true);
+                    }
+                }
+            });
+        } else {
+            // You are not logged in => Must loggin first
+            setisShowLogin(true);
+        }
     };
 
     const handleUnfollowAccount = () => {
-        setIsFollow(false);
+        const token = window.localStorage.getItem("accessToken");
+        unfollowUserHasId(user._id, token).then((res) => {
+            if (res.status === 200) {
+                setFollowerNum((oldFl) => --oldFl);
+                setIsFollow(false);
+            }
+        });
     };
 
     const handleShareAccount = () => {};
@@ -127,6 +166,7 @@ function Profile() {
 
     return (
         <div className={cn("wrapper")}>
+            {isShowLogin && <Login handleClosePanel={setisShowLogin} />}
             <div className={cn("user-infor")}>
                 <div className={cn("infor-section")}>
                     <div className={cn("name-infor")}>
@@ -211,7 +251,7 @@ function Profile() {
                                         onClick={handleUnfollowAccount}
                                     >
                                         <img
-                                            src={follow}
+                                            src={isFollowEachOther ? friend : follow} // follow hand
                                             alt='follow'
                                         />
                                         <div className={cn("unfollow-tooltip")}>
@@ -233,10 +273,10 @@ function Profile() {
                     <div className={cn("bio-infor")}>
                         <div className={cn("follow-infor")}>
                             <span className={cn("follow")}>
-                                <span className={cn("bold")}>{user.followings.length}</span>Following
+                                <span className={cn("bold")}>{followingNum}</span>Following
                             </span>
                             <span className={cn("follow")}>
-                                <span className={cn("bold")}>{user.followers.length}</span>Followers
+                                <span className={cn("bold")}>{followerNum}</span>Followers
                             </span>
                             <span className={cn("follow")}>
                                 <span className={cn("bold")}>0</span>Likes
