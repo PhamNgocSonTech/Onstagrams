@@ -104,6 +104,17 @@
 
             .validate-input {
                 position: relative;
+                .show-hide-icon {
+                    position: absolute;
+                    right: 20px;
+                    top: 21%;
+                    &:hover {
+                        cursor: pointer;
+                    }
+                    &:active {
+                        opacity: 0.8;
+                    }
+                }
                 .infor-validation {
                     position: absolute;
                     top: 2px;

@@ -17,6 +17,9 @@ import { useDispatch } from "react-redux";
 import { setUserInfor } from "../../reducers/LoginStateManager";
 import { login } from "../../utils/HttpRequest/auth_request";
 
+import show from "../../assets/image/register/show.svg";
+import hide from "../../assets/image/register/hide.svg";
+
 const cn = classNames.bind(styles);
 
 function PersonalLogIn({ isShowDoneRegister = "" }) {
@@ -24,6 +27,9 @@ function PersonalLogIn({ isShowDoneRegister = "" }) {
     const [isShowAlertIncorrectLogin, setIsShowAlertIncorrectLogin] = useState("");
     const [isShowAlertSuccessRegister, setIsShowAlertSuccessRegister] = useState(isShowDoneRegister);
     const [isShowLoadingModal, setisShowLoadingModal] = useState(false);
+
+    const [isShowPassword, setIsShowPassword] = useState(false);
+    const [isShowEyesIcon, setIsShowEyesIcon] = useState(false);
     const frm = useRef();
 
     const dispatch = useDispatch();
@@ -48,6 +54,19 @@ function PersonalLogIn({ isShowDoneRegister = "" }) {
 
     function handleCloseAllForm() {
         handleClosePanel(false);
+    }
+
+    function handleShowHideBtnPW1() {
+        setIsShowPassword(!isShowPassword);
+    }
+
+    function handleInputPassword(e) {
+        if (e.target.value) {
+            setIsShowEyesIcon(true);
+        } else {
+            setIsShowEyesIcon(false);
+            setIsShowPassword(false);
+        }
     }
 
     function handleSubmitLogin() {
@@ -133,13 +152,25 @@ function PersonalLogIn({ isShowDoneRegister = "" }) {
                             ref={username}
                             required={true}
                         />
-                        <input
-                            className={cn("input-control")}
-                            type='password'
-                            placeholder='Password'
-                            required={true}
-                            ref={password}
-                        />
+
+                        <div className={cn("pw-wrapper")}>
+                            <input
+                                className={cn("input-control")}
+                                type={isShowPassword ? "text" : "password"}
+                                placeholder='Password'
+                                required={true}
+                                ref={password}
+                                onChange={handleInputPassword}
+                            />
+                            {isShowEyesIcon && (
+                                <img
+                                    className={cn("show-hide-icon")}
+                                    src={isShowPassword ? show : hide}
+                                    alt=''
+                                    onClick={handleShowHideBtnPW1}
+                                />
+                            )}
+                        </div>
                     </form>
                     <div className={cn("forgot-pass")}>
                         <p>Forgot password?</p>

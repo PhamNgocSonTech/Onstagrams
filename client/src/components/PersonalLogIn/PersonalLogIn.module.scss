@@ -68,6 +68,24 @@
                 margin-bottom: -15px;
             }
 
+            form {
+
+                .pw-wrapper {
+                    position: relative;
+                    .show-hide-icon {
+                        position: absolute;
+                        right: 20px;
+                        top: 21%;
+                        &:hover {
+                            cursor: pointer;
+                        }
+                        &:active {
+                            opacity: 0.8;
+                        }
+                    }
+                }
+            }
+
             .input-control {
                 font-family: "ProximaNova";
                 width: 100%;

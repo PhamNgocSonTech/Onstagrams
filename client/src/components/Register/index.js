@@ -1,21 +1,23 @@
 import classNames from "classnames/bind";
 import styles from "./Register.module.scss";
 import { useContext, useEffect, useRef, useState } from "react";
+import { ParentContext } from "../Login";
+
+import { register } from "../../utils/HttpRequest/auth_request";
 
 import Modal_Center from "../common/Modal/Modal_Center";
 import Button from "../common/Button";
 import Tooltip from "../common/Tooltip";
-
-import { ParentContext } from "../Login";
 import Alert from "../common/Alert";
+import LoadingModal from "../common/LoadingModal";
 
 import incorrect from "../../assets/image/login/incorrect.svg";
 import close from "../../assets/image/modal/close-dark.svg";
 import back from "../../assets/image/header/back.svg";
 import question from "../../assets/image/register/question.svg";
 import information from "../../assets/image/register/information.svg";
-import { register } from "../../utils/HttpRequest/auth_request";
-import LoadingModal from "../common/LoadingModal";
+import show from "../../assets/image/register/show.svg";
+import hide from "../../assets/image/register/hide.svg";
 
 const cn = classNames.bind(styles);
 
@@ -37,6 +39,12 @@ function Register() {
 
     const [isChangeWrongUsernameIcon, setIsChangeWrongUsernameIcon] = useState(false);
     const [isChangeWrongPasswordIcon, setIsChangeWrongPasswordIcon] = useState(false);
+
+    const [isShowPassword, setIsShowPassword] = useState(false);
+    const [isShowEyesIcon, setIsShowEyesIcon] = useState(false);
+
+    const [isShowPassword2, setIsShowPassword2] = useState(false);
+    const [isShowEyesIcon2, setIsShowEyesIcon2] = useState(false);
 
     const [isShowModal, setIsShowModal] = useState(false);
 
@@ -85,6 +93,15 @@ function Register() {
     function handleCommonTogglePopup(state, setCallback) {
         setCallback(state);
     }
+
+    function handleShowHideBtnPW1() {
+        setIsShowPassword(!isShowPassword);
+    }
+
+    function handleShowHideBtnPW2() {
+        setIsShowPassword2(!isShowPassword2);
+    }
+
     function handleChangeInputData(index, e) {
         let tmpArr = [...registerData];
         tmpArr[index] = e.target.value;
@@ -97,9 +114,21 @@ function Register() {
         if (index === 3) {
             setIsChangeWrongPasswordIcon(!validatePassword(tmpArr[3]));
             setIsShowWrongPassword(!validatePasswordAgain(tmpArr[3], tmpArr[4]));
+            if (tmpArr[3]) {
+                setIsShowEyesIcon(true);
+            } else {
+                setIsShowEyesIcon(false);
+                setIsShowPassword(false);
+            }
         }
         if (index === 4) {
             setIsShowWrongPassword(!validatePasswordAgain(tmpArr[3], tmpArr[4]));
+            if (tmpArr[4]) {
+                setIsShowEyesIcon2(true);
+            } else {
+                setIsShowEyesIcon2(false);
+                setIsShowPassword2(false);
+            }
         }
         setRegisterData(tmpArr);
     }
@@ -275,11 +304,19 @@ function Register() {
                         <div className={cn("validate-input")}>
                             <input
                                 className={cn("input-control")}
-                                type='password'
+                                type={isShowPassword ? "text" : "password"}
                                 placeholder='Password'
                                 required
                                 onChange={(e) => handleChangeInputData(3, e)}
                             />
+                            {isShowEyesIcon && (
+                                <img
+                                    className={cn("show-hide-icon")}
+                                    src={isShowPassword ? show : hide}
+                                    alt=''
+                                    onClick={handleShowHideBtnPW1}
+                                />
+                            )}
                             <div className={cn("infor-validation")}>
                                 <img
                                     src={isChangeWrongPasswordIcon ? information : question}
@@ -300,11 +337,19 @@ function Register() {
                         <div className={cn("validate-input")}>
                             <input
                                 className={cn("input-control")}
-                                type='password'
+                                type={isShowPassword2 ? "text" : "password"}
                                 placeholder='Input Password Again'
                                 required
                                 onChange={(e) => handleChangeInputData(4, e)}
                             />
+                            {isShowEyesIcon2 && (
+                                <img
+                                    className={cn("show-hide-icon")}
+                                    src={isShowPassword2 ? show : hide}
+                                    alt=''
+                                    onClick={handleShowHideBtnPW2}
+                                />
+                            )}
                             {isShowWrongPassword && (
                                 <div className={cn("infor-validation")}>
                                     <img
