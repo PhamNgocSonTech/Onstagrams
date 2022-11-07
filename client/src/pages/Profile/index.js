@@ -69,10 +69,10 @@ function Profile() {
             if (token) {
                 // Logged in => Check you follow this person or not
                 const myid = jwt_decode(token); // This is my id
-                user.data.followers.includes(myid._id) && setIsFollow(true);
-                user.data.followers.includes(myid._id) &&
-                    user.data.followings.includes(myid._id) &&
-                    setIsFollowEachOther(true);
+                user.data.followers.includes(myid._id) ? setIsFollow(true) : setIsFollow(false);
+                user.data.followers.includes(myid._id) && user.data.followings.includes(myid._id)
+                    ? setIsFollowEachOther(true)
+                    : setIsFollowEachOther(false);
             }
             setFollowerNum(user.data.followers.length);
             setFollowingNum(user.data.followings.length);
