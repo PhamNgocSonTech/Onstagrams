@@ -7,6 +7,29 @@
     top: 60px;
     overflow-y: hidden;
 
+    .none-user-found {
+        height: 130px;
+        padding: 10px;
+        margin: 0 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+
+        img {
+            margin-bottom: 10px;
+            opacity: 0.6;
+        }
+
+        h5 {
+            text-align: center;
+            opacity: 0.8;
+            font-size: 12px;
+        }
+    }
+
     &::-webkit-scrollbar-thumb {
         border-radius: 3px;
         background: rgba(22, 24, 35, .06);

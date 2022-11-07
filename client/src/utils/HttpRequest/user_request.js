@@ -12,15 +12,13 @@ const usersConfig2 = axios.create({
     },
 });
 
-/**
- * url: https://localhost:5000/api/user/{url}
- * options: https://localhost:5000/api/user/{url}&{params}
- */
+// MOCK API
 export const getUsers = async (url, options = {}) => {
     const results = await usersConfig.get(url, { params: options });
     return results.data;
 };
 
+// LOCAL API
 export const getAllUsers = async () => {
     const results = await usersConfig2.get("/getListUsers/");
     return results.data;
@@ -39,4 +37,14 @@ export const followUserHasId = async (id, accessToken) => {
 export const unfollowUserHasId = async (id, accessToken) => {
     const results = await usersConfig2.put(`/${id}/unfollow`, {}, { headers: { token: accessToken } });
     return results;
+};
+
+export const getFollowersOfUser = async (id) => {
+    const results = await usersConfig2.get(`/getUserFollowers/${id}`);
+    return results.data;
+};
+
+export const getFollowingsOfUser = async (id) => {
+    const results = await usersConfig2.get(`/getUserFollowings/${id}`);
+    return results.data;
 };

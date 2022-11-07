@@ -5,14 +5,21 @@ import Button from "../Button";
 import Sidebar_DivSecondary from "./Sidebar_FrameSecondary";
 import MainBar from "./MainBar";
 import styles from "./Sidebar.module.scss";
+import { Skeleton } from "@mui/material";
 
 import { DICOVER_SECTION } from "../../../Default/constant";
 import Sidebar_Footer from "./Sidebar_Footer";
 import ProfilePopover from "../../ProfilePopover";
 import Login from "../../Login";
 import { createContext, useEffect, useRef, useState } from "react";
+import no_following from "../../../assets/image/sidebar/no_following.svg";
 
-import { getUsers } from "../../../utils/HttpRequest/user_request";
+import {
+    getAllUsers,
+    getFollowersOfUser,
+    getFollowingsOfUser,
+    getUsers,
+} from "../../../utils/HttpRequest/user_request";
 
 const cn = classNames.bind(styles);
 export const TopPosition = createContext();
@@ -20,17 +27,44 @@ export const TopPosition = createContext();
 function Sidebar({
     className,
     isShowPopUp = true,
-    followerAccounts = false,
-    suggestAcounts = true,
-    followingAccounts = true,
     isShowLoginSection = false,
+
+    followerAccounts = false,
+    followingAccounts = true,
+
+    suggestAcounts = true,
+
+    userId,
 }) {
-    const [SuggestdAccounts, setSuggestdAccounts] = useState([]);
-    const [FollowingAccounts, setFollowingAccounts] = useState([]);
-    const [FollowerAccounts, setFollowerAccounts] = useState([]);
+    const [SuggestdAccounts, setSuggestdAccounts] = useState([]); // 100% have data
+    const [FollowingAccounts, setFollowingAccounts] = useState([]); // If dont have data => Show area div => OK
+    const [FollowerAccounts, setFollowerAccounts] = useState([]); // If dont have data => Hide
     const [showLoginForm, setShowLoginForm] = useState(false);
     let idLeave = useRef();
     let idHover = useRef();
+
+    const [isGetAPIDone, setIsGetAPIDone] = useState(false);
+    useEffect(() => {
+        // Not loggin or Logged in can get Suggestd Account
+        getAllUsers().then((res) => {
+            console.log(res);
+            setSuggestdAccounts(res);
+        });
+
+        if (userId) {
+            // If have followerAccounts => Handle
+            if (followerAccounts) {
+                getFollowersOfUser(userId).then((res) => setFollowerAccounts(res));
+            }
+            // If have followingAccounts => Hanndle
+            if (followingAccounts) {
+                getFollowingsOfUser(userId).then((res) => {
+                    setFollowingAccounts(res);
+                });
+            }
+        }
+        setIsGetAPIDone(true);
+    }, [userId]);
 
     const [Profile, setProfile] = useState({
         index: -1,
@@ -74,30 +108,6 @@ function Sidebar({
         });
     };
 
-    useEffect(() => {
-        Promise.all([
-            getUsers("", {
-                p: 1,
-                l: 5,
-                badge: true,
-            }),
-            getUsers("", {
-                p: 1,
-                l: 5,
-                badge: false,
-            }),
-            getUsers("", {
-                p: 1,
-                l: 5,
-                badge: true,
-            }),
-        ]).then(([SuggestedAcc, FollowingAcc, FollowerAcc]) => {
-            setSuggestdAccounts(SuggestedAcc);
-            setFollowingAccounts(FollowingAcc);
-            setFollowerAccounts(FollowerAcc);
-        });
-    }, []);
-
     return (
         <div>
             {showLoginForm && (
@@ -125,38 +135,200 @@ function Sidebar({
                     </Sidebar_DivSecondary>
                 )}
 
-                {followerAccounts && (
+                {followerAccounts && FollowerAccounts.length > 0 && (
                     <Sidebar_DivSecondary
                         title='Follower accounts'
-                        seeall
+                        seeall={SuggestdAccounts.length >= 5}
                     >
-                        {FollowerAccounts.map((user, index) => (
-                            <AccountItem
-                                bold
-                                smdes
-                                userInfor={user}
-                                key={index}
-                            />
-                        ))}
+                        {!isGetAPIDone ? (
+                            <div>
+                                <div style={{ display: "flex", marginBottom: "20px" }}>
+                                    <div>
+                                        <Skeleton
+                                            variant='circular'
+                                            width={40}
+                                            height={40}
+                                        />
+                                    </div>
+                                    <div style={{ marginLeft: "10px" }}>
+                                        <Skeleton
+                                            variant='text'
+                                            sx={{ fontSize: "15px", width: "120px" }}
+                                        />
+                                        <Skeleton
+                                            variant='text'
+                                            sx={{ fontSize: "10px", width: "90px" }}
+                                        />
+                                    </div>
+                                </div>
+                                <div style={{ display: "flex", marginBottom: "20px" }}>
+                                    <div>
+                                        <Skeleton
+                                            variant='circular'
+                                            width={40}
+                                            height={40}
+                                        />
+                                    </div>
+                                    <div style={{ marginLeft: "10px" }}>
+                                        <Skeleton
+                                            variant='text'
+                                            sx={{ fontSize: "15px", width: "120px" }}
+                                        />
+                                        <Skeleton
+                                            variant='text'
+                                            sx={{ fontSize: "10px", width: "90px" }}
+                                        />
+                                    </div>
+                                </div>
+                                <div style={{ display: "flex", marginBottom: "20px" }}>
+                                    <div>
+                                        <Skeleton
+                                            variant='circular'
+                                            width={40}
+                                            height={40}
+                                        />
+                                    </div>
+                                    <div style={{ marginLeft: "10px" }}>
+                                        <Skeleton
+                                            variant='text'
+                                            sx={{ fontSize: "15px", width: "120px" }}
+                                        />
+                                        <Skeleton
+                                            variant='text'
+                                            sx={{ fontSize: "10px", width: "90px" }}
+                                        />
+                                    </div>
+                                </div>
+                                <div style={{ display: "flex", marginBottom: "20px" }}>
+                                    <div>
+                                        <Skeleton
+                                            variant='circular'
+                                            width={40}
+                                            height={40}
+                                        />
+                                    </div>
+                                    <div style={{ marginLeft: "10px" }}>
+                                        <Skeleton
+                                            variant='text'
+                                            sx={{ fontSize: "15px", width: "120px" }}
+                                        />
+                                        <Skeleton
+                                            variant='text'
+                                            sx={{ fontSize: "10px", width: "90px" }}
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                        ) : (
+                            FollowerAccounts.map((user, index) => (
+                                <AccountItem
+                                    bold
+                                    smdes
+                                    userInfor={user}
+                                    key={index}
+                                />
+                            ))
+                        )}
                     </Sidebar_DivSecondary>
                 )}
 
                 {suggestAcounts && (
                     <Sidebar_DivSecondary
                         title='Suggested accounts'
-                        seeall
+                        seeall={SuggestdAccounts.length >= 5}
                     >
                         <div className={cn("container")}>
-                            {SuggestdAccounts.map((user, index) => (
-                                <AccountItem
-                                    onMouseEnter={() => handleHover(user, index)}
-                                    onMouseLeave={handleLeave}
-                                    bold
-                                    smdes
-                                    userInfor={user}
-                                    key={index}
-                                />
-                            ))}
+                            {!isGetAPIDone ? (
+                                <div>
+                                    <div style={{ display: "flex", marginBottom: "20px" }}>
+                                        <div>
+                                            <Skeleton
+                                                variant='circular'
+                                                width={40}
+                                                height={40}
+                                            />
+                                        </div>
+                                        <div style={{ marginLeft: "10px" }}>
+                                            <Skeleton
+                                                variant='text'
+                                                sx={{ fontSize: "15px", width: "120px" }}
+                                            />
+                                            <Skeleton
+                                                variant='text'
+                                                sx={{ fontSize: "10px", width: "90px" }}
+                                            />
+                                        </div>
+                                    </div>
+                                    <div style={{ display: "flex", marginBottom: "20px" }}>
+                                        <div>
+                                            <Skeleton
+                                                variant='circular'
+                                                width={40}
+                                                height={40}
+                                            />
+                                        </div>
+                                        <div style={{ marginLeft: "10px" }}>
+                                            <Skeleton
+                                                variant='text'
+                                                sx={{ fontSize: "15px", width: "120px" }}
+                                            />
+                                            <Skeleton
+                                                variant='text'
+                                                sx={{ fontSize: "10px", width: "90px" }}
+                                            />
+                                        </div>
+                                    </div>
+                                    <div style={{ display: "flex", marginBottom: "20px" }}>
+                                        <div>
+                                            <Skeleton
+                                                variant='circular'
+                                                width={40}
+                                                height={40}
+                                            />
+                                        </div>
+                                        <div style={{ marginLeft: "10px" }}>
+                                            <Skeleton
+                                                variant='text'
+                                                sx={{ fontSize: "15px", width: "120px" }}
+                                            />
+                                            <Skeleton
+                                                variant='text'
+                                                sx={{ fontSize: "10px", width: "90px" }}
+                                            />
+                                        </div>
+                                    </div>
+                                    <div style={{ display: "flex", marginBottom: "20px" }}>
+                                        <div>
+                                            <Skeleton
+                                                variant='circular'
+                                                width={40}
+                                                height={40}
+                                            />
+                                        </div>
+                                        <div style={{ marginLeft: "10px" }}>
+                                            <Skeleton
+                                                variant='text'
+                                                sx={{ fontSize: "15px", width: "120px" }}
+                                            />
+                                            <Skeleton
+                                                variant='text'
+                                                sx={{ fontSize: "10px", width: "90px" }}
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                            ) : (
+                                SuggestdAccounts.map((user, index) => (
+                                    <AccountItem
+                                        onMouseEnter={() => handleHover(user, index)}
+                                        onMouseLeave={handleLeave}
+                                        bold
+                                        smdes
+                                        userInfor={user}
+                                        key={index}
+                                    />
+                                ))
+                            )}
 
                             {isShowPopUp &&
                                 (Profile.index === -1 || (
@@ -180,16 +352,106 @@ function Sidebar({
                 {followingAccounts && (
                     <Sidebar_DivSecondary
                         title='Following accounts'
-                        seeall
+                        seeall={SuggestdAccounts.length >= 5}
                     >
-                        {FollowingAccounts.map((user, index) => (
-                            <AccountItem
-                                bold
-                                smdes
-                                userInfor={user}
-                                key={index}
-                            />
-                        ))}
+                        {!isGetAPIDone ? (
+                            <div>
+                                <div style={{ display: "flex", marginBottom: "20px" }}>
+                                    <div>
+                                        <Skeleton
+                                            variant='circular'
+                                            width={40}
+                                            height={40}
+                                        />
+                                    </div>
+                                    <div style={{ marginLeft: "10px" }}>
+                                        <Skeleton
+                                            variant='text'
+                                            sx={{ fontSize: "15px", width: "120px" }}
+                                        />
+                                        <Skeleton
+                                            variant='text'
+                                            sx={{ fontSize: "10px", width: "90px" }}
+                                        />
+                                    </div>
+                                </div>
+                                <div style={{ display: "flex", marginBottom: "20px" }}>
+                                    <div>
+                                        <Skeleton
+                                            variant='circular'
+                                            width={40}
+                                            height={40}
+                                        />
+                                    </div>
+                                    <div style={{ marginLeft: "10px" }}>
+                                        <Skeleton
+                                            variant='text'
+                                            sx={{ fontSize: "15px", width: "120px" }}
+                                        />
+                                        <Skeleton
+                                            variant='text'
+                                            sx={{ fontSize: "10px", width: "90px" }}
+                                        />
+                                    </div>
+                                </div>
+                                <div style={{ display: "flex", marginBottom: "20px" }}>
+                                    <div>
+                                        <Skeleton
+                                            variant='circular'
+                                            width={40}
+                                            height={40}
+                                        />
+                                    </div>
+                                    <div style={{ marginLeft: "10px" }}>
+                                        <Skeleton
+                                            variant='text'
+                                            sx={{ fontSize: "15px", width: "120px" }}
+                                        />
+                                        <Skeleton
+                                            variant='text'
+                                            sx={{ fontSize: "10px", width: "90px" }}
+                                        />
+                                    </div>
+                                </div>
+                                <div style={{ display: "flex", marginBottom: "20px" }}>
+                                    <div>
+                                        <Skeleton
+                                            variant='circular'
+                                            width={40}
+                                            height={40}
+                                        />
+                                    </div>
+                                    <div style={{ marginLeft: "10px" }}>
+                                        <Skeleton
+                                            variant='text'
+                                            sx={{ fontSize: "15px", width: "120px" }}
+                                        />
+                                        <Skeleton
+                                            variant='text'
+                                            sx={{ fontSize: "10px", width: "90px" }}
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                        ) : FollowingAccounts.length == 0 && isGetAPIDone ? (
+                            <div className={cn("none-user-found")}>
+                                <img
+                                    src={no_following}
+                                    alt=''
+                                />
+                                <h4>Let's start follow someone</h4>
+                                <h5>Following someone to see newest moments from them</h5>
+                            </div>
+                        ) : (
+                            FollowingAccounts.map((user, index) => (
+                                <AccountItem
+                                    bold
+                                    smdes
+                                    userInfor={user}
+                                    key={index}
+                                />
+                            ))
+                        )}
                     </Sidebar_DivSecondary>
                 )}
 

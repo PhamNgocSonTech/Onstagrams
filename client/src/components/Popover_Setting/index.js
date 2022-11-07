@@ -52,7 +52,6 @@ function Popover_Setting({ menu, logIn = false, onHandleLogOut }) {
                             })}
                             leftIcon={item.icon}
                             to={item.to}
-                            href={item.href}
                             onClick={() => handleClick(item)}
                         >
                             {item.option}

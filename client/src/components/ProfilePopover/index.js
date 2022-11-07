@@ -14,27 +14,34 @@ function ProfilePopover({ className, userInfor }) {
     return (
         <Popover className={cn("wrapper", { [className]: className })}>
             <div className={cn("header")}>
-                <img className={cn("avt")} alt="img" src={userInfor.avatar} />
-                <Button className={cn("follow")} primary>
+                <img
+                    className={cn("avt")}
+                    alt='img'
+                    src={userInfor.avatar}
+                />
+                <Button
+                    className={cn("follow")}
+                    primary
+                >
                     Follow
                 </Button>
             </div>
             <Button className={cn("username")}>
-                {userInfor.nickname}
+                {userInfor.username}
                 {userInfor.badge && (
-                    <img className={cn("check")} src={check} alt="img" />
+                    <img
+                        className={cn("check")}
+                        src={check}
+                        alt='img'
+                    />
                 )}
             </Button>
             <p className={cn("name")}>{userInfor.fullname}</p>
             <div className={cn("number-des")}>
-                <span className={cn("num")}>
-                    {convert_milions(userInfor.following)}
-                </span>
+                <span className={cn("num")}>{convert_milions(userInfor.followings.length)}</span>
                 <span className={cn("label")}>Followers</span>
-                <span className={cn("num")}>
-                    {convert_milions(userInfor.likes)}
-                </span>
-                <span className={cn("label")}>Likes</span>
+                <span className={cn("num")}>{convert_milions(userInfor.followers.length)}</span>
+                <span className={cn("label")}>Followings</span>
             </div>
         </Popover>
     );

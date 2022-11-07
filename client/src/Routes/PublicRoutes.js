@@ -8,6 +8,11 @@ import Profile from "../pages/Profile";
 
 export const pubRoutes = [
     {
+        path: "/profile/:id",
+        element: Profile,
+        layout: ProfileLayout,
+    },
+    {
         path: "/",
         element: Home,
     },
@@ -25,10 +30,5 @@ export const pubRoutes = [
         element: Upload,
         layout: OnlyHeader,
         parameters: { isShowUploadBtn: false },
-    },
-    {
-        path: "/profile/:id",
-        element: Profile,
-        layout: ProfileLayout,
     },
 ];

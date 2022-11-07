@@ -2,7 +2,6 @@ import classNames from "classnames/bind";
 import styles from "./Profile.module.scss";
 import { useEffect, useState, useRef } from "react";
 import { useParams } from "react-router-dom";
-
 import { getListSrcFromAllPosts } from "../../utils/GetListSource/getListSrcFromAllPosts";
 
 import { addProfileTags } from "../../Default/constant";
@@ -24,10 +23,12 @@ import Tooltip from "../../components/common/Tooltip";
 import EditProfile from "../../components/EditProfile";
 import Login from "../../components/Login";
 import jwt_decode from "jwt-decode";
+import { Skeleton } from "@mui/material";
 
 const cn = classNames.bind(styles);
 
 function Profile() {
+    const [isGetAPIDone, setIsGetAPIDone] = useState(false);
     const [user, setUser] = useState({ followers: [], followings: [] });
     const [src, setSrc] = useState({ img: [], video: [] });
     const [isShowVerifyPopUp, setIsShowVerifyPopUp] = useState(false);
@@ -60,7 +61,7 @@ function Profile() {
         const token = window.localStorage.getItem("accessToken");
         try {
             const decode = jwt_decode(token); // => If OK => My View
-            decode._id === id && setViewType(true);
+            decode._id === id ? setViewType(true) : setViewType(false);
         } catch (Ex) {}
 
         getUser(id).then((user) => {
@@ -77,9 +78,11 @@ function Profile() {
             setFollowingNum(user.data.followings.length);
         });
         getImageAndVideo(id).then((src) => {
-            src.length > 0 && setSrc(getListSrcFromAllPosts(src));
+            console.log(src);
+            src.length > 0 ? setSrc(getListSrcFromAllPosts(src)) : setSrc([]);
+            setIsGetAPIDone(true);
         });
-    }, []);
+    }, [id]);
     const [tabChoose, setTabChoose] = useState(0);
 
     const [isOpenEditPopUp, setIsOpenEditPopUp] = useState(false);
@@ -170,32 +173,73 @@ function Profile() {
             <div className={cn("user-infor")}>
                 <div className={cn("infor-section")}>
                     <div className={cn("name-infor")}>
-                        <img
-                            className={cn("avatar")}
-                            src={user.avatar}
-                            alt=''
-                        />
+                        {!isGetAPIDone ? (
+                            <Skeleton
+                                variant='circular'
+                                width={116}
+                                height={116}
+                            />
+                        ) : (
+                            <img
+                                className={cn("avatar")}
+                                src={user.avatar}
+                                alt=''
+                            />
+                        )}
+
                         <div className={cn("name")}>
-                            <h2>{user.username}</h2>
-                            <h5>{user.fullname}</h5>
+                            {!isGetAPIDone ? (
+                                <div>
+                                    <Skeleton
+                                        variant='text'
+                                        sx={{ fontSize: "35px", width: "350px", marginBottom: "-10px" }}
+                                    />
+                                    <Skeleton
+                                        variant='text'
+                                        sx={{ fontSize: "20px", width: "200px" }}
+                                    />
+                                </div>
+                            ) : (
+                                <>
+                                    <h2>{user.username}</h2>
+                                    <h5>{user.fullname}</h5>
+                                </>
+                            )}
 
                             {viewType ? (
                                 <div className={cn("ed")}>
-                                    <Button
-                                        leftIcon={edit}
-                                        outline
-                                        className={cn("edit-profile-button")}
-                                        onClick={handleOpenEditPopUp}
-                                    >
-                                        Edit profile
-                                    </Button>
+                                    {!isGetAPIDone ? (
+                                        <Skeleton
+                                            variant='rounded'
+                                            width={250}
+                                            height={40}
+                                        />
+                                    ) : (
+                                        <Button
+                                            leftIcon={edit}
+                                            outline
+                                            className={cn("edit-profile-button")}
+                                            onClick={handleOpenEditPopUp}
+                                        >
+                                            Edit profile
+                                        </Button>
+                                    )}
                                     {!user.verifed ? (
                                         <div
                                             className={cn("auth")}
                                             onMouseEnter={() => setIsShowVerifyPopUp(true)}
                                             onMouseLeave={handleLeaveVerify}
                                         >
-                                            <img src={not_auth} />
+                                            {!isGetAPIDone ? (
+                                                <Skeleton
+                                                    variant='rounded'
+                                                    width={16}
+                                                    height={16}
+                                                />
+                                            ) : (
+                                                <img src={not_auth} />
+                                            )}
+
                                             {isShowVerifyPopUp && (
                                                 <div onMouseEnter={handleEnterAgain}>
                                                     <Popover className={cn("pop-up-auth")}>
@@ -222,6 +266,7 @@ function Profile() {
                                             onMouseLeave={handleLeaveVerify}
                                         >
                                             <img src={veriyfed} />
+
                                             {isShowVerifyPopUp && (
                                                 <div onMouseEnter={handleEnterAgain}>
                                                     <Popover className={cn("pop-up-auth")}>
@@ -259,6 +304,12 @@ function Profile() {
                                         </div>
                                     </div>
                                 </div>
+                            ) : !isGetAPIDone ? (
+                                <Skeleton
+                                    variant='rounded'
+                                    width={250}
+                                    height={40}
+                                />
                             ) : (
                                 <Button
                                     primary
@@ -271,17 +322,27 @@ function Profile() {
                         </div>
                     </div>
                     <div className={cn("bio-infor")}>
-                        <div className={cn("follow-infor")}>
-                            <span className={cn("follow")}>
-                                <span className={cn("bold")}>{followingNum}</span>Following
-                            </span>
-                            <span className={cn("follow")}>
-                                <span className={cn("bold")}>{followerNum}</span>Followers
-                            </span>
-                            <span className={cn("follow")}>
-                                <span className={cn("bold")}>0</span>Likes
-                            </span>
-                        </div>
+                        {!isGetAPIDone ? (
+                            <div>
+                                <Skeleton
+                                    variant='text'
+                                    sx={{ fontSize: "20px", width: "300px" }}
+                                />
+                            </div>
+                        ) : (
+                            <div className={cn("follow-infor")}>
+                                <span className={cn("follow")}>
+                                    <span className={cn("bold")}>{followingNum}</span>Following
+                                </span>
+                                <span className={cn("follow")}>
+                                    <span className={cn("bold")}>{followerNum}</span>Followers
+                                </span>
+                                <span className={cn("follow")}>
+                                    <span className={cn("bold")}>0</span>Likes
+                                </span>
+                            </div>
+                        )}
+
                         <div className={cn("bio")}>
                             <p>{user.bio}</p>
                         </div>
@@ -341,12 +402,20 @@ function Profile() {
                 </div>
 
                 <div className={cn("content")}>
-                    {
+                    {!isGetAPIDone ? (
+                        <div>
+                            <Skeleton
+                                variant='rounded'
+                                width={182}
+                                height={200}
+                            />
+                        </div>
+                    ) : (
                         <Frame
                             contents={contents}
                             isMyProfile={viewType}
                         />
-                    }
+                    )}
                 </div>
             </div>
 
