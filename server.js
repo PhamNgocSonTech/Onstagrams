@@ -1,5 +1,6 @@
 const express = require("express");
 const app = express();
+
 const mongoose = require("mongoose");
 const morgan = require("morgan");
 const helmet = require("helmet");
@@ -11,6 +12,7 @@ const cors = require("cors");
 const userRoute = require("./route/users");
 const authRoute = require("./route/auth");
 const postRoute = require("./route/post");
+const notifyRoute = require("./route/notify");
 
 // ENV Config
 dotenv.config();
@@ -41,9 +43,11 @@ app.use(cors({
 }))
 
 //ROUTE
-app.use("/api/user", userRoute);
 app.use("/api/auth", authRoute);
+app.use("/api/user", userRoute);
 app.use("/api/post", postRoute);
+app.use("/api/notify", notifyRoute);
+
 
 app.listen(port, () => console.log("Server is running on port is:", port));
 // COOKIES SESSION
