@@ -4,6 +4,9 @@ const User = require('../models/User')
 const {verifyToken} = require('../utils/verifyToken')
 const cloudinary = require("../utils/cloudinary");
 const upload = require("../utils/multer");
+const uploadVideo = require("../utils/multerConfig");
+
+
 
 // router.get("/", async(req, res) =>{
 //     res.send("Post")
@@ -35,7 +38,7 @@ router.post("/", verifyToken, upload.array("img", 10), async(req, res) =>{
         // }
         const newPost = await new Post({
             desc, 
-            img: imageResponses, 
+            img: imageResponses || post.img, 
             video,
             userId: req.user._id
         })
@@ -153,7 +156,8 @@ router.get("/getListPosts/", async (req, res) => {
 
 // ********************************************//
 //GET ALL TIMELINE POST
-router.get("/timeline/:userId", async (req, res) => {
+router.get("/timeline/:userId", verifyToken, async (req, res) => {
+    if(req.user._id === req.params.userId) return res.status(500).json({msg: 'You can not get your timeline'})
     try {
         const currentUser = await User.findById(req.params.userId)
         const userPost = await Post.find({userId: currentUser._id})

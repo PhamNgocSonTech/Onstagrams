@@ -1,17 +1,13 @@
 const router = require("express").Router();
-const User = require("../models/User");
-const Post = require("../models/Post");
-
 const bcrypt = require("bcrypt");
 const cloudinary = require("../utils/cloudinary");
 const upload = require("../utils/multer");
 const { verifyToken } = require("../utils/verifyToken");
+const User = require("../models/User");
+const Post = require("../models/Post");
 
-router.get("/", (req, res) => {
-    res.send("Welcome to User Route!");
-});
 
-// SEARCH USER
+//SEARCH USER WITH USERNAME
 router.get("/search/:username", async (req, res) => {
     try {
         const userGet = await User.find({ username: req.params.username });
@@ -41,7 +37,7 @@ router.get("/getListUsers/", async (req, res) => {
     }
 });
 
-//UPDATE PROFILE WITH TOKEN AND CHANGE AVATAR
+//UPDATE PROFILE AND CHANGE AVATAR
 router.put("/updateProfile/:id", verifyToken, upload.single("img"), async (req, res) => {
     // try {
     if (req.params.id === req.user._id) {
@@ -83,30 +79,6 @@ router.put("/updateProfile/:id", verifyToken, upload.single("img"), async (req, 
     // }
 });
 
-//UPDATE USER WITH IMG CLOUDINARY
-// router.put("/update-cloudinary/:id", upload.single("img"), async (req, res) => {
-//   try {
-//     let user = await User.findById(req.params.id);
-//     // Upload image to cloudinary
-//     let result;
-//     if (req.file) {
-//       result = await cloudinary.uploader.upload(req.file.path, {
-//         upload_preset: "avatar",
-//       });
-//       // Delete image from cloudinary
-//       await cloudinary.uploader.destroy(user.cloudinary_id);
-//     }
-//     const data = {
-//       $set: req.body,
-//       avatar: result?.secure_url || user.avatar,
-//       cloudinary_id: result?.public_id || user.cloudinary_id,
-//     };
-//     user = await User.findByIdAndUpdate(req.params.id, data, { new: true });
-//     res.json(user);
-//   } catch (err) {
-//     console.log(err);
-//   }
-// });
 
 //DELETE USER
 router.delete("/delete/:id", verifyToken, async (req, res) => {
@@ -288,4 +260,30 @@ router.get("/getUserFollowers/:id", async(req, res)=>{
 //     return res.status(403).json("You can update only your account");
 //   }
 // });
+
+//UPDATE USER WITH IMG CLOUDINARY
+// router.put("/update-cloudinary/:id", upload.single("img"), async (req, res) => {
+//   try {
+//     let user = await User.findById(req.params.id);
+//     // Upload image to cloudinary
+//     let result;
+//     if (req.file) {
+//       result = await cloudinary.uploader.upload(req.file.path, {
+//         upload_preset: "avatar",
+//       });
+//       // Delete image from cloudinary
+//       await cloudinary.uploader.destroy(user.cloudinary_id);
+//     }
+//     const data = {
+//       $set: req.body,
+//       avatar: result?.secure_url || user.avatar,
+//       cloudinary_id: result?.public_id || user.cloudinary_id,
+//     };
+//     user = await User.findByIdAndUpdate(req.params.id, data, { new: true });
+//     res.json(user);
+//   } catch (err) {
+//     console.log(err);
+//   }
+// });
+
 module.exports = router;

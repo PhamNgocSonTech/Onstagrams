@@ -10,11 +10,6 @@ const PostSchema = new mongoose.Schema(
         type: Array,
         default: [],
       },
-
-      cloudinary_image_id: {
-        type: String,
-      },
-
       video: {
         type: Array,
         default: [],

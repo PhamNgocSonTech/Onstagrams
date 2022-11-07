@@ -1,39 +1,46 @@
+// PACKAGE REQUIRE
 const router = require('express').Router()
-const User = require('../models/User')
 const bcrypt = require('bcrypt')
-
-const cloudinary = require('../utils/cloudinary')
-const upload = require('../utils/multer')
+const jwt = require('jsonwebtoken')
+const nodemailer = require('nodemailer')
+const {OAuth2Client} = require('google-auth-library')
+const { nanoid } = require('nanoid');
 
 //const passport = require('passport')
 
-const jwt = require('jsonwebtoken')
-const ResetToken = require("../models/ResetToken")
+
+// UTILS REQUIRE
+const cloudinary = require('../utils/cloudinary')
+const upload = require('../utils/multer')
+const mailConfig = require('../utils/mail')
 const {verifyToken} = require('../utils/verifyToken')
 
-const nodemailer = require('nodemailer')
-const {OAuth2Client} = require('google-auth-library')
-const mailConfig = require('../utils/mail')
-const {generateOTP} = require('../utils/generateOTP')
+// MODELS REQUIRE
 const VerificationMail = require('../models/VerificationMail')
+const ResetToken = require("../models/ResetToken")
+const {generateOTP} = require('../utils/generateOTP')
+const User = require('../models/User')
 
+// ENV CONFIG REQUIRE
 const dotenv = require('dotenv').config()
+
+
+// DECLARE VARIABLE refreshTokens IS TYPE ARRAY TO STORE REFRESH_TOKEN ELEMENT
 let refreshTokens = []
 
 
 // CONFIG FOR GOOGLE SEND MAIL
 // Khởi tạo OAuth2Client với Client ID và Client Secret 
-
 const myOAuth2Client = new OAuth2Client(
     process.env.GOOGLE_MAILER_CLIENT_ID,
     process.env.GOOGLE_MAILER_CLIENT_SECRET
   )
-  // Set Refresh Token vào OAuth2Client Credentials
+// Set Refresh Token vào OAuth2Client Credentials
   myOAuth2Client.setCredentials({
     refresh_token: process.env.GOOGLE_MAILER_REFRESH_TOKEN
   })
 
-//REGISTER NEW
+// NEW REGISTER CAN SEND OTP CODE TO EMAIL FOR USERS
 router.post("/register", async(req, res) => {
     try {
         const { fullname, username, email, password, gender, bio, external } = req.body
@@ -111,7 +118,7 @@ router.post("/register", async(req, res) => {
     }
 })
 
-
+// VERIFY EMAIL WHEN USE REGISTERED
 router.post('/verify/mail', async(req, res) => {
     const {userId, otp} = req.body
     const getUser = await User.findById(userId)
@@ -154,8 +161,7 @@ router.post('/verify/mail', async(req, res) => {
 
 })
 
-// LOGIN NEW 
-
+// NEW LOGIN CAN CREATE ACCESS_TOKEN AND REFRESH_TOKEN
 router.post("/login", async(req, res) => {
     try {
         //const { email, password } = req.body
@@ -180,6 +186,102 @@ router.post("/login", async(req, res) => {
     }     
 })
 
+
+// LOGOUT USER WILL DELETE REFRESH_TOKEN
+router.post('/logout', (req, res) => {
+  const refreshToken = req.body.token;
+  refreshTokens = refreshTokens.filter((refToken) => refToken !== refreshToken);
+  res.status(200).json('Logout Success');
+});
+
+router.post('/forgot/password', async(req, res) => {
+  const {email} = req.body
+  const user = await User.findOne({email: email})
+  if(!user) return res.status(500).json('User not found')
+  const token = await ResetToken.findOne({user: user._id})
+  if(token) return res.status(500).json('Token already exists')
+  const codeRandom = nanoid(10)
+  const resetToken = new ResetToken({
+    user: user._id,
+    token: codeRandom
+  })
+  resetToken.save()
+  
+  let transporter = nodemailer.createTransport({
+    host: mailConfig.HOST,
+    auth: {
+    type: "OAuth2",
+    user: mailConfig.FROM_EMAIL_ADDRESS,
+    clientId: mailConfig.GOOGLE_CLIENT_ID,
+    clientSecret: mailConfig.GOOGLE_SECRET_ID,
+    refreshToken: mailConfig.GOOGLE_REFRESH_TOKEN                              
+    },
+  });
+ 
+  let mailOptions = {
+    from: `Admin_Onstagram💎 <${mailConfig.FROM_EMAIL_ADDRESS}>`, 
+    to: user.email, 
+    subject: 'Using Token From Onstagrams To Reset Password', 
+    html:`<h1>Hello ✔ <span style="color:blue;text-align:center;">${user.username}</span> <p>Your TOKEN RESET PASSWORD => <span style="color:red;">${codeRandom}</span> </p></h1>`, 
+  };
+
+  await transporter.sendMail(mailOptions)
+  res.status(200).json({msg:"Send Success! Please check your email to reset password"})
+
+})
+
+router.put('/reset/password', verifyToken, async(req, res) => {
+  try{
+    const {password, token} = req.body
+  if(!token || !req.user._id){
+      return res.status(500).json('Request failed')
+  }
+  const user = await User.findOne({_id: req.user._id})
+  if(!user){
+    return res.status(500).json('User not found')
+  }
+  const resetToken = await ResetToken.findOne({user: user._id})
+  if(!resetToken){
+    return res.status(500).json('Reset token not found')
+  }
+  console.log(resetToken.token)
+  const isMatch = await bcrypt.compareSync(token, resetToken.token)
+  if(!isMatch){
+    return res.status(500).json('Wrong reset token!!! Please try again')
+  }
+  const hashPass = await bcrypt.hash(password, 10)
+  user.password = hashPass
+  await user.save()
+
+  let transporter = nodemailer.createTransport({
+    host: mailConfig.HOST,
+    auth: {
+    type: "OAuth2",
+    user: mailConfig.FROM_EMAIL_ADDRESS,
+    clientId: mailConfig.GOOGLE_CLIENT_ID,
+    clientSecret: mailConfig.GOOGLE_SECRET_ID,
+    refreshToken: mailConfig.GOOGLE_REFRESH_TOKEN                              
+    },
+  });
+ 
+  let mailOptions = {
+    from: `Admin_Onstagram💎 <${mailConfig.FROM_EMAIL_ADDRESS}>`, 
+    to: user.email, 
+    subject: 'Your Password Successfully Updated', 
+    html:`<h1>Hello ✔ <span style="color:blue;text-align:center;">${user.username}</span> <p>Now you can login new password</p></h1>`, 
+  };
+
+  await transporter.sendMail(mailOptions)
+  res.status(200).json({msg:"Send Success! Check your mail!!"})
+  }catch(err){
+    return res.status(500).json({msg: err.message});
+  }
+  
+})
+   
+
+
+// REFRESH ACCESS_TOKEN WHEN IT EXPIRES
 router.post('/refreshToken', async (req, res) => {
     const refreshToken = req.body.token
     if(!refreshToken) return res.status(401).json('Refresh token not valid')
@@ -193,101 +295,103 @@ router.post('/refreshToken', async (req, res) => {
         res.status(200).json({accessToken})
     } )
 })
-router.post('/logout', (req, res) => {
-    const refreshToken = req.body.token;
-    refreshTokens = refreshTokens.filter((refToken) => refToken !== refreshToken);
-    res.status(200).json('Logout Success');
-  });
 
 
+
+
+
+
+  
+// ***********CANCELED CODE***********
+
+/* SEND MAIL
 router.post('/send/mail', async (req, res) => {
-  let subject = "Hello ✔️ This is mail for test send mail from Onstagrams"
-  let contentHtml = '<b>Hello Mail Send Success</b>'
-  // Generate test SMTP service account from ethereal.email
- // const info =  mailer.sendMail('khahankhung@gmail.com',subject,contentHtml)
-  let transporter = nodemailer.createTransport({
-    host: mailConfig.HOST,
-    //port: 465,
-    //secure: true,
-    auth: {
-    type: "OAuth2",
-    user: mailConfig.FROM_EMAIL_ADDRESS,
-    clientId: mailConfig.GOOGLE_CLIENT_ID,
-    clientSecret: mailConfig.GOOGLE_SECRET_ID,
-    refreshToken: mailConfig.GOOGLE_REFRESH_TOKEN                              
-    },
-  });
- 
-  let info = await transporter.sendMail({
-    from: '"Admin_Onstagram💎" <phamngocson7a1@gmail.com>', 
-    to: "khahankhung@gmail.com", 
-    subject: "Hello ✔ This is mail for test send mail from Onstagrams", 
-    //text: "Hello For Test", 
-    html: "<b>Hello Mail Send Success</b>", 
-  });
+    let subject = "Hello ✔️ This is mail for test send mail from Onstagrams"
+    let contentHtml = '<b>Hello Mail Send Success</b>'
+    // Generate test SMTP service account from ethereal.email
+   // const info =  mailer.sendMail('khahankhung@gmail.com',subject,contentHtml)
+    let transporter = nodemailer.createTransport({
+      host: mailConfig.HOST,
+      //port: 465,
+      //secure: true,
+      auth: {
+      type: "OAuth2",
+      user: mailConfig.FROM_EMAIL_ADDRESS,
+      clientId: mailConfig.GOOGLE_CLIENT_ID,
+      clientSecret: mailConfig.GOOGLE_SECRET_ID,
+      refreshToken: mailConfig.GOOGLE_REFRESH_TOKEN                              
+      },
+    });
+   
+    let info = await transporter.sendMail({
+      from: '"Admin_Onstagram💎" <phamngocson7a1@gmail.com>', 
+      to: "khahankhung@gmail.com", 
+      subject: "Hello ✔ This is mail for test send mail from Onstagrams", 
+      //text: "Hello For Test", 
+      html: "<b>Hello Mail Send Success</b>", 
+    });
+  
+    console.log("Message sent: %s", info.messageId);
+  
+    console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
+  
+  
+  
+  
+})
 
-  console.log("Message sent: %s", info.messageId);
-
-  console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
-
-
-
-
+router.post("/logout", verifyToken, async (req, res) => {
+        try {
+            req.user.token
+        }catch(err){
+            return res.status(500).json({msg: err.message})
+        }
 })
 
 
-//router.post("/logout", verifyToken, async (req, res) => {
-//         try {
-//             req.user.token
-//         }catch(err){
-//             return res.status(500).json({msg: err.message})
-//         }
-// })
+REGISTER OLD
+router.post("/register",  async(req, res) => {
+    try {
+        //hash password  => generate new password
+        const salt = await bcrypt.genSalt(10)
+        const hashedPassword = await bcrypt.hash(req.body.password, salt)
 
-
-//REGISTER OLD
-// router.post("/register",  async(req, res) => {
-//     try {
-//         //hash password  => generate new password
-//         const salt = await bcrypt.genSalt(10)
-//         const hashedPassword = await bcrypt.hash(req.body.password, salt)
-
-//         //save data from input body to newUser
-//             const newUser = await new User({
-//                 // username: "son",
-//                 // email: "son@gmail.com",
-//                 // password: "123",
+        //save data from input body to newUser
+            const newUser = await new User({
+                // username: "son",
+                // email: "son@gmail.com",
+                // password: "123",
             
-//                 //get data from body input
-//                 username: req.body.username,
-//                 fullname: req.body.fullname,
-//                 gender: req.body.gender,
-//                 email: req.body.email,
-//                 password: hashedPassword,
+                //get data from body input
+                username: req.body.username,
+                fullname: req.body.fullname,
+                gender: req.body.gender,
+                email: req.body.email,
+                password: hashedPassword,
                 
-//             })
+            })
         
-//         // save data from client to database and response
-//         const user = await newUser.save()
-//         res.status(200).json(user)
-//     } catch(err){
-//         return res.status(400).json({err: 'Something wrong happened!!! Try again'})
-//     }
-// })
+        // save data from client to database and response
+        const user = await newUser.save()
+        res.status(200).json(user)
+    } catch(err){
+        return res.status(400).json({err: 'Something wrong happened!!! Try again'})
+    }
+})
 
 
-//LOGIN OLD
-// router.post("/login", async(req, res) => {
-// try {
-//     const user = await User.findOne({email:req.body.email})
-//     !user && res.status(404).json("User Not Found")
-//     const validPassword = await bcrypt.compare(req.body.password, user.password)
-//     !validPassword && res.status(404).json("Opps!! Wrong password, Please input again")
-//     res.status(200).json(user)
-// }catch(err){
-//     //console.log(err)
-//     return res.status(401).json(err)
-// }
-// })
-
+LOGIN OLD
+router.post("/login", async(req, res) => {
+try {
+    const user = await User.findOne({email:req.body.email})
+    !user && res.status(404).json("User Not Found")
+    const validPassword = await bcrypt.compare(req.body.password, user.password)
+    !validPassword && res.status(404).json("Opps!! Wrong password, Please input again")
+    res.status(200).json(user)
+}catch(err){
+    //console.log(err)
+    return res.status(401).json(err)
+}
+})
+ */
 module.exports = router
