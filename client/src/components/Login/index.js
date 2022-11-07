@@ -16,7 +16,7 @@ import { createContext, useState } from "react";
 const cn = classNames.bind(styles);
 export const ParentContext = createContext();
 
-function Login({ handleClosePanel }) {
+function Login({ handleClosePanel, className }) {
     const [isOpenRegisterForm, setIsOpenRegisterForm] = useState(false);
     const [isOpenPersonalLogInForm, setIsOpenPersonalLogInForm] = useState({ open: false, panel: "" });
 
@@ -44,7 +44,7 @@ function Login({ handleClosePanel }) {
                 handleClosePanel,
             }}
         >
-            <Modal_Center className={cn("login-modal")}>
+            <Modal_Center className={cn("login-modal", { [className]: className })}>
                 <div className={cn("header-modal")}>
                     <div
                         className={cn("close-btn")}

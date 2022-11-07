@@ -37,7 +37,7 @@
     .cmt-section {
         flex-grow: 1;
         height: 100%;
-        margin-top: 20px;
+        margin-top: 45px;
         display: flex;
         align-items: center;
         flex-direction: column;
@@ -119,7 +119,7 @@
             background-color: rgb(255, 255, 255);
             width: 100%;
             padding: 20px 32px;
-            height: 378px;
+            height: 352px;
             overflow: scroll;
             
             .comment {
@@ -206,7 +206,7 @@
 
                 & > input {
                     font-family: 'Baloo 2', cursive;
-                    background-color: rgb(228, 224, 224);
+                    background-color: rgb(242 239 239);
                     height: 100%;
                     font-size: 15px;
                     padding: 10px;

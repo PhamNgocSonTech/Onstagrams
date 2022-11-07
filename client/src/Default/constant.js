@@ -132,7 +132,7 @@ export const MENU_SETTING = [
         to: "/",
     },
 ];
-console.log("Do you log in ??");
+
 export const export_MENU_SETTING_USER = () => {
     var id_user = {};
     const token = window.localStorage.getItem("accessToken");
@@ -189,6 +189,7 @@ export const MAIN_NAV_SIDEBAR = [
     {
         title: "Following",
         icon: Follow,
+        needLogin: true,
     },
     // {
     //     title: "LIVE",

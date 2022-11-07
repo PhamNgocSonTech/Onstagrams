@@ -15,18 +15,24 @@ function MainBar() {
         setActive(index);
     };
 
+    const token = window.localStorage.getItem("accessToken");
+
     return (
         <div className={cn("main-bar")}>
             <div className={cn("nav-main")}>
-                {MAIN_NAV_SIDEBAR.map((item, key) => (
-                    <Button
-                        key={key}
-                        onClick={() => handleClick(key)}
-                        className={cn("nav-item", { active: key == active })}
-                    >
-                        <item.icon className={cn("nav-icon")} /> {item.title}
-                    </Button>
-                ))}
+                {MAIN_NAV_SIDEBAR.map((item, key) => {
+                    if ((item.needLogin && token) || !item.needLogin) {
+                        return (
+                            <Button
+                                key={key}
+                                onClick={() => handleClick(key)}
+                                className={cn("nav-item", { active: key == active })}
+                            >
+                                <item.icon className={cn("nav-icon")} /> {item.title}
+                            </Button>
+                        );
+                    }
+                })}
             </div>
         </div>
     );

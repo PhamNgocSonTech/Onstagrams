@@ -20,6 +20,18 @@
         overflow-y: overlay;
     }
 
+    .loggin-need {
+        padding-left: 10px;
+        padding-right: 5px;
+
+        .btn-loggin-need {
+            margin-top: 10px;
+            width: 100%;
+            height: 50px;
+            justify-content: center;
+        }
+    }
+
     .container {
         position: relative;
 

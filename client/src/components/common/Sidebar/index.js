@@ -9,6 +9,7 @@ import styles from "./Sidebar.module.scss";
 import { DICOVER_SECTION } from "../../../Default/constant";
 import Sidebar_Footer from "./Sidebar_Footer";
 import ProfilePopover from "../../ProfilePopover";
+import Login from "../../Login";
 import { createContext, useEffect, useRef, useState } from "react";
 
 import { getUsers } from "../../../utils/HttpRequest/user_request";
@@ -22,10 +23,12 @@ function Sidebar({
     followerAccounts = false,
     suggestAcounts = true,
     followingAccounts = true,
+    isShowLoginSection = false,
 }) {
     const [SuggestdAccounts, setSuggestdAccounts] = useState([]);
     const [FollowingAccounts, setFollowingAccounts] = useState([]);
     const [FollowerAccounts, setFollowerAccounts] = useState([]);
+    const [showLoginForm, setShowLoginForm] = useState(false);
     let idLeave = useRef();
     let idHover = useRef();
 
@@ -96,99 +99,120 @@ function Sidebar({
     }, []);
 
     return (
-        <aside
-            className={cn("sidebar", { [className]: className })}
-            onScroll={handleScrollSideBar}
-        >
-            <MainBar />
-
-            {followerAccounts && (
-                <Sidebar_DivSecondary
-                    title='Follower accounts'
-                    seeall
-                >
-                    {FollowerAccounts.map((user, index) => (
-                        <AccountItem
-                            bold
-                            smdes
-                            userInfor={user}
-                            key={index}
-                        />
-                    ))}
-                </Sidebar_DivSecondary>
+        <div>
+            {showLoginForm && (
+                <Login
+                    handleClosePanel={setShowLoginForm}
+                    className={cn("login-form")}
+                />
             )}
+            <aside
+                className={cn("sidebar", { [className]: className })}
+                onScroll={handleScrollSideBar}
+            >
+                <MainBar />
 
-            {suggestAcounts && (
-                <Sidebar_DivSecondary
-                    title='Suggested accounts'
-                    seeall
-                >
-                    <div className={cn("container")}>
-                        {SuggestdAccounts.map((user, index) => (
+                {isShowLoginSection && (
+                    <Sidebar_DivSecondary className={cn("loggin-need")}>
+                        <p>Log in to follow creators, like videos, and view comments.</p>
+                        <Button
+                            outlinePrimary
+                            className={cn("btn-loggin-need")}
+                            onClick={() => setShowLoginForm(true)}
+                        >
+                            ✨ Login now ✨
+                        </Button>
+                    </Sidebar_DivSecondary>
+                )}
+
+                {followerAccounts && (
+                    <Sidebar_DivSecondary
+                        title='Follower accounts'
+                        seeall
+                    >
+                        {FollowerAccounts.map((user, index) => (
                             <AccountItem
-                                onMouseEnter={() => handleHover(user, index)}
-                                onMouseLeave={handleLeave}
                                 bold
                                 smdes
                                 userInfor={user}
                                 key={index}
                             />
                         ))}
+                    </Sidebar_DivSecondary>
+                )}
 
-                        {isShowPopUp &&
-                            (Profile.index === -1 || (
-                                <TopPosition.Provider
-                                    value={{
-                                        top: `${(Profile.index + 1) * 57}px`,
-                                        onMouseLeave: handleProfileLeave,
-                                        onMouseEnter: handleProfileEnter,
-                                    }}
-                                >
-                                    <ProfilePopover
-                                        className={cn("profile-popover")}
-                                        userInfor={Profile.user}
-                                    />
-                                </TopPosition.Provider>
+                {suggestAcounts && (
+                    <Sidebar_DivSecondary
+                        title='Suggested accounts'
+                        seeall
+                    >
+                        <div className={cn("container")}>
+                            {SuggestdAccounts.map((user, index) => (
+                                <AccountItem
+                                    onMouseEnter={() => handleHover(user, index)}
+                                    onMouseLeave={handleLeave}
+                                    bold
+                                    smdes
+                                    userInfor={user}
+                                    key={index}
+                                />
                             ))}
+
+                            {isShowPopUp &&
+                                (Profile.index === -1 || (
+                                    <TopPosition.Provider
+                                        value={{
+                                            top: `${(Profile.index + 1) * 57}px`,
+                                            onMouseLeave: handleProfileLeave,
+                                            onMouseEnter: handleProfileEnter,
+                                        }}
+                                    >
+                                        <ProfilePopover
+                                            className={cn("profile-popover")}
+                                            userInfor={Profile.user}
+                                        />
+                                    </TopPosition.Provider>
+                                ))}
+                        </div>
+                    </Sidebar_DivSecondary>
+                )}
+
+                {followingAccounts && (
+                    <Sidebar_DivSecondary
+                        title='Following accounts'
+                        seeall
+                    >
+                        {FollowingAccounts.map((user, index) => (
+                            <AccountItem
+                                bold
+                                smdes
+                                userInfor={user}
+                                key={index}
+                            />
+                        ))}
+                    </Sidebar_DivSecondary>
+                )}
+
+                <Sidebar_DivSecondary title='Discover'>
+                    <div className={cn("tag")}>
+                        {DICOVER_SECTION.map(({ title, icon }, index) => (
+                            <Button
+                                key={index}
+                                outline
+                                leftIcon={icon}
+                                className={cn("tag-btn")}
+                            >
+                                <p className={cn("text-hidden-overflow")}>{title}</p>
+                            </Button>
+                        ))}
                     </div>
                 </Sidebar_DivSecondary>
-            )}
 
-            {followingAccounts && (
-                <Sidebar_DivSecondary
-                    title='Following accounts'
-                    seeall
-                >
-                    {FollowingAccounts.map((user, index) => (
-                        <AccountItem
-                            bold
-                            smdes
-                            userInfor={user}
-                            key={index}
-                        />
-                    ))}
+                <Sidebar_DivSecondary>
+                    <Sidebar_Footer />
                 </Sidebar_DivSecondary>
-            )}
-
-            <Sidebar_DivSecondary title='Discover'>
-                <div className={cn("tag")}>
-                    {DICOVER_SECTION.map(({ title, icon }, index) => (
-                        <Button
-                            key={index}
-                            outline
-                            leftIcon={icon}
-                            className={cn("tag-btn")}
-                        >
-                            <p className={cn("text-hidden-overflow")}>{title}</p>
-                        </Button>
-                    ))}
-                </div>
-            </Sidebar_DivSecondary>
-
-            <Sidebar_DivSecondary>
-                <Sidebar_Footer />
-            </Sidebar_DivSecondary>
-        </aside>
+            </aside>
+        </div>
     );
 }
 

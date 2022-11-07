@@ -23,11 +23,11 @@ function App() {
             getUser(decode._id).then((user) => {
                 if (user.status === 200) {
                     dispatch(setUserInfor(user.data));
-                    console.log(`Saved user into redux`);
+                    console.log(`This person is logged in !`);
                 }
             });
         } catch (Ex) {
-            console.log(`Not have token => Force login`);
+            console.log(`Not have token => This person doesn't loggin => Force login`);
         }
     }, []);
 
