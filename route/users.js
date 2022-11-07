@@ -184,8 +184,8 @@ router.get("/getUserFollowings/:id", async(req, res)=>{
         );
         let friendList = [];
         friendFollowing.map((friend) => {
-          const { _id, username, fullname, followings, followers } = friend;
-          friendList.push({ _id, username, fullname, followings, followers});
+          const { _id, username, avatar, fullname, followings, followers } = friend;
+          friendList.push({ _id, username, avatar, fullname, followings, followers});
         });
         res.status(200).json(friendList)
       } catch (err) {
@@ -204,8 +204,8 @@ router.get("/getUserFollowers/:id", async(req, res)=>{
         );
         let friendList = [];
         friendsFollower.map((friend) => {
-          const { _id, username, fullname, followings, followers } = friend;
-          friendList.push({ _id, username, fullname, followings, followers});
+          const { _id, username, fullname, avatar, followings, followers } = friend;
+          friendList.push({ _id, username, avatar, fullname, followings, followers});
         });
         res.status(200).json(friendList)
       } catch (err) {
