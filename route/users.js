@@ -50,7 +50,7 @@ router.put("/updateProfile/:id", verifyToken, upload.single("img"), async (req, 
             }
         }
         try {
-            let user = await User.findById(req.params.id);
+            let user = await User.findById(req.user._id);
             // Upload image to cloudinary
             let result;
             if (req.file) {
@@ -65,7 +65,7 @@ router.put("/updateProfile/:id", verifyToken, upload.single("img"), async (req, 
                 avatar: result?.secure_url || user.avatar,
                 cloudinary_id: result?.public_id || user.cloudinary_id,
             };
-            user = await User.findByIdAndUpdate(req.params.id, data, { new: true });
+            user = await User.findByIdAndUpdate(req.user._id, data, { new: true });
             //await updateuser.save();
             res.status(200).json(user);
         } catch (err) {

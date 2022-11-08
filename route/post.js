@@ -83,9 +83,10 @@ router.put("/updatePost/:id", verifyToken, upload.array("img", 10), async (req, 
 router.delete("/delete/:id", verifyToken, async (req, res) => {
     try {
         const post = await Post.findById(req.params.id);
-        if (post.userId !== req.user._id) {
+        if (req.user._id != post.userId) {
             res.status(403).json("You can only delete your post");
         } else {
+            await cloudinary.uploader.destroy(post.img);
             await post.deleteOne();
             res.status(200).json("Your post has been deleted");
         }

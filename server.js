@@ -13,6 +13,8 @@ const userRoute = require("./route/users");
 const authRoute = require("./route/auth");
 const postRoute = require("./route/post");
 const notifyRoute = require("./route/notify");
+const chatRoute = require("./route/chat");
+
 
 // ENV Config
 dotenv.config();
@@ -47,6 +49,8 @@ app.use("/api/auth", authRoute);
 app.use("/api/user", userRoute);
 app.use("/api/post", postRoute);
 app.use("/api/notify", notifyRoute);
+app.use("/api/chat", chatRoute);
+
 
 
 app.listen(port, () => console.log("Server is running on port is:", port));
