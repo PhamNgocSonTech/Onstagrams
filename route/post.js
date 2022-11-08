@@ -80,14 +80,14 @@ router.put("/updatePost/:id", verifyToken, upload.array("img", 10), async (req, 
 
 // ********************************************//
 //DELETE POST
-router.delete("/delete/:id", async (req, res) => {
+router.delete("/delete/:id", verifyToken, async (req, res) => {
     try {
         const post = await Post.findById(req.params.id);
-        if (post.userId === req.body.userId) {
+        if (post.userId !== req.user._id) {
+            res.status(403).json("You can only delete your post");
+        } else {
             await post.deleteOne();
             res.status(200).json("Your post has been deleted");
-        } else {
-            res.status(403).json("You can only delete your post");
         }
     } catch (err) {
         res.status(500).json(err);
