@@ -5,6 +5,7 @@ import Modal_Center from "../common/Modal/Modal_Center";
 import Button from "../common/Button";
 import Alert from "../common/Alert";
 import LoadingModal from "../common/LoadingModal";
+import Toast from "../common/Toast";
 
 import close from "../../assets/image/modal/close-dark.svg";
 import back from "../../assets/image/header/back.svg";
@@ -30,6 +31,7 @@ function PersonalLogIn({ isShowDoneRegister = "" }) {
 
     const [isShowPassword, setIsShowPassword] = useState(false);
     const [isShowEyesIcon, setIsShowEyesIcon] = useState(false);
+    const [isShowToast, setIsShowToast] = useState({ isShow: false, message: "" });
     const frm = useRef();
 
     const dispatch = useDispatch();
@@ -75,8 +77,10 @@ function PersonalLogIn({ isShowDoneRegister = "" }) {
                 if (typeof res == "object") {
                     dispatch(setUserInfor(res.other));
                     window.localStorage.setItem("accessToken", res.accessToken);
-                    handleClosePanel(false);
-                    window.location.reload(true);
+                    setIsShowToast({ isShow: true, message: "Login Sucessfully!" });
+                    setTimeout(() => {
+                        window.location.reload(true);
+                    }, 1000);
                 } else {
                     setIsShowAlertIncorrectLogin(res);
                     setIsShowAlertSuccessRegister("");
@@ -201,6 +205,12 @@ function PersonalLogIn({ isShowDoneRegister = "" }) {
             </div>
 
             {isShowLoadingModal && <LoadingModal />}
+            {isShowToast.isShow && (
+                <Toast
+                    message={isShowToast.message}
+                    state={true}
+                />
+            )}
         </Modal_Center>
     );
 }

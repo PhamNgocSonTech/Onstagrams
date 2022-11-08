@@ -1,0 +1,44 @@
+.toast {
+    display: flex;
+    height: 50px;
+    align-items: center;
+    padding: 15px;
+    justify-content: flex-start;
+    border-radius: 5px;
+
+    .stt-icon {
+        width: 25px;
+        height: 25px;
+    }
+
+    .status {
+        margin-left: 12px;
+        margin-right: 60px;
+
+    }
+
+    .close-icon {
+        &:hover {
+            cursor: pointer;
+        }
+    }
+}
+
+.toast.success {
+        background-color: rgb(240, 255, 241);
+
+        .status {
+            color: green;
+        }
+
+}
+
+.toast.error {
+        background-color: rgb(255, 230, 230);
+
+        .status {
+            color: red;
+        }
+
+}
+

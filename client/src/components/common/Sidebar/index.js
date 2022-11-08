@@ -44,13 +44,8 @@ function Sidebar({
     let idHover = useRef();
 
     const [isGetAPIDone, setIsGetAPIDone] = useState(false);
+    const [isGetAPIFollowingDone, setIsGetFollowingAPIDone] = useState(false);
     useEffect(() => {
-        // Not loggin or Logged in can get Suggestd Account
-        getAllUsers().then((res) => {
-            console.log(res);
-            setSuggestdAccounts(res);
-        });
-
         if (userId) {
             // If have followerAccounts => Handle
             if (followerAccounts) {
@@ -60,9 +55,15 @@ function Sidebar({
             if (followingAccounts) {
                 getFollowingsOfUser(userId).then((res) => {
                     setFollowingAccounts(res);
+                    setIsGetFollowingAPIDone(true);
                 });
             }
         }
+        // Not loggin or Logged in can get Suggestd Account
+        getAllUsers().then((res) => {
+            console.log(res);
+            setSuggestdAccounts(res);
+        });
         setIsGetAPIDone(true);
     }, [userId]);
 
@@ -354,7 +355,7 @@ function Sidebar({
                         title='Following accounts'
                         seeall={SuggestdAccounts.length >= 5}
                     >
-                        {!isGetAPIDone ? (
+                        {!isGetAPIFollowingDone ? (
                             <div>
                                 <div style={{ display: "flex", marginBottom: "20px" }}>
                                     <div>
@@ -433,7 +434,7 @@ function Sidebar({
                                     </div>
                                 </div>
                             </div>
-                        ) : FollowingAccounts.length == 0 && isGetAPIDone ? (
+                        ) : FollowingAccounts.length === 0 ? (
                             <div className={cn("none-user-found")}>
                                 <img
                                     src={no_following}

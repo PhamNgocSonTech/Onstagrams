@@ -8,6 +8,12 @@ import octagon from "../../assets/image/upload/octagon-close-button.svg";
 import hashtag from "../../assets/image/upload/hashtag.svg";
 import smile from "../../assets/image/upload/smile.svg";
 import Button from "../../components/common/Button";
+import Login from "../../components/Login";
+import { createPost } from "../../utils/HttpRequest/post_request";
+import { useNavigate } from "react-router-dom";
+import LoadingModal from "../../components/common/LoadingModal";
+import jwt_decode from "jwt-decode";
+import Toast from "../../components/common/Toast";
 
 const cn = classNames.bind(styles);
 
@@ -16,8 +22,46 @@ function Upload() {
     const [isShowEmotePicker, setIsShowEmotePicker] = useState(false);
     const [caption, setCaption] = useState("");
     const [hashTag, setHashTag] = useState("");
+
+    const ngt = useNavigate();
+
+    const [isShowLoginForm, setIsShowLoginForm] = useState(false);
+    const [isShowLoadingModal, setIsShowLoadingModal] = useState(false);
+    const [isShowToast, setIsShowToast] = useState({ check: false, stt: false, message: "" });
     const ref = useRef();
     const htip = useRef();
+
+    const handlePost = () => {
+        // Hanlde Check Login
+        const token = window.localStorage.getItem("accessToken");
+        if (token) {
+            // LOGGED IN
+            setIsShowLoadingModal(true);
+            const frmData = new FormData();
+            images.forEach((image) => {
+                frmData.append("img", image, image.name);
+            });
+            frmData.append("desc", caption + " " + hashTag);
+            createPost(token, frmData).then((res) => {
+                setIsShowLoadingModal(false);
+                if (res.status === 200) {
+                    setIsShowToast({ check: true, stt: true, message: "Post Successfully ^^" });
+                    setTimeout(() => {
+                        ngt(`/profile/${jwt_decode(token)._id}`);
+                    }, 1500);
+                } else {
+                    console.log(res);
+                    setIsShowToast({ check: true, stt: false, message: res.data });
+                }
+                setTimeout(() => {
+                    setIsShowToast({ check: false, stt: false, message: "" });
+                }, 2500);
+            });
+        } else {
+            // NOT LOG IN => SHOW LOGIN FORM
+            setIsShowLoginForm(true);
+        }
+    };
 
     const handleChangeImage = (e) => {
         const newfiles = [...e.target.files];
@@ -109,6 +153,7 @@ function Upload() {
                             <h3 style={{ opacity: 0.8 }}>Choose/Drop your image or video here</h3>
                             <ul>
                                 <li>Accept .jpg, .png, .jpeg images only</li>
+                                <li>Maximum 10 files upload</li>
                                 <li>Video must less than 2 minutes</li>
                             </ul>
                         </div>
@@ -204,7 +249,7 @@ function Upload() {
                                         <EmojiPicker
                                             emojiStyle='facebook'
                                             onEmojiClick={handleEmoteClick}
-                                            lazyLoadEmojis={true}
+                                            lazyLoadEmojis={false}
                                         />
                                     </div>
                                 )}
@@ -215,7 +260,20 @@ function Upload() {
             </div>
             <div className={cn("submit-section")}>
                 <Button outline>Discard</Button>
-                <Button primary>Post</Button>
+                <Button
+                    primary
+                    onClick={handlePost}
+                >
+                    Post
+                </Button>
+                {isShowLoginForm && <Login handleClosePanel={setIsShowLoginForm} />}
+                {isShowLoadingModal && <LoadingModal />}
+                {isShowToast.check && (
+                    <Toast
+                        state={isShowToast.stt}
+                        message={isShowToast.message}
+                    />
+                )}
             </div>
         </div>
     );

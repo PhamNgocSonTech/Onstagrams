@@ -18,3 +18,10 @@ export const getPostByIdUser = async (id) => {
     const results = await usersConfig.get(`/getPost/${id}`);
     return results.data;
 };
+
+export const createPost = async (accessToken, data) => {
+    const results = await usersConfig.post("/", data, {
+        headers: { token: accessToken, Accept: "application/json", "Content-Type": "multipart/form-data" },
+    });
+    return results;
+};
