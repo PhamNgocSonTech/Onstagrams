@@ -38,9 +38,9 @@ function ProfilePopover({ className, userInfor }) {
             </Button>
             <p className={cn("name")}>{userInfor.fullname}</p>
             <div className={cn("number-des")}>
-                <span className={cn("num")}>{convert_milions(userInfor.followings.length)}</span>
-                <span className={cn("label")}>Followers</span>
                 <span className={cn("num")}>{convert_milions(userInfor.followers.length)}</span>
+                <span className={cn("label")}>Followers</span>
+                <span className={cn("num")}>{convert_milions(userInfor.followings.length)}</span>
                 <span className={cn("label")}>Followings</span>
             </div>
         </Popover>

@@ -3,7 +3,7 @@ import error from "../../../assets/image/toast/error.svg";
 import close from "../../../assets/image/toast/close.svg";
 import classNames from "classnames/bind";
 import styles from "./Toast.module.scss";
-import { Snackbar } from "@mui/material";
+import { Fade, Grow, Snackbar } from "@mui/material";
 import { useState } from "react";
 
 const cn = classNames.bind(styles);
@@ -21,6 +21,7 @@ function Toast({ message, time = 2000, state = true }) {
             autoHideDuration={time}
             onClose={handleClose}
             anchorOrigin={{ vertical: "top", horizontal: "center" }}
+            TransitionComponent={Grow}
         >
             <div
                 className={cn("toast", state ? "success" : "error")}

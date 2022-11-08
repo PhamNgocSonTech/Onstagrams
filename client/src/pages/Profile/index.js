@@ -344,7 +344,7 @@ function Profile() {
                         )}
 
                         <div className={cn("bio")}>
-                            <p>{user.bio}</p>
+                            <p>{user.bio ? user.bio : `No bio yet...😶`}</p>
                         </div>
                     </div>
                     {user.external && (

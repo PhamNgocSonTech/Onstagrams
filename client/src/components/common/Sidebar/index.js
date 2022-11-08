@@ -43,18 +43,28 @@ function Sidebar({
     let idLeave = useRef();
     let idHover = useRef();
 
+    let SuggestdAccountsUR = useRef([]);
+    let FollowingAccountsUR = useRef([]);
+    let FollowerAccountsUR = useRef([]);
+
     const [isGetAPIDone, setIsGetAPIDone] = useState(false);
     const [isGetAPIFollowingDone, setIsGetFollowingAPIDone] = useState(false);
     useEffect(() => {
         if (userId) {
             // If have followerAccounts => Handle
             if (followerAccounts) {
-                getFollowersOfUser(userId).then((res) => setFollowerAccounts(res));
+                getFollowersOfUser(userId).then((res) => {
+                    const tmp = res.slice(0, 5);
+                    setFollowerAccounts(tmp);
+                    FollowerAccountsUR.current = res;
+                });
             }
             // If have followingAccounts => Hanndle
             if (followingAccounts) {
                 getFollowingsOfUser(userId).then((res) => {
-                    setFollowingAccounts(res);
+                    const tmp = res.slice(0, 5);
+                    setFollowingAccounts(tmp);
+                    FollowingAccountsUR.current = res;
                     setIsGetFollowingAPIDone(true);
                 });
             }
@@ -62,7 +72,9 @@ function Sidebar({
         // Not loggin or Logged in can get Suggestd Account
         getAllUsers().then((res) => {
             console.log(res);
-            setSuggestdAccounts(res);
+            const tmp = res.slice(0, 5);
+            setSuggestdAccounts(tmp);
+            SuggestdAccountsUR.current = res;
         });
         setIsGetAPIDone(true);
     }, [userId]);
@@ -139,7 +151,8 @@ function Sidebar({
                 {followerAccounts && FollowerAccounts.length > 0 && (
                     <Sidebar_DivSecondary
                         title='Follower accounts'
-                        seeall={SuggestdAccounts.length >= 5}
+                        defaultListUser={FollowerAccountsUR.current}
+                        setDataFunction={setFollowerAccounts}
                     >
                         {!isGetAPIDone ? (
                             <div>
@@ -236,7 +249,8 @@ function Sidebar({
                 {suggestAcounts && (
                     <Sidebar_DivSecondary
                         title='Suggested accounts'
-                        seeall={SuggestdAccounts.length >= 5}
+                        defaultListUser={SuggestdAccountsUR.current}
+                        setDataFunction={setSuggestdAccounts}
                     >
                         <div className={cn("container")}>
                             {!isGetAPIDone ? (
@@ -353,7 +367,8 @@ function Sidebar({
                 {followingAccounts && (
                     <Sidebar_DivSecondary
                         title='Following accounts'
-                        seeall={SuggestdAccounts.length >= 5}
+                        defaultListUser={FollowingAccountsUR.current}
+                        setDataFunction={setFollowingAccounts}
                     >
                         {!isGetAPIFollowingDone ? (
                             <div>

@@ -39,6 +39,13 @@ export const unfollowUserHasId = async (id, accessToken) => {
     return results;
 };
 
+export const editUser = async (accessToken, id, data) => {
+    const results = await usersConfig2.put(`/updateProfile/${id}`, data, {
+        headers: { token: accessToken, Accept: "application/json", "Content-Type": "multipart/form-data" },
+    });
+    return results;
+};
+
 export const getFollowersOfUser = async (id) => {
     const results = await usersConfig2.get(`/getUserFollowers/${id}`);
     return results.data;
