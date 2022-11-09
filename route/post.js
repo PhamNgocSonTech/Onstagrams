@@ -4,11 +4,6 @@ const User = require("../models/User");
 const { verifyToken } = require("../utils/verifyToken");
 const cloudinary = require("../utils/cloudinary");
 const upload = require("../utils/multer");
-// const uploadVideo = require("../utils/multerConfig");
-
-// router.get("/", async(req, res) =>{
-//     res.send("Post")
-// })
 
 // ********************************************//
 //CREATE POST

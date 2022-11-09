@@ -6,10 +6,11 @@ const PostSchema = new mongoose.Schema(
         type: String,
         max: 500,
       },
+      
       hastag: {
         type: String
-        
-      }
+      },
+
       img: {
         type: Array,
         default: [],
