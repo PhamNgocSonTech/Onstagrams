@@ -2,7 +2,7 @@ const router = require('express').Router();
 const ChatRoom = require('../models/ChatRoom')
 const {verifyToken} = require('../utils/verifyToken')
 
-router.post('/createChat', verifyToken, async (req, res) => {
+router.post('/createChatRoom', verifyToken, async (req, res) => {
     const newChatRoom = new ChatRoom({
         members: [
             req.user._id,
@@ -17,23 +17,23 @@ router.post('/createChat', verifyToken, async (req, res) => {
     }
 })
 
-router.get('/userChat', verifyToken, async (req, res) => {
+router.get('/userChatRoom', verifyToken, async (req, res) => {
     try{
-        const userChat = await ChatRoom.findOne({
+        const userChatRoom = await ChatRoom.findOne({
             members: {$in : [req.user._id]},
         })
-        return res.status(200).json(userChat)
+        return res.status(200).json(userChatRoom)
     }catch (err) {
         return res.status(500).json({msg: err.message})
 
     }
 })
-router.get('/getChat/:secondId', verifyToken, async (req, res) => {
+router.get('/getChatRoom/:secondId', verifyToken, async (req, res) => {
     try {
-        const getChat = await ChatRoom.findOne({
+        const getChatRoom = await ChatRoom.findOne({
           members: { $all: [req.user._id, req.params.secondId] },
         });
-        return res.status(200).json(getChat)
+        return res.status(200).json(getChatRoom)
       } catch (err) {
         return res.status(500).json({msg: err.message})
       }

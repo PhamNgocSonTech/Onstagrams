@@ -7,7 +7,7 @@ const PostSchema = new mongoose.Schema(
         max: 500,
       },
       
-      hastag: {
+      hashtag: {
         type: String
       },
 

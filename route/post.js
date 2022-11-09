@@ -9,7 +9,7 @@ const upload = require("../utils/multer");
 //CREATE POST
 router.post("/", verifyToken, upload.array("img", 10), async (req, res) => {
     try {
-        const { desc, video, hastag } = req.body;
+        const { desc, video, hashtag } = req.body;
         const imgFiles = req.files;
         if (!imgFiles) return res.status(500).json({ msg: "No image file" });
         let multiplePicturePromise = imgFiles.map((picture) =>
@@ -31,7 +31,7 @@ router.post("/", verifyToken, upload.array("img", 10), async (req, res) => {
         //     // await cloudinary.uploader.destroy(user.cloudinary_id);
         // }
         const newPost = await new Post({
-            desc, hastag,
+            desc, hashtag,
             img: imageResponses || post.img,
             video,
             userId: req.user._id,
@@ -47,7 +47,7 @@ router.post("/", verifyToken, upload.array("img", 10), async (req, res) => {
 //UPDATE POST
 router.put("/updatePost/:id", verifyToken, upload.array("img", 10), async (req, res) => {
     try {
-        const { desc, hastag } = req.body;
+        const { desc, hashtag } = req.body;
         let post = await Post.findById(req.params.id);
         if (!post) return res.status(500).json("Post not found");
 
@@ -61,7 +61,7 @@ router.put("/updatePost/:id", verifyToken, upload.array("img", 10), async (req, 
         //await cloudinary.uploader.destroy(user.cloudinary_id);
         //}
         const data = {
-            desc, hastag,
+            desc, hashtag,
             img: imageResponses || post.img,
             //cloudinary_id: multiplePicturePromise?.public_id || post.cloudinary_id,
         };
@@ -81,7 +81,7 @@ router.delete("/delete/:id", verifyToken, async (req, res) => {
         if (req.user._id != post.userId) {
             res.status(403).json("You can only delete your post");
         } else {
-            await cloudinary.uploader.destroy(post.img);
+            //await cloudinary.uploader.destroy(post.img);
             await post.deleteOne();
             res.status(200).json("Your post has been deleted");
         }
