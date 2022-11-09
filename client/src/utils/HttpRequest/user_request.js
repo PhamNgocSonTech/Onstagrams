@@ -55,3 +55,8 @@ export const getFollowingsOfUser = async (id) => {
     const results = await usersConfig2.get(`/getUserFollowings/${id}`);
     return results.data;
 };
+
+export const getPostFromFollowingUsers = async (id, accessToken) => {
+    const results = await usersConfig2.get(`/fetchPostFlw/${id}`, { headers: { token: accessToken } });
+    return results;
+};

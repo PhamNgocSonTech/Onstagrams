@@ -1,7 +1,9 @@
 import classNames from "classnames/bind";
 import styles from "./PostInfor.module.scss";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import { ImageList, ImageListItem, Skeleton } from "@mui/material";
+import moment from "moment";
 
 import Button from "../../components/common/Button";
 import Comment from "../Comment";
@@ -13,16 +15,27 @@ import share from "../../assets/image/content/share.svg";
 
 import { useSelector } from "react-redux";
 import Login from "../Login";
+import { getUserById } from "../../utils/HttpRequest/user_request";
 
 import FrameRecommendVideo from "../common/FrameRecommendVideo";
 
 const cn = classNames.bind(styles);
 
-function PostInfor() {
+function PostInfor({ postData = {} }) {
     const [isUnderlineUsername, setIsUnderlineUsername] = useState(false);
     const [isLike, setIsLike] = useState(false);
     const [isFollow, setIsFollow] = useState(false);
     const [isShowPanel, setIsShowPanel] = useState(false);
+    const [dataUser, setDataUser] = useState({});
+
+    const [isGetAPIDone, setIsGetAPIDone] = useState(false);
+
+    useEffect(() => {
+        getUserById(postData.userId).then((user) => {
+            setDataUser(user.data);
+            setIsGetAPIDone(true);
+        });
+    }, []);
 
     const didLogin = useSelector((state) => state.loginState_reducer.user);
 
@@ -55,83 +68,253 @@ function PostInfor() {
 
     return (
         <FrameRecommendVideo className={cn("wrapper")}>
-            <img
-                className={cn("avatar")}
-                alt='avt'
-                src='https://p16-sign-sg.tiktokcdn.com/aweme/100x100/tos-alisg-avt-0068/27090e4b6826f4471c40afb66771d5ce.jpeg?x-expires=1666843200&x-signature=ogQ00wzSeEyfEvRat%2Fm99FoZGZ4%3D'
-                onMouseEnter={handleMouseHoverAvt}
-                onMouseLeave={handleMouseLeaveAvt}
-            />
+            {isGetAPIDone ? (
+                <img
+                    className={cn("avatar")}
+                    alt='avt'
+                    src={dataUser.avatar}
+                    onMouseEnter={handleMouseHoverAvt}
+                    onMouseLeave={handleMouseLeaveAvt}
+                />
+            ) : (
+                <Skeleton
+                    className={cn("avatar")}
+                    variant={"rounded"}
+                />
+            )}
 
             <div className={cn("details")}>
                 <div className={cn("author")}>
-                    <h3
-                        className={cn("username", {
-                            active: isUnderlineUsername,
-                        })}
-                    >
-                        alex_mine
-                    </h3>
-                    <h4
-                        className={cn("name")}
-                        onMouseEnter={handleMouseHoverAvt}
-                        onMouseLeave={handleMouseLeaveAvt}
-                    >
-                        ❤️
-                    </h4>
+                    {isGetAPIDone ? (
+                        <>
+                            <h3
+                                className={cn("username", {
+                                    active: isUnderlineUsername,
+                                })}
+                            >
+                                {dataUser.username}
+                            </h3>
+                            <h4
+                                className={cn("name")}
+                                onMouseEnter={handleMouseHoverAvt}
+                                onMouseLeave={handleMouseLeaveAvt}
+                            >
+                                {dataUser.fullname}
+                            </h4>
+                            <span className={cn("time")}>- {moment(postData.createdAt).startOf("hour").fromNow()}</span>
+                        </>
+                    ) : (
+                        <div>
+                            <Skeleton
+                                variant='text'
+                                style={{ width: "300px" }}
+                            />
+                            <Skeleton
+                                variant='text'
+                                style={{ width: "200px" }}
+                            />
+                        </div>
+                    )}
                 </div>
                 <div className={cn("video-des")}>
-                    <span className={cn("cap")}>
-                        Bạn có đủ dũng cảm để tiếp tục tình yêu dù biết rằng sẽ không đem lại kết quả? 😂{" "}
-                    </span>
-                    <Button className={cn("hashtag")}>#sad</Button>
-                    <Button className={cn("hashtag")}>#tinhyeu</Button>
-                    <Button className={cn("hashtag")}>#tamtrang</Button>
-                    <Button className={cn("hashtag")}>#tinhyeu</Button>
+                    {isGetAPIDone ? (
+                        <>
+                            {" "}
+                            <span className={cn("cap")}>{postData.desc} </span>
+                            {postData.hashtag &&
+                                postData.hashtag
+                                    .split(" ")
+                                    .map((ht, index) => <Button className={cn("hashtag")}>{ht}</Button>)}
+                            {/* <Button className={cn("hashtag")}>#tinhyeu</Button>
+                        <Button className={cn("hashtag")}>#tamtrang</Button>
+                        <Button className={cn("hashtag")}>#tinhyeu</Button> */}
+                        </>
+                    ) : (
+                        <>
+                            {" "}
+                            <Skeleton
+                                variant='text'
+                                style={{ height: "50px" }}
+                            />
+                        </>
+                    )}
                 </div>
-                <div className={cn("video-container")}>
-                    <img
-                        className={cn("video")}
-                        src='https://kenh14cdn.com/thumb_w/660/2020/6/23/a483bd33d4c46bf25bac64d11cdb04d8-159292559942978254085.jpg'
-                    />
-                    <div className={cn("actions")}>
-                        <div className={cn("action")}>
-                            <div
-                                className={cn("act-btn")}
-                                onClick={handleLike}
+                {isGetAPIDone ? (
+                    <div className={cn("video-container")}>
+                        {/* 1 image */}
+                        {postData.img.length === 1 && (
+                            <ImageList
+                                variant='quilted'
+                                sx={{ height: "100%", overflow: "hidden", padding: "20px" }}
+                                cols={1}
+                                className={cn("img-list")}
                             >
-                                <motion.img
-                                    alt='img'
-                                    variants={animations}
-                                    src={isLike ? pink_heart : black_heart}
-                                    animate={isLike ? "like" : "dislike"}
-                                />
-                            </div>
-                            <span className={cn("act-text")}>130K</span>
-                        </div>
-                        <div className={cn("action")}>
-                            <div
-                                className={cn("act-btn")}
-                                onClick={handleOpenCommentSection}
+                                <ImageListItem>
+                                    <img
+                                        className={cn("video")}
+                                        src={postData.img[0].url}
+                                    />
+                                </ImageListItem>
+                            </ImageList>
+                        )}
+
+                        {/* 2, 4 image */}
+                        {(postData.img.length == 2 || postData.img.length == 4) && (
+                            <ImageList
+                                variant='quilted'
+                                sx={{ height: "100%", overflow: "hidden", padding: "15px" }}
+                                cols={2}
+                                gap={15}
+                                className={cn("img-list")}
                             >
-                                <img
-                                    alt='img'
-                                    src={comment}
-                                />
+                                {postData.img.map((image, key) => (
+                                    <ImageListItem key={key}>
+                                        <img
+                                            className={cn("video")}
+                                            src={image.url}
+                                        />
+                                    </ImageListItem>
+                                ))}
+                            </ImageList>
+                        )}
+
+                        {/* 3 image */}
+                        {postData.img.length === 3 && (
+                            <div className={cn("three-frames-image")}>
+                                <div className={cn("first-img")}>
+                                    <img
+                                        className={cn("video")}
+                                        src={postData.img[0].url}
+                                    />
+                                </div>
+                                <div className={cn("other-img")}>
+                                    <img
+                                        className={cn("video")}
+                                        src={postData.img[1].url}
+                                    />
+                                    <img
+                                        className={cn("video")}
+                                        src={postData.img[2].url}
+                                    />
+                                </div>
                             </div>
-                            <span className={cn("act-text")}>2602</span>
-                        </div>
-                        <div className={cn("action")}>
-                            <div className={cn("act-btn")}>
-                                <img
-                                    alt='img'
-                                    src={share}
-                                />
+                        )}
+
+                        {/* > 4 image */}
+                        {postData.img.length > 4 && (
+                            <ImageList
+                                variant='quilted'
+                                sx={{ height: "100%", overflow: "hidden", padding: "15px" }}
+                                cols={2}
+                                gap={15}
+                                className={cn("img-list")}
+                            >
+                                {postData.img.slice(0, 3).map((image, index) => (
+                                    <ImageListItem key={index}>
+                                        <img
+                                            className={cn("video")}
+                                            src={image.url}
+                                        />
+                                    </ImageListItem>
+                                ))}
+                                <ImageListItem className={cn("last-imgs")}>
+                                    <img
+                                        className={cn("video")}
+                                        src={postData.img[4].url}
+                                    />
+                                    <div className={cn("excess-img")}>
+                                        <h1>+{postData.img.length - 4}</h1>
+                                    </div>
+                                </ImageListItem>
+                            </ImageList>
+                        )}
+
+                        {/* <ImageList
+                        variant='quilted'
+                        sx={{ height: "100%", overflow: "hidden", padding: "15px" }}
+                        cols={2}
+                        gap={15}
+                        className={cn("img-list")}
+                    >
+                        <ImageListItem>
+                            <img
+                                className={cn("video")}
+                                src={
+                                    "http://res.cloudinary.com/doapkbncj/image/upload/v1667930671/onstagram_v2/posts/jubaj5wnls13z8o1blyk.jpg"
+                                }
+                            />
+                        </ImageListItem>
+                        <ImageListItem>
+                            <img
+                                className={cn("video")}
+                                src={
+                                    "http://res.cloudinary.com/doapkbncj/image/upload/v1667930671/onstagram_v2/posts/jubaj5wnls13z8o1blyk.jpg"
+                                }
+                            />
+                        </ImageListItem>
+                        <ImageListItem>
+                            <img
+                                className={cn("video")}
+                                src={
+                                    "http://res.cloudinary.com/doapkbncj/image/upload/v1667930671/onstagram_v2/posts/jubaj5wnls13z8o1blyk.jpg"
+                                }
+                            />
+                        </ImageListItem>
+
+                        <ImageListItem className={cn("last-imgs")}>
+                            <img
+                                className={cn("video")}
+                                src={
+                                    "http://res.cloudinary.com/doapkbncj/image/upload/v1667930671/onstagram_v2/posts/jubaj5wnls13z8o1blyk.jpg"
+                                }
+                            />
+                            <div className={cn("excess-img")}>
+                                <h1>+12</h1>
                             </div>
-                            <span className={cn("act-text")}>20K</span>
+                        </ImageListItem>
+                    </ImageList> */}
+
+                        <div className={cn("actions")}>
+                            <div className={cn("action")}>
+                                <div
+                                    className={cn("act-btn")}
+                                    onClick={handleLike}
+                                >
+                                    <motion.img
+                                        alt='img'
+                                        variants={animations}
+                                        src={isLike ? pink_heart : black_heart}
+                                        animate={isLike ? "like" : "dislike"}
+                                    />
+                                </div>
+                                <span className={cn("act-text")}>{postData.likes.length}</span>
+                            </div>
+                            <div className={cn("action")}>
+                                <div
+                                    className={cn("act-btn")}
+                                    onClick={handleOpenCommentSection}
+                                >
+                                    <img
+                                        alt='img'
+                                        src={comment}
+                                    />
+                                </div>
+                                <span className={cn("act-text")}>{postData.comments.length}</span>
+                            </div>
+                            <div className={cn("action")}>
+                                <div className={cn("act-btn")}>
+                                    <img
+                                        alt='img'
+                                        src={share}
+                                    />
+                                </div>
+                                <span className={cn("act-text")}>0</span>
+                            </div>
                         </div>
                     </div>
-                </div>
+                ) : (
+                    <Skeleton style={{ width: "600px", height: "600px", marginTop: "-120px" }} />
+                )}
             </div>
 
             {isFollow ? (

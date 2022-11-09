@@ -26,7 +26,8 @@ function MainBar() {
                             <Button
                                 key={key}
                                 onClick={() => handleClick(key)}
-                                className={cn("nav-item", { active: key == active })}
+                                className={cn("nav-item", { active: window.location.pathname == item.to })}
+                                to={item.to}
                             >
                                 <item.icon className={cn("nav-icon")} /> {item.title}
                             </Button>

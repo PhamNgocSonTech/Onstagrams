@@ -41,7 +41,8 @@ function Upload() {
             images.forEach((image) => {
                 frmData.append("img", image, image.name);
             });
-            frmData.append("desc", caption + " " + hashTag);
+            frmData.append("desc", caption);
+            frmData.append("hashtag", hashTag);
             createPost(token, frmData).then((res) => {
                 setIsShowLoadingModal(false);
                 if (res.status === 200) {
@@ -50,7 +51,6 @@ function Upload() {
                         ngt(`/profile/${jwt_decode(token)._id}`);
                     }, 1500);
                 } else {
-                    console.log(res);
                     setIsShowToast({ check: true, stt: false, message: res.data });
                 }
                 setTimeout(() => {

@@ -185,11 +185,13 @@ export const MAIN_NAV_SIDEBAR = [
     {
         title: "For You",
         icon: Home,
+        to: "/",
     },
     {
         title: "Following",
         icon: Follow,
         needLogin: true,
+        to: "/following/",
     },
     // {
     //     title: "LIVE",

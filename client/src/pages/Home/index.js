@@ -7,17 +7,7 @@ import PostInfor from "../../components/PostInfor";
 const cn = classNames.bind(styles);
 
 function Home() {
-    return (
-        <>
-            <VideoInfor />
-            <PostInfor />
-            <VideoInfor />
-            <PostInfor />
-            <VideoInfor />
-            <VideoInfor />
-            <PostInfor />
-        </>
-    );
+    return <></>;
 }
 
 export default Home;
