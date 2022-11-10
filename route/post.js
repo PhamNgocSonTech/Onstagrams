@@ -31,7 +31,8 @@ router.post("/", verifyToken, upload.array("img", 10), async (req, res) => {
         //     // await cloudinary.uploader.destroy(user.cloudinary_id);
         // }
         const newPost = await new Post({
-            desc, hashtag,
+            desc,
+            hashtag,
             img: imageResponses || post.img,
             video,
             userId: req.user._id,
@@ -61,7 +62,8 @@ router.put("/updatePost/:id", verifyToken, upload.array("img", 10), async (req, 
         //await cloudinary.uploader.destroy(user.cloudinary_id);
         //}
         const data = {
-            desc, hashtag,
+            desc,
+            hashtag,
             img: imageResponses || post.img,
             //cloudinary_id: multiplePicturePromise?.public_id || post.cloudinary_id,
         };
@@ -123,7 +125,7 @@ router.delete("/delComment/post/:firstId/:secondId", async (req, res) => {
         //     comment,
         // };
         const post = await Post.findById(req.params.firstId);
-        await post.update({ $pull: { comments: {_id: req.params.secondId }} });
+        await post.update({ $pull: { comments: { _id: req.params.secondId } } });
 
         // await post.save();
         res.status(200).json(post);
@@ -132,17 +134,16 @@ router.delete("/delComment/post/:firstId/:secondId", async (req, res) => {
     }
 });
 
-
 router.put("/updateComment/post/:firstId/:secondId", verifyToken, async (req, res) => {
     try {
-       const {comment} = req.body;
+        const { comment } = req.body;
         const postId = await Post.findById(req.params.firstId);
-        const cmtId = await Post.findById({ comments: {_id: req.params.secondId }} );
+        const cmtId = await Post.findById({ comments: { _id: req.params.secondId } });
         const data = {
-            comment
+            comment,
         };
-        postId = await Post.findByIdAndUpdate({$push: {comment:cmtId}}, data)
-        const updateCmt = await postId.save()
+        postId = await Post.findByIdAndUpdate({ $push: { comment: cmtId } }, data);
+        const updateCmt = await postId.save();
         res.status(200).json(updateCmt);
     } catch (err) {
         return res.status(500).json({ msg: err.message });
@@ -179,7 +180,7 @@ router.get("/getPost/:id", async (req, res) => {
 
 // ********************************************//
 //GET POST BY userId
-router.get("/getPost/:id", async (req, res) => {
+router.get("/getPostUser/:id", async (req, res) => {
     try {
         const postGetUserId = await Post.find({ userId: req.params.id });
         res.status(200).json(postGetUserId);

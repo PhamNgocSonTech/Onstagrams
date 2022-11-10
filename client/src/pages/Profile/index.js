@@ -78,8 +78,8 @@ function Profile() {
             setFollowingNum(user.data.followings.length);
         });
         getImageAndVideo(id).then((src) => {
-            console.log(src);
-            src.length > 0 ? setSrc(getListSrcFromAllPosts(src)) : setSrc([]);
+            // src.length > 0 ? setSrc(getListSrcFromAllPosts(src)) : setSrc([]);
+            src.length > 0 ? setSrc(src) : setSrc([]);
             setIsGetAPIDone(true);
         });
     }, [id]);
@@ -90,14 +90,14 @@ function Profile() {
     var Frame, contents;
     if (tabChoose === 0) {
         // Image
-        Frame = addProfileTags(src.img, src.video)[0].frame;
-        contents = addProfileTags(src.img, src.video)[0].contents;
+        Frame = addProfileTags(src)[0].frame;
+        contents = addProfileTags(src)[0].contents;
     }
 
     if (tabChoose === 1) {
         // Video
-        Frame = addProfileTags(src.img, src.video)[1].frame;
-        contents = addProfileTags(src.img, src.video)[1].contents;
+        Frame = addProfileTags(src)[1].frame;
+        contents = addProfileTags(src)[1].contents;
     }
 
     if (tabChoose === 2) {

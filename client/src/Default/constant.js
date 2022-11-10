@@ -351,18 +351,17 @@ export const PROFILE_TABS = [
         content: SharedGallery,
     },
 ];
-
-export const addProfileTags = (imgs, videos) => {
+export const addProfileTags = (src) => {
     return [
         {
             name: "Photos",
             frame: PhotoGallery,
-            contents: imgs,
+            contents: src,
         },
         {
             name: "Videos",
             frame: VideoGallery,
-            contents: videos,
+            contents: src,
         },
         {
             name: "Shared",

@@ -2,7 +2,7 @@ import axios from "axios";
 import { END_POINT_API2 } from "../../Default/constant";
 
 const usersConfig = axios.create({
-    baseURL: `${END_POINT_API2}/post`,
+    baseURL: `http://localhost:5000/api/post`,
     validateStatus: function (status) {
         return status >= 200 && status <= 500;
     },
@@ -15,8 +15,13 @@ const usersConfig = axios.create({
 export const getAllPost = async (url, options = {}) => {};
 
 export const getPostByIdUser = async (id) => {
-    const results = await usersConfig.get(`/getPost/${id}`);
+    const results = await usersConfig.get(`/getPostUser/${id}`);
     return results.data;
+};
+
+export const getPostByIdPost = async (id) => {
+    const results = await usersConfig.get(`/getPost/${id}`);
+    return results;
 };
 
 export const createPost = async (accessToken, data) => {

@@ -2,11 +2,11 @@ import axios from "axios";
 import { END_POINT_API, END_POINT_API2 } from "../../Default/constant";
 
 const usersConfig = axios.create({
-    baseURL: `${END_POINT_API}/users`,
+    baseURL: `http://localhost:5000/api/users`,
 });
 
 const usersConfig2 = axios.create({
-    baseURL: `${END_POINT_API2}/user`,
+    baseURL: `http://localhost:5000/api/user`,
     validateStatus: function (status) {
         return status >= 200 && status <= 500;
     },

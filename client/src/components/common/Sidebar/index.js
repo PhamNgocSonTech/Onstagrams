@@ -71,7 +71,6 @@ function Sidebar({
         }
         // Not loggin or Logged in can get Suggestd Account
         getAllUsers().then((res) => {
-            console.log(res);
             const tmp = res.slice(0, 5);
             setSuggestdAccounts(tmp);
             SuggestdAccountsUR.current = res;

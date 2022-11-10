@@ -22,13 +22,66 @@ import FrameRecommendVideo from "../common/FrameRecommendVideo";
 const cn = classNames.bind(styles);
 
 function PostInfor({ postData = {} }) {
+    /** postData
+     * 
+     * {
+    "_id": "636a9a2f41da11eaa44b1b19",
+    "desc": "ÁDASD #conan",
+    "img": [
+        {   
+            ...
+            "url": "http://res.cloudinary.com/doapkbncj/image/upload/v1667930671/onstagram_v2/posts/jubaj5wnls13z8o1blyk.jpg",
+            ...
+        },
+        {
+            ...
+            "url": "http://res.cloudinary.com/doapkbncj/image/upload/v1667930671/onstagram_v2/posts/fnlch4ujah75thna9kjw.jpg",
+            ...
+
+        },
+        {
+            ...
+            "url": "http://res.cloudinary.com/doapkbncj/image/upload/v1667930671/onstagram_v2/posts/ynxmxrcy6rjslyhuoyir.jpg",
+            ...
+        }
+    ],
+    "video": [],
+    "userId": "6367b61cf5189c410030d936",
+    "likes": [],
+    "comments": [],
+    "createdAt": "2022-11-08T18:04:31.103Z",
+    "updatedAt": "2022-11-08T18:04:31.103Z",
+    "__v": 0
+        }
+     */
     const [isUnderlineUsername, setIsUnderlineUsername] = useState(false);
     const [isLike, setIsLike] = useState(false);
     const [isFollow, setIsFollow] = useState(false);
     const [isShowPanel, setIsShowPanel] = useState(false);
+    const [isShowComment, setIsShowComment] = useState({ isShow: false, data: {} });
     const [dataUser, setDataUser] = useState({});
 
     const [isGetAPIDone, setIsGetAPIDone] = useState(false);
+
+    const handleOpenComment = (url) => {
+        const dataToComment = [];
+        postData.img.forEach((img) => {
+            if (img.url === url) {
+                dataToComment.push({
+                    postID: postData._id,
+                    url: img.url,
+                    show: true,
+                });
+            } else {
+                dataToComment.push({
+                    postID: postData._id,
+                    url: img.url,
+                });
+            }
+        });
+        console.log(dataToComment); //OK
+        setIsShowComment({ isShow: true, data: dataToComment });
+    };
 
     useEffect(() => {
         getUserById(postData.userId).then((user) => {
@@ -119,19 +172,22 @@ function PostInfor({ postData = {} }) {
                 <div className={cn("video-des")}>
                     {isGetAPIDone ? (
                         <>
-                            {" "}
                             <span className={cn("cap")}>{postData.desc} </span>
                             {postData.hashtag &&
-                                postData.hashtag
-                                    .split(" ")
-                                    .map((ht, index) => <Button className={cn("hashtag")}>{ht}</Button>)}
+                                postData.hashtag.split(" ").map((ht, index) => (
+                                    <Button
+                                        key={index}
+                                        className={cn("hashtag")}
+                                    >
+                                        {ht}
+                                    </Button>
+                                ))}
                             {/* <Button className={cn("hashtag")}>#tinhyeu</Button>
                         <Button className={cn("hashtag")}>#tamtrang</Button>
                         <Button className={cn("hashtag")}>#tinhyeu</Button> */}
                         </>
                     ) : (
                         <>
-                            {" "}
                             <Skeleton
                                 variant='text'
                                 style={{ height: "50px" }}
@@ -153,6 +209,7 @@ function PostInfor({ postData = {} }) {
                                     <img
                                         className={cn("video")}
                                         src={postData.img[0].url}
+                                        onClick={() => handleOpenComment(postData.img[0].url)}
                                     />
                                 </ImageListItem>
                             </ImageList>
@@ -172,6 +229,7 @@ function PostInfor({ postData = {} }) {
                                         <img
                                             className={cn("video")}
                                             src={image.url}
+                                            onClick={() => handleOpenComment(image.url)}
                                         />
                                     </ImageListItem>
                                 ))}
@@ -185,16 +243,19 @@ function PostInfor({ postData = {} }) {
                                     <img
                                         className={cn("video")}
                                         src={postData.img[0].url}
+                                        onClick={() => handleOpenComment(postData.img[0].url)}
                                     />
                                 </div>
                                 <div className={cn("other-img")}>
                                     <img
                                         className={cn("video")}
                                         src={postData.img[1].url}
+                                        onClick={() => handleOpenComment(postData.img[1].url)}
                                     />
                                     <img
                                         className={cn("video")}
                                         src={postData.img[2].url}
+                                        onClick={() => handleOpenComment(postData.img[2].url)}
                                     />
                                 </div>
                             </div>
@@ -214,6 +275,7 @@ function PostInfor({ postData = {} }) {
                                         <img
                                             className={cn("video")}
                                             src={image.url}
+                                            onClick={() => handleOpenComment(image.url)}
                                         />
                                     </ImageListItem>
                                 ))}
@@ -222,57 +284,15 @@ function PostInfor({ postData = {} }) {
                                         className={cn("video")}
                                         src={postData.img[4].url}
                                     />
-                                    <div className={cn("excess-img")}>
+                                    <div
+                                        className={cn("excess-img")}
+                                        onClick={() => handleOpenComment(postData.img[4].url)}
+                                    >
                                         <h1>+{postData.img.length - 4}</h1>
                                     </div>
                                 </ImageListItem>
                             </ImageList>
                         )}
-
-                        {/* <ImageList
-                        variant='quilted'
-                        sx={{ height: "100%", overflow: "hidden", padding: "15px" }}
-                        cols={2}
-                        gap={15}
-                        className={cn("img-list")}
-                    >
-                        <ImageListItem>
-                            <img
-                                className={cn("video")}
-                                src={
-                                    "http://res.cloudinary.com/doapkbncj/image/upload/v1667930671/onstagram_v2/posts/jubaj5wnls13z8o1blyk.jpg"
-                                }
-                            />
-                        </ImageListItem>
-                        <ImageListItem>
-                            <img
-                                className={cn("video")}
-                                src={
-                                    "http://res.cloudinary.com/doapkbncj/image/upload/v1667930671/onstagram_v2/posts/jubaj5wnls13z8o1blyk.jpg"
-                                }
-                            />
-                        </ImageListItem>
-                        <ImageListItem>
-                            <img
-                                className={cn("video")}
-                                src={
-                                    "http://res.cloudinary.com/doapkbncj/image/upload/v1667930671/onstagram_v2/posts/jubaj5wnls13z8o1blyk.jpg"
-                                }
-                            />
-                        </ImageListItem>
-
-                        <ImageListItem className={cn("last-imgs")}>
-                            <img
-                                className={cn("video")}
-                                src={
-                                    "http://res.cloudinary.com/doapkbncj/image/upload/v1667930671/onstagram_v2/posts/jubaj5wnls13z8o1blyk.jpg"
-                                }
-                            />
-                            <div className={cn("excess-img")}>
-                                <h1>+12</h1>
-                            </div>
-                        </ImageListItem>
-                    </ImageList> */}
 
                         <div className={cn("actions")}>
                             <div className={cn("action")}>
@@ -342,6 +362,12 @@ function PostInfor({ postData = {} }) {
                 ) : (
                     <Login handleClosePanel={setIsShowPanel} />
                 ))}
+            {isShowComment.isShow && (
+                <Comment
+                    setIsShowComment={setIsShowComment}
+                    dataShow={isShowComment.data}
+                />
+            )}
         </FrameRecommendVideo>
     );
 }
