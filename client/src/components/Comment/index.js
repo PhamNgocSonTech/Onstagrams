@@ -20,6 +20,8 @@ import { getPostByIdPost } from "../../utils/HttpRequest/post_request";
 import { getUserById } from "../../utils/HttpRequest/user_request";
 import moment from "moment";
 
+import { Skeleton } from "@mui/material";
+
 const cn = classNames.bind(styles);
 
 function Comment({ setIsShowComment, dataShow = [] }) {
@@ -43,13 +45,15 @@ function Comment({ setIsShowComment, dataShow = [] }) {
     const srcDataShow = useRef(dataShow);
     const [currentComment, setCurrentComment] = useState(srcDataShow.current.findIndex((item) => item.show == true));
     const [userCurrent, setUserCurrent] = useState({});
-    const [isHaveComment, setIsHaveComment] = useState(false);
-    const [postCurrent, setPostCurrent] = useState({});
+    const [isGetAPIDone, setIsGetAPIDone] = useState(false);
+    const [postCurrent, setPostCurrent] = useState({ comments: [], likes: [], comments: [] });
     const [isFollow, setIsFollow] = useState(false);
     const [isLike, setIsLike] = useState(false);
     const [isShowEmotePicker, setIsShowEmotePicker] = useState(false);
     const [cmt, setCmt] = useState("");
     const ref = useRef();
+
+    const [animate, setAnimate] = useState(false);
 
     function handleChangeFollower() {
         setIsFollow(!isFollow);
@@ -102,14 +106,27 @@ function Comment({ setIsShowComment, dataShow = [] }) {
                 document.removeEventListener("click", handleClickOutside, true);
             };
         }
+        // GET POST
         getPostByIdPost(srcDataShow.current[currentComment].postID).then((post) => {
             if (post.status === 200) {
                 const userid = post.data[0].userId;
+                // GET AUTHOR INFOR
                 getUserById(userid).then((user) => {
                     if (user.status === 200) {
                         setUserCurrent(user.data);
-                        setPostCurrent(post.data[0]);
+                        console.log(post.data[0]);
                     }
+                });
+
+                // GET COMMENT USER INFOR
+                let reqs = [];
+                post.data[0].comments.forEach((user) => {
+                    reqs.push(user.userId);
+                });
+                Promise.all(reqs.map((id) => getUserById(id))).then((allRes) => {
+                    post.data[0].usercomments = allRes;
+                    setPostCurrent(post.data[0]);
+                    setIsGetAPIDone(true);
                 });
             }
         });
@@ -123,7 +140,7 @@ function Comment({ setIsShowComment, dataShow = [] }) {
         currentComment == 0 ? setCurrentComment(srcDataShow.current.length - 1) : setCurrentComment((pre) => pre - 1);
     };
 
-    return (
+    return isGetAPIDone ? (
         <Modal>
             <div className={cn("wrapper")}>
                 <div
@@ -136,19 +153,37 @@ function Comment({ setIsShowComment, dataShow = [] }) {
                     />
                 </div>
                 <div className={cn("img-section")}>
-                    <img src={srcDataShow.current[currentComment].url} />
+                    <motion.img
+                        onMouseEnter={() => setAnimate(true)}
+                        onMouseLeave={() => setAnimate(false)}
+                        src={srcDataShow.current[currentComment].url}
+                    />
 
                     {srcDataShow.current.length >= 2 && (
                         <>
-                            <img
+                            <motion.img
                                 src={left}
                                 alt='left'
                                 className={cn("slide", "left")}
                                 onClick={handlePreClick}
+                                initial={{ opacity: 0, left: 0 }}
+                                whileHover={{ opacity: 1, left: 20 }}
+                                animate={animate ? { opacity: 1, left: 20 } : { opacity: 0, left: 0 }}
+                                transition={{
+                                    duration: 0.5,
+                                    ease: "easeInOut",
+                                }}
                             />
-                            <img
+                            <motion.img
                                 src={right}
                                 alt='right'
+                                initial={{ opacity: 0, right: 0 }}
+                                whileHover={{ opacity: 1, right: 20 }}
+                                animate={animate ? { opacity: 1, right: 20 } : { opacity: 0, right: 0 }}
+                                transition={{
+                                    duration: 0.5,
+                                    ease: "easeInOut",
+                                }}
                                 onClick={handleNextClick}
                                 className={cn("slide", "right")}
                             />
@@ -206,7 +241,7 @@ function Comment({ setIsShowComment, dataShow = [] }) {
                                     animate={isLike ? "like" : "unlike"}
                                 />
                             </div>
-                            <span className={cn("act-text")}>130K</span>
+                            <span className={cn("act-text")}>{postCurrent.likes.length}</span>
                         </div>
                         <div className={cn("action")}>
                             <div className={cn("act-btn")}>
@@ -215,7 +250,7 @@ function Comment({ setIsShowComment, dataShow = [] }) {
                                     src={comment}
                                 />
                             </div>
-                            <span className={cn("act-text")}>2602</span>
+                            <span className={cn("act-text")}>{postCurrent.comments.length}</span>
                         </div>
                         <div className={cn("action")}>
                             <div className={cn("act-btn")}>
@@ -224,106 +259,43 @@ function Comment({ setIsShowComment, dataShow = [] }) {
                                     src={share}
                                 />
                             </div>
-                            <span className={cn("act-text")}>20K</span>
+                            <span className={cn("act-text")}>0</span>
                         </div>
                     </div>
 
                     <div className={cn("comments")}>
-                        {isHaveComment ? (
+                        {postCurrent.comments.length > 0 ? (
                             <>
-                                {" "}
-                                <div className={cn("comment")}>
-                                    <img
-                                        src='https://p16-sign-va.tiktokcdn.com/tos-useast2a-avt-0068-giso/d33b7f5618c3f0a7f264c7dff5e225eb~c5_100x100.jpg?x-expires=1666792800&x-signature=5v8pXrRs%2FPkmuhoq2cSTZNsxkNs%3D'
-                                        alt=''
-                                    />
-                                    <div className={cn("comment-content")}>
-                                        <h3>Đẹp trai nhưng ngu vãi lồn🍀</h3>
-                                        <h4>Đúng vậy {":(("}</h4>
-                                        <div className={cn("cmt-footer")}>
-                                            <span className={cn("cmt-time")}>4d ago</span>
-                                            <span className={cn("cmt-reply")}>Reply</span>
+                                {postCurrent.comments.map((cmt, index) => (
+                                    <div
+                                        key={index}
+                                        className={cn("comment")}
+                                    >
+                                        <img
+                                            src={postCurrent.usercomments[index].data.avatar}
+                                            alt='avatar'
+                                        />
+                                        <div className={cn("comment-content")}>
+                                            <h3>{postCurrent.usercomments[index].data.username}</h3>
+                                            <h4>{cmt.comment}</h4>
+                                            <div className={cn("cmt-footer")}>
+                                                <span className={cn("cmt-time")}>
+                                                    {moment(cmt.createdAt).startOf("hour").fromNow()}
+                                                </span>
+                                                <span className={cn("cmt-reply")}>Reply</span>
+                                            </div>
+                                        </div>
+                                        <div className={cn("action-cmt")}>
+                                            <div className={cn("act-btn-cmt")}>
+                                                <img
+                                                    alt='img'
+                                                    src={heart_outline}
+                                                />
+                                            </div>
+                                            <span className={cn("act-text-cmt")}>0</span>
                                         </div>
                                     </div>
-                                    <div className={cn("action-cmt")}>
-                                        <div className={cn("act-btn-cmt")}>
-                                            <img
-                                                alt='img'
-                                                src={heart_outline}
-                                            />
-                                        </div>
-                                        <span className={cn("act-text-cmt")}>1</span>
-                                    </div>
-                                </div>
-                                <div className={cn("comment")}>
-                                    <img
-                                        src='https://p16-sign-va.tiktokcdn.com/tos-useast2a-avt-0068-giso/73e50e80740d8e56895151775d681f9a~c5_100x100.jpg?x-expires=1666803600&x-signature=qx6m02mSh%2Fi4osstYbcS%2FMj%2BrUs%3D'
-                                        alt=''
-                                    />
-                                    <div className={cn("comment-content")}>
-                                        <h3>Sói Ngây Ngô</h3>
-                                        <h4>Chẳng có thứ gì tồn tại mãi mãi ^^</h4>
-                                        <div className={cn("cmt-footer")}>
-                                            <span className={cn("cmt-time")}>4d ago</span>
-                                            <span className={cn("cmt-reply")}>Reply</span>
-                                        </div>
-                                    </div>
-                                    <div className={cn("action-cmt")}>
-                                        <div className={cn("act-btn-cmt")}>
-                                            <img
-                                                alt='img'
-                                                src={heart_outline}
-                                            />
-                                        </div>
-                                        <span className={cn("act-text-cmt")}>13</span>
-                                    </div>
-                                </div>
-                                <div className={cn("comment")}>
-                                    <img
-                                        src='https://p16-sign-va.tiktokcdn.com/tos-maliva-avt-0068/7124822249265168389~c5_100x100.jpg?x-expires=1666803600&x-signature=BBjg8XF2b3FcFkUtgeKbnAITqjc%3D'
-                                        alt=''
-                                    />
-                                    <div className={cn("comment-content")}>
-                                        <h3>LpVy2909</h3>
-                                        <h4>Chấp nhận thôi -.-</h4>
-                                        <div className={cn("cmt-footer")}>
-                                            <span className={cn("cmt-time")}>4d ago</span>
-                                            <span className={cn("cmt-reply")}>Reply</span>
-                                        </div>
-                                    </div>
-                                    <div className={cn("action-cmt")}>
-                                        <div className={cn("act-btn-cmt")}>
-                                            <img
-                                                alt='img'
-                                                src={heart_outline}
-                                            />
-                                        </div>
-                                        <span className={cn("act-text-cmt")}>2</span>
-                                    </div>
-                                </div>
-                                <div className={cn("comment")}>
-                                    <img
-                                        src='https://p16-sign-va.tiktokcdn.com/tos-useast2a-avt-0068-giso/1d28f283320c12d138eadb35859499d4~c5_100x100.jpg?x-expires=1666803600&x-signature=5NQvQ5J2JYTVIVQqx%2BVdxI%2BwHN0%3D'
-                                        alt=''
-                                    />
-                                    <div className={cn("comment-content")}>
-                                        <h3>vợ Lee Jong Suk</h3>
-                                        <h4>Cay đắng</h4>
-                                        <div className={cn("cmt-footer")}>
-                                            <span className={cn("cmt-time")}>4d ago</span>
-                                            <span className={cn("cmt-reply")}>Reply</span>
-                                        </div>
-                                    </div>
-                                    <div className={cn("action-cmt")}>
-                                        <div className={cn("act-btn-cmt")}>
-                                            <img
-                                                alt='img'
-                                                src={heart_outline}
-                                            />
-                                        </div>
-                                        <span className={cn("act-text-cmt")}>2</span>
-                                    </div>
-                                </div>
+                                ))}
                             </>
                         ) : (
                             <div className={cn("empty-cmt")}>
@@ -331,7 +303,7 @@ function Comment({ setIsShowComment, dataShow = [] }) {
                                     src={comments}
                                     alt=''
                                 />
-                                <h2>No comment now !</h2>
+                                <h3>No comment now !</h3>
                             </div>
                         )}
                     </div>
@@ -363,6 +335,181 @@ function Comment({ setIsShowComment, dataShow = [] }) {
                             />
                         </div>
                         <Button outline>Post</Button>
+                    </div>
+                </div>
+            </div>
+        </Modal>
+    ) : (
+        <Modal>
+            <div className={cn("wrapper")}>
+                <div
+                    className={cn("close-btn")}
+                    onClick={handleCloseComment}
+                >
+                    <img
+                        src={close}
+                        alt='close'
+                    />
+                </div>
+                <div className={cn("img-section")}>
+                    <img src={srcDataShow.current[currentComment].url} />
+                </div>
+                <div className={cn("cmt-section")}>
+                    <div className={cn("owner-infor")}>
+                        <div className={cn("owner")}>
+                            <Skeleton
+                                variant='rounded'
+                                className={cn("owner-avatar")}
+                            />
+                            <div className={cn("infor")}>
+                                <h3>
+                                    <Skeleton
+                                        variant='text'
+                                        sx={{ width: "300px" }}
+                                    />
+                                </h3>
+                                <h4>
+                                    <Skeleton
+                                        variant='text'
+                                        sx={{ width: "200px" }}
+                                    />
+                                </h4>
+                            </div>
+                        </div>
+
+                        <p className={cn("cap")}>
+                            <Skeleton
+                                variant='text'
+                                sx={{ width: "400px" }}
+                            />
+                        </p>
+                    </div>
+
+                    <div className={cn("actions")}>
+                        <div className={cn("action")}>
+                            <div className={cn("act-btn")}>
+                                <Skeleton
+                                    variant='rounded'
+                                    className={cn("owner-avatar")}
+                                />
+                            </div>
+                            <span className={cn("act-text")}>
+                                <Skeleton variant='text' />
+                            </span>
+                        </div>
+                        <div className={cn("action")}>
+                            <div className={cn("act-btn")}>
+                                <Skeleton
+                                    variant='rounded'
+                                    className={cn("owner-avatar")}
+                                />
+                            </div>
+                            <span className={cn("act-text")}>
+                                <Skeleton variant='text' />
+                            </span>
+                        </div>
+                        <div className={cn("action")}>
+                            <div className={cn("act-btn")}>
+                                <Skeleton
+                                    variant='rounded'
+                                    className={cn("owner-avatar")}
+                                />
+                            </div>
+                            <span className={cn("act-text")}>
+                                <Skeleton variant='text' />
+                            </span>
+                        </div>
+                    </div>
+
+                    <div className={cn("comments")}>
+                        <>
+                            <div className={cn("comment")}>
+                                <Skeleton
+                                    variant='circular'
+                                    sx={{ width: "50px", height: "50px" }}
+                                />
+                                <div className={cn("comment-content")}>
+                                    <h3>
+                                        <Skeleton
+                                            variant='text'
+                                            sx={{ width: "80px" }}
+                                        />
+                                    </h3>
+                                    <h4>
+                                        <Skeleton
+                                            variant='text'
+                                            sx={{ width: "300px" }}
+                                        />
+                                    </h4>
+                                    <div className={cn("cmt-footer")}>
+                                        <span className={cn("cmt-time")}>
+                                            <Skeleton
+                                                variant='text'
+                                                sx={{ width: "20px" }}
+                                            />
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className={cn("comment")}>
+                                <Skeleton
+                                    variant='circular'
+                                    sx={{ width: "50px", height: "50px" }}
+                                />
+                                <div className={cn("comment-content")}>
+                                    <h3>
+                                        <Skeleton
+                                            variant='text'
+                                            sx={{ width: "80px" }}
+                                        />
+                                    </h3>
+                                    <h4>
+                                        <Skeleton
+                                            variant='text'
+                                            sx={{ width: "300px" }}
+                                        />
+                                    </h4>
+                                    <div className={cn("cmt-footer")}>
+                                        <span className={cn("cmt-time")}>
+                                            <Skeleton
+                                                variant='text'
+                                                sx={{ width: "20px" }}
+                                            />
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className={cn("comment")}>
+                                <Skeleton
+                                    variant='circular'
+                                    sx={{ width: "50px", height: "50px" }}
+                                />
+                                <div className={cn("comment-content")}>
+                                    <h3>
+                                        <Skeleton
+                                            variant='text'
+                                            sx={{ width: "80px" }}
+                                        />
+                                    </h3>
+                                    <h4>
+                                        <Skeleton
+                                            variant='text'
+                                            sx={{ width: "300px" }}
+                                        />
+                                    </h4>
+                                    <div className={cn("cmt-footer")}>
+                                        <span className={cn("cmt-time")}>
+                                            <Skeleton
+                                                variant='text'
+                                                sx={{ width: "20px" }}
+                                            />
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </>
                     </div>
                 </div>
             </div>

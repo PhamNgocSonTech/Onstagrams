@@ -116,7 +116,23 @@ function PostInfor({ postData = {} }) {
     }
 
     function handleOpenCommentSection() {
-        setIsShowPanel(true);
+        //setIsShowPanel(true);
+        const dataToComment = [];
+        postData.img.forEach((img, index) => {
+            if (index === 0) {
+                dataToComment.push({
+                    postID: postData._id,
+                    url: img.url,
+                    show: true,
+                });
+            } else {
+                dataToComment.push({
+                    postID: postData._id,
+                    url: img.url,
+                });
+            }
+        });
+        setIsShowComment({ isShow: true, data: dataToComment });
     }
 
     return (
@@ -201,7 +217,7 @@ function PostInfor({ postData = {} }) {
                         {postData.img.length === 1 && (
                             <ImageList
                                 variant='quilted'
-                                sx={{ height: "100%", overflow: "hidden", padding: "20px" }}
+                                sx={{ height: "100%", overflow: "hidden" }}
                                 cols={1}
                                 className={cn("img-list")}
                             >
@@ -219,7 +235,7 @@ function PostInfor({ postData = {} }) {
                         {(postData.img.length == 2 || postData.img.length == 4) && (
                             <ImageList
                                 variant='quilted'
-                                sx={{ height: "100%", overflow: "hidden", padding: "15px" }}
+                                sx={{ height: "100%", overflow: "hidden" }}
                                 cols={2}
                                 gap={15}
                                 className={cn("img-list")}
@@ -265,7 +281,7 @@ function PostInfor({ postData = {} }) {
                         {postData.img.length > 4 && (
                             <ImageList
                                 variant='quilted'
-                                sx={{ height: "100%", overflow: "hidden", padding: "15px" }}
+                                sx={{ height: "100%", overflow: "hidden" }}
                                 cols={2}
                                 gap={15}
                                 className={cn("img-list")}

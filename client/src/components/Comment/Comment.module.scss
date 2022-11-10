@@ -48,7 +48,7 @@
             }
 
             &:active {
-                opacity: 0.8;
+                opacity: 0.9;
             }
 
             &.left {
@@ -92,6 +92,10 @@
                 .infor {
                     margin-left: 12px;
                     flex-grow: 1;
+
+                    h3 {
+                        font-family: 'Lexend Deca', sans-serif;
+                    }
 
                     h4 {
                         font-weight: 300;
@@ -163,6 +167,7 @@
                     width:50px;
                     height: 50px;
                     border-radius: 50%;
+                    object-fit: cover;
                 }
 
                 .action-cmt {
@@ -193,6 +198,7 @@
                 align-items: center;
                 justify-content: center;
                 opacity: 0.5;
+                font-family: 'Lexend Deca', sans-serif;
 
                 img {
                     width: 40px;
