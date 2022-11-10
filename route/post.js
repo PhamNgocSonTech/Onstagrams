@@ -108,6 +108,47 @@ router.put("/comment/post/:id", verifyToken, async (req, res) => {
         return res.status(500).json({ msg: err.message });
     }
 });
+
+// ********************************************//
+//DELETE COMMENT
+// firstId => id post
+// secondId => id comment
+
+router.delete("/delComment/post/:firstId/:secondId", async (req, res) => {
+    try {
+        // const { comment } = req.body;
+        // const commentObj = {
+        //     userId: req.user._id,
+        //     username: req.user.username,
+        //     comment,
+        // };
+        const post = await Post.findById(req.params.firstId);
+        await post.update({ $pull: { comments: {_id: req.params.secondId }} });
+
+        // await post.save();
+        res.status(200).json(post);
+    } catch (err) {
+        return res.status(500).json({ msg: err.message });
+    }
+});
+
+
+router.put("/updateComment/post/:firstId/:secondId", verifyToken, async (req, res) => {
+    try {
+       const {comment} = req.body;
+        const postId = await Post.findById(req.params.firstId);
+        const cmtId = await Post.findById({ comments: {_id: req.params.secondId }} );
+        const data = {
+            comment
+        };
+        postId = await Post.findByIdAndUpdate({$push: {comment:cmtId}}, data)
+        const updateCmt = await postId.save()
+        res.status(200).json(updateCmt);
+    } catch (err) {
+        return res.status(500).json({ msg: err.message });
+    }
+});
+
 // ********************************************//
 //LIKE AND DISLIKE POST
 router.put("/like/:id", verifyToken, async (req, res) => {
@@ -126,11 +167,22 @@ router.put("/like/:id", verifyToken, async (req, res) => {
 });
 
 // ********************************************//
-//GET POST BY USERID
+//GET POST BY postId
 router.get("/getPost/:id", async (req, res) => {
     try {
-        const postGet = await Post.find({ userId: req.params.id });
+        const postGet = await Post.find({ _id: req.params.id });
         res.status(200).json(postGet);
+    } catch (err) {
+        return res.status(500).json(err);
+    }
+});
+
+// ********************************************//
+//GET POST BY userId
+router.get("/getPost/:id", async (req, res) => {
+    try {
+        const postGetUserId = await Post.find({ userId: req.params.id });
+        res.status(200).json(postGetUserId);
     } catch (err) {
         return res.status(500).json(err);
     }
