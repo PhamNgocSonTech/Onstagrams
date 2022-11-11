@@ -271,11 +271,9 @@ function Profile() {
                                                 <div onMouseEnter={handleEnterAgain}>
                                                     <Popover className={cn("pop-up-auth")}>
                                                         <p>
-                                                            Your account{" "}
-                                                            <strong style={{ color: "green" }}>
-                                                                has been verifyed
-                                                            </strong>{" "}
-                                                            by Onstagrams
+                                                            Your account is{" "}
+                                                            <strong style={{ color: "green" }}>verifyed</strong> by
+                                                            Onstagrams
                                                         </p>
                                                     </Popover>
                                                 </div>

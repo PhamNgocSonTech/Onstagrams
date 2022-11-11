@@ -16,7 +16,10 @@ function Modal_Center({ children, className, classNameWrapper }) {
         },
     };
     return (
-        <Modal className={cn("wrapper", { [classNameWrapper]: classNameWrapper })}>
+        <Modal
+            key={"cut2"}
+            className={cn("wrapper", { [classNameWrapper]: classNameWrapper })}
+        >
             {/* <div className={cn("modal-form", { [className]: className })}>{children}</div> */}
             <motion.div
                 variants={animations}

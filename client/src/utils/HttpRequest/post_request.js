@@ -30,3 +30,17 @@ export const createPost = async (accessToken, data) => {
     });
     return results;
 };
+
+export const editPost = async (accessToken, postId, data) => {
+    const results = await usersConfig.put(`/updatePost/${postId}`, data, {
+        headers: { token: accessToken, Accept: "application/json", "Content-Type": "multipart/form-data" },
+    });
+    return results;
+};
+
+export const deletePost = async (accessToken, postId) => {
+    const results = await usersConfig.delete(`/delete/${postId}`, {
+        headers: { token: accessToken },
+    });
+    return results;
+};

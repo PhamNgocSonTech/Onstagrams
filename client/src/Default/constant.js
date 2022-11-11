@@ -188,7 +188,7 @@ export const MAIN_NAV_SIDEBAR = [
         to: "/",
     },
     {
-        title: "Following",
+        title: "My timeline",
         icon: Follow,
         needLogin: true,
         to: "/following/",

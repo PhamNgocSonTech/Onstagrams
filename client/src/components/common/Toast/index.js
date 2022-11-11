@@ -20,6 +20,7 @@ function Toast({ message, time = 2000, state = true }) {
             open={open}
             autoHideDuration={time}
             onClose={handleClose}
+            sx={{ zIndex: 9999999 }}
             anchorOrigin={{ vertical: "top", horizontal: "center" }}
             TransitionComponent={Grow}
         >

@@ -1,12 +1,13 @@
 import classNames from "classnames/bind";
 import styles from "./PostInfor.module.scss";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { ImageList, ImageListItem, Skeleton } from "@mui/material";
 import moment from "moment";
 
 import Button from "../../components/common/Button";
 import Comment from "../Comment";
+import more from "../../assets/image/comment/more.svg";
 
 import black_heart from "../../assets/image/content/black_heart.svg";
 import pink_heart from "../../assets/image/content/pink_heart.svg";
@@ -18,6 +19,12 @@ import Login from "../Login";
 import { getUserById } from "../../utils/HttpRequest/user_request";
 
 import FrameRecommendVideo from "../common/FrameRecommendVideo";
+import Popover from "../common/Popover";
+import Modal_Center from "../common/Modal/Modal_Center";
+import jwt_decode from "jwt-decode";
+import { deletePost } from "../../utils/HttpRequest/post_request";
+import Toast from "../common/Toast";
+import LoadingModal from "../common/LoadingModal";
 
 const cn = classNames.bind(styles);
 
@@ -59,9 +66,25 @@ function PostInfor({ postData = {} }) {
     const [isFollow, setIsFollow] = useState(false);
     const [isShowPanel, setIsShowPanel] = useState(false);
     const [isShowComment, setIsShowComment] = useState({ isShow: false, data: {} });
+    const [isMyAccount, setIsMyAccount] = useState(() => {
+        const token = window.localStorage.getItem("accessToken");
+        if (jwt_decode(token)._id === postData.userId) {
+            return true;
+        } else {
+            return false;
+        }
+    });
     const [dataUser, setDataUser] = useState({});
 
+    const [isOpenFormDelete, setIsOpenFormDelete] = useState(false);
+    const [isOpenAcceptDeleteOption, setIsOpenAcceptDeleteOption] = useState(false);
+
     const [isGetAPIDone, setIsGetAPIDone] = useState(false);
+    const [isShowToast, setIsShowToast] = useState({ isShow: false, type: false, message: "" });
+
+    const [isShowLoadingModal, setIsShowLoadingModal] = useState(false);
+
+    const ref = useRef();
 
     const handleOpenComment = (url) => {
         const dataToComment = [];
@@ -79,9 +102,20 @@ function PostInfor({ postData = {} }) {
                 });
             }
         });
-        console.log(dataToComment); //OK
         setIsShowComment({ isShow: true, data: dataToComment });
     };
+
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (ref.current && !ref.current.contains(event.target)) {
+                setIsOpenAcceptDeleteOption(false);
+            }
+        };
+        document.addEventListener("click", handleClickOutside, true);
+        return () => {
+            document.removeEventListener("click", handleClickOutside, true);
+        };
+    }, []);
 
     useEffect(() => {
         getUserById(postData.userId).then((user) => {
@@ -91,6 +125,22 @@ function PostInfor({ postData = {} }) {
     }, []);
 
     const didLogin = useSelector((state) => state.loginState_reducer.user);
+
+    function handleDeletePost() {
+        setIsShowLoadingModal(true);
+        const token = window.localStorage.getItem("accessToken");
+        deletePost(token, postData._id).then((res) => {
+            setIsShowLoadingModal(false);
+            if (res.status === 200 || res.status === 304) {
+                setIsShowToast({ isShow: true, type: true, message: "Deleted successfully !" });
+                setTimeout(() => {
+                    window.location.reload();
+                }, 1000);
+            } else {
+                setIsShowToast({ isShow: true, type: false, message: res.data });
+            }
+        });
+    }
 
     const animations = {
         like: {
@@ -353,22 +403,56 @@ function PostInfor({ postData = {} }) {
                 )}
             </div>
 
-            {isFollow ? (
-                <Button
-                    onClick={handleChangeFollower}
-                    className={cn("following")}
-                    outline
-                >
-                    <p className={cn("fling-text")}>Following</p>
-                </Button>
-            ) : (
-                <Button
-                    onClick={handleChangeFollower}
-                    className={cn("follow")}
-                    outline
-                >
-                    <p className={cn("fl-text")}>Follow</p>
-                </Button>
+            {isMyAccount && (
+                <>
+                    <div
+                        className={cn("more-btn")}
+                        ref={ref}
+                    >
+                        <img
+                            src={more}
+                            alt=''
+                            onClick={() => setIsOpenAcceptDeleteOption(!isOpenAcceptDeleteOption)}
+                        />
+                        {isOpenAcceptDeleteOption && (
+                            <Popover className={cn("delete-post")}>
+                                <Button
+                                    outline
+                                    className={cn("btn-option", "btn-2")}
+                                    onClick={() => {
+                                        setIsOpenAcceptDeleteOption(false);
+                                        setIsOpenFormDelete(true);
+                                    }}
+                                >
+                                    Delete this post
+                                </Button>
+                            </Popover>
+                        )}
+                        {isOpenFormDelete && (
+                            <Modal_Center className={cn("accept-delete-form")}>
+                                <h2>Are you sure to delete this post ? </h2>
+                                <div className={cn("accept-btns")}>
+                                    <Button
+                                        className={cn("accept-btn")}
+                                        outlinePrimary
+                                        onClick={() => {
+                                            setIsOpenFormDelete(false);
+                                        }}
+                                    >
+                                        No
+                                    </Button>
+                                    <Button
+                                        className={cn("accept-btn")}
+                                        outlinePrimary
+                                        onClick={handleDeletePost}
+                                    >
+                                        Yes
+                                    </Button>
+                                </div>
+                            </Modal_Center>
+                        )}
+                    </div>
+                </>
             )}
 
             {/* Comment Section */}
@@ -382,6 +466,13 @@ function PostInfor({ postData = {} }) {
                 <Comment
                     setIsShowComment={setIsShowComment}
                     dataShow={isShowComment.data}
+                />
+            )}
+            {isShowLoadingModal && <LoadingModal />}
+            {isShowToast.isShow && (
+                <Toast
+                    state={isShowToast.type}
+                    message={isShowToast.message}
                 />
             )}
         </FrameRecommendVideo>
