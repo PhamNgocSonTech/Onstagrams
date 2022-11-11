@@ -1,0 +1,19 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.container {
+  width: 100%;
+  display: flex;
+  margin-top: var(--header-height);
+}
+.container .sidebar-custom {
+  width: var(--sidebar-width-profile-section);
+}
+
+.content {
+  flex-grow: 1;
+  margin-left: var(--sidebar-width-profile-section);
+}/*# sourceMappingURL=ProfileLayout.module.css.map */

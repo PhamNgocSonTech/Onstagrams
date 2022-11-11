@@ -1,0 +1,45 @@
+.account {
+  display: flex;
+  align-items: center;
+  padding: 9px 12px;
+}
+.account:hover {
+  cursor: pointer;
+  background: rgba(22, 24, 35, 0.03);
+}
+.account .avt {
+  width: 40px;
+  height: 40px;
+  -o-object-fit: cover;
+     object-fit: cover;
+  border-radius: 50%;
+  margin-right: 12px;
+}
+.account .infor .bold {
+  font-family: Sofiapro;
+}
+.account .infor .smdes {
+  font-size: 1.3rem;
+  margin-top: 1px;
+  line-height: 15px;
+}
+.account .infor h4 {
+  font-size: 1.6rem;
+  line-height: 22px;
+  font-weight: 300;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.account .infor h4 img {
+  margin-left: 5px;
+}
+.account .infor p {
+  font-size: 14px;
+  line-height: 20px;
+  color: rgba(22, 24, 35, 0.5);
+  font-weight: 400;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}/*# sourceMappingURL=AccountItem.module.css.map */

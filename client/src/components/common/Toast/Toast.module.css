@@ -1,0 +1,35 @@
+.toast {
+  display: flex;
+  min-width: 750px;
+  height: 50px;
+  align-items: center;
+  padding: 20px;
+  justify-content: space-between;
+  border-radius: 8px;
+  font-family: "Lexend Deca", sans-serif;
+  font-size: 16px;
+}
+.toast .stt-icon {
+  width: 25px;
+  height: 25px;
+}
+.toast .status {
+  margin-left: 12px;
+}
+.toast .close-icon:hover {
+  cursor: pointer;
+}
+
+.toast.success {
+  background-color: rgb(241, 250, 241);
+}
+.toast.success .status {
+  color: rgb(82, 196, 82);
+}
+
+.toast.error {
+  background-color: rgb(255, 230, 230);
+}
+.toast.error .status {
+  color: red;
+}/*# sourceMappingURL=Toast.module.css.map */

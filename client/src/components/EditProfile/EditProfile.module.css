@@ -1,0 +1,127 @@
+.edit-form {
+  width: 600px !important;
+  height: 95% !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow-y: auto !important;
+}
+.edit-form .wrapper .header {
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 0.5px solid rgba(22, 24, 35, 0.2);
+}
+.edit-form .wrapper .header > h2 {
+  font-family: "Lexend Deca", sans-serif;
+}
+.edit-form .wrapper .header > img {
+  opacity: 0.6;
+}
+.edit-form .wrapper .header > img:hover {
+  cursor: pointer;
+  opacity: 0.5;
+}
+.edit-form .wrapper .header > img:active {
+  opacity: 0.4;
+}
+.edit-form .wrapper .body {
+  padding: 8px 24px 0px;
+  max-height: 490px;
+  overflow-y: scroll;
+}
+.edit-form .wrapper .body .edit-section {
+  padding: 16px 0px;
+  display: flex;
+  border-bottom: 0.5px solid rgba(22, 24, 35, 0.12);
+}
+.edit-form .wrapper .body .edit-section .edit-label {
+  font-weight: 600;
+  line-height: 24px;
+  font-size: 16px;
+  width: 120px;
+  margin-right: 24px;
+}
+.edit-form .wrapper .body .edit-section .edit-label > p {
+  font-family: "ProximaNova";
+}
+.edit-form .wrapper .body .edit-section .edit-input {
+  width: 360px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.edit-form .wrapper .body .edit-section .edit-input .avt-section {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.edit-form .wrapper .body .edit-section .edit-input .avt-section .current-avt {
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+.edit-form .wrapper .body .edit-section .edit-input .avt-section .upload-photo {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgb(255, 255, 255);
+  border: 1px solid rgb(208, 208, 211);
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+}
+.edit-form .wrapper .body .edit-section .edit-input .avt-section input[type=file] {
+  opacity: 0;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: 0;
+}
+.edit-form .wrapper .body .edit-section .edit-input .avt-section input[type=file]:hover {
+  cursor: pointer;
+}
+.edit-form .wrapper .body .edit-section .edit-input .input-un input {
+  width: 360px;
+  height: 38px;
+  border-radius: 4px;
+  background: rgba(22, 24, 35, 0.048);
+  caret-color: rgb(254, 44, 85);
+  font-size: 16px;
+  color: rgb(22, 24, 35);
+  line-height: 24px;
+  outline: none;
+  border: none;
+  padding: 7px 12px;
+  box-sizing: border-box;
+  font-family: "ProximaNova";
+}
+.edit-form .wrapper .body .edit-section .edit-input .input-un .bio {
+  width: 360px;
+  border-radius: 4px;
+  font-family: "ProximaNova";
+  background: rgba(22, 24, 35, 0.048);
+  caret-color: rgb(254, 44, 85);
+  font-size: 16px;
+  color: rgb(22, 24, 35);
+  line-height: 24px;
+  outline: none;
+  border: none;
+  box-sizing: border-box;
+  height: 100px;
+  padding: 12px;
+  resize: none;
+}
+.edit-form .wrapper .footer {
+  display: flex;
+  margin-top: 10px;
+  margin-right: 24px;
+  justify-content: flex-end;
+}/*# sourceMappingURL=EditProfile.module.css.map */

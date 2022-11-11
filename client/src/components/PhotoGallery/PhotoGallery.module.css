@@ -1,0 +1,24 @@
+.photos {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-gap: 20px;
+}
+.photos .photo {
+  display: inline-block;
+  width: 100%;
+  height: 100%;
+}
+.photos .photo > img {
+  width: 100%;
+  height: 200px;
+  -o-object-fit: cover;
+     object-fit: cover;
+  border-radius: 8px;
+}
+.photos .photo:hover {
+  cursor: pointer;
+  opacity: 0.9;
+}
+.photos .photo:active {
+  opacity: 0.8;
+}/*# sourceMappingURL=PhotoGallery.module.css.map */

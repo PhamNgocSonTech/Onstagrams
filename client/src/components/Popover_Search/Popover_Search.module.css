@@ -1,0 +1,13 @@
+.popover {
+  position: absolute;
+  width: 100%;
+  left: 0;
+  top: var(--search-height);
+}
+.popover .pop-label {
+  padding: 5px 12px;
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 300;
+  color: rgba(22, 24, 35, 0.5);
+}/*# sourceMappingURL=Popover_Search.module.css.map */

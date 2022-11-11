@@ -1,0 +1,15 @@
+.wrapper {
+  background-color: rgba(0, 0, 0, 0.493);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.wrapper .modal-form {
+  width: 486px;
+  max-height: 693px;
+  height: 80%;
+  background-color: white;
+  position: relative;
+  border-radius: 8px;
+  overflow: hidden;
+}/*# sourceMappingURL=Modal_Center.module.css.map */

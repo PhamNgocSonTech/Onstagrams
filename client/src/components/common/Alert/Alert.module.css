@@ -1,0 +1,32 @@
+.wrapper.success {
+  width: 100%;
+  padding: 10px;
+  background-color: rgba(196, 242, 189, 0.3411764706);
+  margin-bottom: 10px;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.wrapper.success span {
+  margin-left: 10px;
+  text-align: center;
+  color: #61b16f;
+  font-family: "Lexend Deca", sans-serif;
+}
+.wrapper.failed {
+  width: 100%;
+  padding: 10px;
+  background-color: #FEE2E6;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.wrapper.failed span {
+  margin-left: 10px;
+  text-align: center;
+  color: red;
+  font-family: "Lexend Deca", sans-serif;
+}/*# sourceMappingURL=Alert.module.css.map */

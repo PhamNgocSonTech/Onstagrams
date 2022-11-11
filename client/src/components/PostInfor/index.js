@@ -220,7 +220,7 @@ function PostInfor({ postData = {} }) {
                             >
                                 {dataUser.fullname}
                             </h4>
-                            <span className={cn("time")}>- {moment(postData.createdAt).startOf("hour").fromNow()}</span>
+                            <span className={cn("time")}>- {moment(postData.createdAt).fromNow()}</span>
                         </>
                     ) : (
                         <div>

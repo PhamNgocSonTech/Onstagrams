@@ -1,0 +1,215 @@
+.wrapper {
+  padding: 32px 24px;
+}
+.wrapper .user-infor {
+  max-width: 624px;
+  margin-bottom: 20px;
+  display: flex;
+}
+.wrapper .user-infor .infor-section {
+  display: flex;
+  flex-grow: 1;
+  flex-direction: column;
+}
+.wrapper .user-infor .infor-section .name-infor {
+  display: flex;
+}
+.wrapper .user-infor .infor-section .name-infor img.avatar {
+  width: 116px;
+  height: 116px;
+  border-radius: 50%;
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+.wrapper .user-infor .infor-section .name-infor .name {
+  display: flex;
+  flex-direction: column;
+  padding: 0 20px;
+}
+.wrapper .user-infor .infor-section .name-infor .name .ed {
+  display: flex;
+}
+.wrapper .user-infor .infor-section .name-infor .name .ed .edit-profile-button {
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
+}
+.wrapper .user-infor .infor-section .name-infor .name .ed .auth {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  margin-left: 6px;
+}
+.wrapper .user-infor .infor-section .name-infor .name .ed .auth img {
+  padding: 0 10px;
+}
+.wrapper .user-infor .infor-section .name-infor .name .ed .auth .pop-up-auth {
+  position: absolute;
+  z-index: 999;
+  left: 0;
+  top: 100%;
+  padding: 12px;
+}
+.wrapper .user-infor .infor-section .name-infor .name .ed .auth .pop-up-auth p {
+  white-space: nowrap;
+  font-family: ProximaNova;
+}
+.wrapper .user-infor .infor-section .name-infor .name .ed .auth .pop-up-auth p strong {
+  color: var(--primary-color);
+}
+.wrapper .user-infor .infor-section .name-infor .name .ed .auth .pop-up-auth p strong:hover {
+  cursor: pointer;
+  opacity: 0.8;
+}
+.wrapper .user-infor .infor-section .name-infor .name .ed .auth .pop-up-auth p strong:active {
+  opacity: 0.6;
+}
+.wrapper .user-infor .infor-section .name-infor .name .follow-profile-button {
+  justify-content: center;
+  width: 192px;
+}
+.wrapper .user-infor .infor-section .name-infor .name .message-section {
+  display: flex;
+}
+.wrapper .user-infor .infor-section .name-infor .name .message-section .message-profile-button {
+  width: 164px;
+  height: 36px;
+  justify-content: center;
+}
+.wrapper .user-infor .infor-section .name-infor .name .message-section .unfollow {
+  width: 36px;
+  height: 36px;
+  border: 1px solid rgba(22, 24, 35, 0.12);
+  border-radius: 4px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: 10px;
+  position: relative;
+}
+.wrapper .user-infor .infor-section .name-infor .name .message-section .unfollow .unfollow-tooltip {
+  position: absolute;
+  display: none;
+  left: -50%;
+  bottom: -150%;
+}
+.wrapper .user-infor .infor-section .name-infor .name .message-section .unfollow:hover {
+  cursor: pointer;
+  background-color: rgba(22, 24, 35, 0.03);
+}
+.wrapper .user-infor .infor-section .name-infor .name .message-section .unfollow:hover .unfollow-tooltip {
+  display: block;
+}
+.wrapper .user-infor .infor-section .name-infor .name .message-section .unfollow:active {
+  cursor: pointer;
+  background-color: rgba(22, 24, 35, 0.11);
+}
+.wrapper .user-infor .infor-section .name-infor .name > h2 {
+  font-weight: 700;
+  font-size: 31px;
+  line-height: 38px;
+  overflow-x: hidden;
+  text-overflow: ellipsis;
+  text-align: left;
+  font-family: "Lexend Deca", sans-serif;
+  position: relative;
+}
+.wrapper .user-infor .infor-section .name-infor .name > h5 {
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 25px;
+  text-overflow: ellipsis;
+  height: 25px;
+  overflow: hidden;
+  max-width: 450px;
+  white-space: nowrap;
+  flex-grow: 1;
+  margin-top: 2px;
+  font-family: "Lexend Deca", sans-serif;
+}
+.wrapper .user-infor .infor-section .bio-infor {
+  margin-top: 25px;
+}
+.wrapper .user-infor .infor-section .bio-infor .follow-infor span.follow {
+  margin-right: 25px;
+  opacity: 0.7;
+}
+.wrapper .user-infor .infor-section .bio-infor .follow-infor span.follow span.bold {
+  margin-right: 10px;
+  font-weight: 800;
+  font-family: "Lexend Deca", sans-serif;
+  opacity: 1 !important;
+}
+.wrapper .user-infor .infor-section .bio-infor .bio {
+  margin-top: 10px;
+  text-align: left;
+  color: rgb(22, 24, 35);
+  font-family: ProximaNova, Arial, Tahoma, PingFangSC, sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 22px;
+  white-space: pre-line;
+}
+.wrapper .user-infor .infor-section .share-link .button-link {
+  padding-left: 0;
+  padding-right: 0;
+  color: var(--primary-color);
+}
+.wrapper .user-infor .share {
+  height: 24px;
+}
+.wrapper .user-infor .share:hover {
+  cursor: pointer;
+}
+.wrapper .user-infor .share:active {
+  opacity: 0.6;
+}
+.wrapper .user-gallery {
+  min-height: 490px;
+  min-width: 520px;
+}
+.wrapper .user-gallery .tabs {
+  display: flex;
+  margin-bottom: 15px;
+  position: relative;
+}
+.wrapper .user-gallery .tabs .tab-item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 44px;
+  width: 230px;
+  border-bottom: 1px solid #ccc;
+  opacity: 0.5;
+}
+.wrapper .user-gallery .tabs .tab-item.highlight {
+  opacity: 0.8;
+}
+.wrapper .user-gallery .tabs .tab-item > img {
+  margin-right: 8px;
+}
+.wrapper .user-gallery .tabs .tab-item > p {
+  font-weight: 600;
+  font-family: "Lexend Deca", sans-serif;
+  display: flex;
+  align-items: center;
+  height: 100%;
+  font-size: 18px;
+  line-height: 25px;
+}
+.wrapper .user-gallery .tabs .tab-item:hover {
+  cursor: pointer;
+}
+.wrapper .user-gallery .tabs .bar {
+  position: absolute;
+  height: 3px;
+  width: 230px;
+  background-color: var(--primary-color);
+  border-radius: 20px;
+  bottom: 0;
+  left: 0;
+  transition: all 0.4s;
+}
+.wrapper .user-gallery .content {
+  width: 100%;
+}/*# sourceMappingURL=Profile.module.css.map */

@@ -1,0 +1,147 @@
+.overal-modal {
+  background-color: transparent;
+}
+
+.register-modal {
+  padding: 48px 0px 0px;
+}
+.register-modal .header-modal .close-btn {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgb(245, 245, 245);
+  width: 40px;
+  height: 40px;
+  padding: 10px;
+  border-radius: 50%;
+  right: 20px;
+  top: 20px;
+}
+.register-modal .header-modal .close-btn:hover {
+  cursor: pointer;
+}
+.register-modal .header-modal .close-btn:active {
+  background-color: rgb(231, 224, 224);
+}
+.register-modal .header-modal .back-btn {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 40px;
+  height: 40px;
+  padding: 10px;
+  left: 20px;
+  top: 20px;
+  border-radius: 50%;
+}
+.register-modal .header-modal .back-btn:hover {
+  cursor: pointer;
+}
+.register-modal .body-modal {
+  margin-top: 35px;
+}
+.register-modal .body-modal .text {
+  margin: 20px 0 20px 0;
+  text-align: center;
+  color: var(--primary-color);
+  font-family: "Lexend Deca", sans-serif;
+  font-size: 40px;
+  word-spacing: 2px;
+}
+.register-modal .body-modal .register-section {
+  width: 375px;
+  padding-bottom: 20px;
+  margin: 0 auto;
+  overflow: auto;
+  height: 100%;
+  border-bottom: 1px solid rgb(190, 189, 189);
+}
+.register-modal .body-modal .register-section > form {
+  margin-bottom: -15px;
+}
+.register-modal .body-modal .register-section form .pw-wrapper {
+  position: relative;
+}
+.register-modal .body-modal .register-section form .pw-wrapper .show-hide-icon {
+  position: absolute;
+  right: 20px;
+  top: 21%;
+}
+.register-modal .body-modal .register-section form .pw-wrapper .show-hide-icon:hover {
+  cursor: pointer;
+}
+.register-modal .body-modal .register-section form .pw-wrapper .show-hide-icon:active {
+  opacity: 0.8;
+}
+.register-modal .body-modal .register-section .input-control {
+  font-family: "ProximaNova";
+  width: 100%;
+  border-radius: 4px;
+  background-color: rgba(166, 168, 179, 0.06);
+  border: 1px solid rgba(22, 24, 35, 0.12);
+  -webkit-padding-start: 12px;
+          padding-inline-start: 12px;
+  color: rgb(22, 24, 35);
+  line-height: 100%;
+  outline: none;
+  font-size: 16px;
+  height: 45px;
+  caret-color: rgb(254, 44, 85);
+  -webkit-padding-end: unset;
+          padding-inline-end: unset;
+  margin-bottom: 15px;
+  padding-right: 10px;
+}
+.register-modal .body-modal .register-section .gender-picker {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
+}
+.register-modal .body-modal .register-section .gender-picker .gender-choose {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.register-modal .body-modal .register-section .gender-picker .gender-choose .gender-label {
+  margin-right: 5px;
+}
+.register-modal .body-modal .register-section .gender-picker .gender-choose .gender-label:hover {
+  cursor: pointer;
+}
+.register-modal .body-modal .register-section .forgot-pass {
+  margin-top: 10px;
+  margin-bottom: 30px;
+}
+.register-modal .body-modal .register-section .forgot-pass > p {
+  font-size: 14px;
+  opacity: 0.8;
+}
+.register-modal .body-modal .register-section .forgot-pass > p:hover {
+  cursor: pointer;
+  opacity: 1;
+}
+.register-modal .body-modal .register-section .submit {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.register-modal .footer-modal .login-recommend {
+  margin-top: 20px;
+}
+.register-modal .footer-modal .login-recommend > h3 {
+  font-weight: 300;
+  font-size: 18px;
+  text-align: center;
+}
+.register-modal .footer-modal .login-recommend .login-btn {
+  margin-left: 10px;
+  font-weight: 600;
+  color: var(--primary-color);
+}
+.register-modal .footer-modal .login-recommend .login-btn:hover {
+  cursor: pointer;
+  color: rgb(255, 0, 51);
+}/*# sourceMappingURL=PersonalLogIn.module.css.map */

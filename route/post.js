@@ -134,15 +134,19 @@ router.delete("/delComment/post/:firstId/:secondId", async (req, res) => {
     }
 });
 
+// firstId => postId
+// secondId => commentId
+// NOT WORKING
 router.put("/updateComment/post/:firstId/:secondId", verifyToken, async (req, res) => {
     try {
         const { comment } = req.body;
         const postId = await Post.findById(req.params.firstId);
-        const cmtId = await Post.findById({ comments: { _id: req.params.secondId } });
+        //const cmtId = await Post.findById(comments: { _id: req.params.secondId });
         const data = {
             comment,
         };
-        postId = await Post.findByIdAndUpdate({ $push: { comment: cmtId } }, data);
+        await postId.updateOne({ comments: { comment:data } })
+        // postId = await Post.findByIdAndUpdate(cmtId, { comments: { comment: data } });
         const updateCmt = await postId.save();
         res.status(200).json(updateCmt);
     } catch (err) {

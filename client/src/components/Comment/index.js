@@ -305,7 +305,7 @@ function Comment({ setIsShowComment, dataShow = [] }) {
                             <div className={cn("infor")}>
                                 <h3>{userCurrent.username}</h3>
                                 <h4>
-                                    {userCurrent.fullname} - {moment(postCurrent.createdAt).startOf("hour").fromNow()}
+                                    {userCurrent.fullname} - {moment(postCurrent.createdAt).fromNow()}
                                 </h4>
                             </div>
 
@@ -541,7 +541,7 @@ function Comment({ setIsShowComment, dataShow = [] }) {
                                                     <h4>{cmt.comment}</h4>
                                                     <div className={cn("cmt-footer")}>
                                                         <span className={cn("cmt-time")}>
-                                                            {moment(cmt.createdAt).startOf("hour").fromNow()}
+                                                            {moment(cmt.createdAt).fromNow()}
                                                         </span>
                                                         <span className={cn("cmt-reply")}>Reply</span>
                                                     </div>

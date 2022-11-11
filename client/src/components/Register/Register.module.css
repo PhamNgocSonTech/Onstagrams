@@ -1,0 +1,202 @@
+.overal-modal {
+  background-color: transparent;
+}
+
+.register-modal {
+  padding: 48px 0px 0px;
+  overflow: visible !important;
+  height: 95% !important;
+}
+.register-modal .header-modal .close-btn {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgb(245, 245, 245);
+  width: 40px;
+  height: 40px;
+  padding: 10px;
+  border-radius: 50%;
+  right: 20px;
+  top: 20px;
+}
+.register-modal .header-modal .close-btn:hover {
+  cursor: pointer;
+}
+.register-modal .header-modal .close-btn:active {
+  background-color: rgb(231, 224, 224);
+}
+.register-modal .header-modal .back-btn {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 40px;
+  height: 40px;
+  padding: 10px;
+  left: 20px;
+  top: 20px;
+  border-radius: 50%;
+}
+.register-modal .header-modal .back-btn:hover {
+  cursor: pointer;
+}
+.register-modal .body-modal {
+  font-family: "ProximaNova";
+}
+.register-modal .body-modal .text {
+  font-family: "Lexend Deca", sans-serif;
+  margin: 12px 0 12px 0;
+  text-align: center;
+  color: var(--primary-color);
+  word-spacing: 2px;
+}
+.register-modal .body-modal .register-section {
+  padding-right: 5px;
+  width: 385px;
+  padding-bottom: 20px;
+  margin: 0 auto;
+  max-height: 460px;
+  border-bottom: 1px solid rgb(190, 189, 189);
+  overflow-y: auto;
+}
+.register-modal .body-modal .register-section::-webkit-scrollbar {
+  border-radius: 30px;
+  width: 4px;
+}
+.register-modal .body-modal .register-section::-webkit-scrollbar-thumb {
+  border-radius: 30px;
+  background-color: rgba(0, 0, 0, 0.15);
+}
+.register-modal .body-modal .register-section::-webkit-scrollbar-track {
+  border-radius: 30px;
+  background-color: rgba(0, 0, 0, 0);
+}
+.register-modal .body-modal .register-section .policy-check {
+  margin-bottom: 6px;
+}
+.register-modal .body-modal .register-section .policy-check > label {
+  font-size: 12px;
+}
+.register-modal .body-modal .register-section .policy-check > label:hover {
+  cursor: pointer;
+}
+.register-modal .body-modal .register-section .policy-check > input {
+  margin-right: 6px;
+  position: relative;
+  top: 2px;
+  accent-color: var(--primary-color);
+}
+.register-modal .body-modal .register-section .policy-check > input:hover {
+  cursor: pointer;
+}
+.register-modal .body-modal .register-section .validate-input {
+  position: relative;
+}
+.register-modal .body-modal .register-section .validate-input .show-hide-icon {
+  position: absolute;
+  right: 20px;
+  top: 21%;
+}
+.register-modal .body-modal .register-section .validate-input .show-hide-icon:hover {
+  cursor: pointer;
+}
+.register-modal .body-modal .register-section .validate-input .show-hide-icon:active {
+  opacity: 0.8;
+}
+.register-modal .body-modal .register-section .validate-input .infor-validation {
+  position: absolute;
+  top: 2px;
+  right: 4px;
+  opacity: 0.6;
+  z-index: 999;
+}
+.register-modal .body-modal .register-section .validate-input .tooltip-information {
+  position: absolute;
+  right: 0;
+  bottom: -50%;
+  left: 0;
+  z-index: 999;
+}
+.register-modal .body-modal .register-section .validate-input .tooltip-information.length-tooltip {
+  bottom: -90%;
+}
+.register-modal .body-modal .register-section .validate-input .tooltip-information span {
+  white-space: wrap;
+}
+.register-modal .body-modal .register-section .input-control {
+  font-family: "ProximaNova";
+  width: 100%;
+  border-radius: 4px;
+  background-color: rgba(166, 168, 179, 0.06);
+  border: 1px solid rgba(22, 24, 35, 0.12);
+  -webkit-padding-start: 12px;
+          padding-inline-start: 12px;
+  color: rgb(22, 24, 35);
+  line-height: 100%;
+  outline: none;
+  font-size: 16px;
+  height: 45px;
+  caret-color: rgb(254, 44, 85);
+  -webkit-padding-end: unset;
+          padding-inline-end: unset;
+  margin-bottom: 15px;
+  padding-right: 10px;
+}
+.register-modal .body-modal .register-section .gender-picker {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
+}
+.register-modal .body-modal .register-section .gender-picker .gender-choose {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.register-modal .body-modal .register-section .gender-picker .gender-choose .gender-label {
+  margin-right: 5px;
+}
+.register-modal .body-modal .register-section .gender-picker .gender-choose .gender-label:hover {
+  cursor: pointer;
+}
+.register-modal .body-modal .register-section .gender-picker .gender-choose input[type=radio] {
+  border: 2px solid white;
+  box-shadow: 0 0 0 1px var(--primary-color);
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  border-radius: 50%;
+  width: 12px;
+  height: 12px;
+  background-color: #fff;
+  transition: all ease-in 0.2s;
+}
+.register-modal .body-modal .register-section .gender-picker .gender-choose input[type=radio]:hover {
+  cursor: pointer;
+}
+.register-modal .body-modal .register-section .gender-picker .gender-choose input[type=radio]:checked {
+  background-color: var(--primary-color);
+}
+.register-modal .body-modal .register-section .submit {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.register-modal .footer-modal .login-recommend {
+  margin-top: 20px;
+}
+.register-modal .footer-modal .login-recommend > h3 {
+  font-weight: 300;
+  font-size: 18px;
+  text-align: center;
+}
+.register-modal .footer-modal .login-recommend .login-btn {
+  margin-left: 10px;
+  font-weight: 600;
+  color: var(--primary-color);
+}
+.register-modal .footer-modal .login-recommend .login-btn:hover {
+  cursor: pointer;
+  color: rgb(255, 0, 51);
+}/*# sourceMappingURL=Register.module.css.map */

@@ -1,0 +1,208 @@
+.wrapper {
+  display: flex;
+  padding-bottom: 40px !important;
+}
+.wrapper .avatar {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+.wrapper .avatar:hover {
+  cursor: pointer;
+}
+.wrapper .details {
+  margin-left: 15px;
+  width: 87%;
+}
+.wrapper .details .author {
+  margin-bottom: 4px;
+  display: flex;
+}
+.wrapper .details .author .username {
+  margin-right: 4px;
+  font-family: Sofiapro;
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 25px;
+}
+.wrapper .details .author .username.active, .wrapper .details .author .username:hover {
+  text-decoration: underline;
+}
+.wrapper .details .author .username:hover {
+  cursor: pointer;
+}
+.wrapper .details .author .name {
+  font-family: "Be Vietnam Pro", sans-serif;
+  font-size: 14px;
+  line-height: 30px;
+  vertical-align: middle;
+  margin-left: 5px;
+}
+.wrapper .details .author .name:hover {
+  cursor: pointer;
+}
+.wrapper .details .author .time {
+  font-family: "Be Vietnam Pro", sans-serif;
+  font-size: 14px;
+  line-height: 30px;
+  vertical-align: middle;
+  margin-left: 3px;
+}
+.wrapper .details .video-des {
+  margin-bottom: 10px;
+}
+.wrapper .details .video-des .cap {
+  font-weight: 400;
+  font-size: 16px;
+  font-family: "Be Vietnam Pro", sans-serif;
+}
+.wrapper .details .hashtag {
+  display: inline-block;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  color: rgb(22, 24, 35);
+  font-size: 16px;
+  padding: 0;
+  font-weight: 600;
+}
+.wrapper .details .hashtag:hover {
+  text-decoration: underline;
+}
+.wrapper .details .hashtag + .hashtag {
+  margin-left: 5px;
+}
+.wrapper .details .music {
+  margin: 4px 0 12px 0;
+  font-size: 14px;
+}
+.wrapper .details .video-container {
+  width: 100%;
+  border-radius: 8px;
+  height: 600px;
+  cursor: pointer;
+  background: #ffffff center no-repeat;
+  margin-right: 20px;
+  position: relative;
+}
+.wrapper .details .video-container .three-frames-image {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-gap: 15px;
+  width: 100%;
+  height: 100%;
+}
+.wrapper .details .video-container .three-frames-image img {
+  width: 100%;
+  height: 100%;
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+.wrapper .details .video-container .three-frames-image .other-img {
+  display: grid;
+  grid-template-rows: 2;
+  grid-gap: 15px;
+}
+.wrapper .details .video-container .img-list::-webkit-scrollbar {
+  border-radius: 50px;
+  width: 4px;
+}
+.wrapper .details .video-container .img-list::-webkit-scrollbar-thumb {
+  border-radius: 50px;
+  background-color: rgba(0, 0, 0, 0.15);
+}
+.wrapper .details .video-container .img-list::-webkit-scrollbar-track {
+  border-radius: 50px;
+  background-color: rgba(0, 0, 0, 0);
+}
+.wrapper .details .video-container .img-list .last-imgs {
+  position: relative;
+}
+.wrapper .details .video-container .img-list .last-imgs .excess-img {
+  background-color: rgba(0, 0, 0, 0.486);
+  position: absolute;
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: white;
+  font-size: 20px;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+.wrapper .details .video-container .img-list .last-imgs .excess-img:active {
+  opacity: 0.9;
+}
+.wrapper .details .video-container .video {
+  border-radius: 3px;
+}
+.wrapper .details .video-container .video:hover {
+  cursor: pointer;
+}
+.wrapper .details .video-container .video:active {
+  opacity: 0.9;
+}
+.wrapper .details .actions {
+  display: flex;
+  flex-direction: column;
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
+  position: absolute;
+  right: -62px;
+  bottom: 0;
+}
+.wrapper .details .actions .action .act-btn, .wrapper .details .actions .action .act-text {
+  display: block;
+}
+.wrapper .details .actions .action .act-btn {
+  width: 48px;
+  height: 48px;
+  background-color: rgba(22, 24, 35, 0.06);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 8px 0 6px 0;
+}
+.wrapper .details .actions .action .act-btn:hover {
+  background-color: rgba(22, 24, 35, 0.1);
+}
+.wrapper .details .actions .action .act-btn:active {
+  background-color: rgba(22, 24, 35, 0.253);
+}
+.wrapper .details .actions .action .act-text {
+  color: rgba(22, 24, 35, 0.75);
+  font-size: 12px;
+  font-weight: 800;
+  line-height: 17px;
+  text-align: center;
+}
+.wrapper .follow, .wrapper .following {
+  border: 1px solid var(--primary-color);
+  color: var(--primary-color);
+  border-radius: 4px;
+  width: 88px;
+  height: 28px;
+  padding: 0 10px;
+}
+.wrapper .follow .fl-text, .wrapper .following .fl-text, .wrapper .following .fling-text {
+  flex-grow: 1;
+  text-align: center;
+  font-size: 12px;
+}
+.wrapper .follow:hover, .wrapper .following:hover {
+  background-color: rgba(254, 44, 85, 0.06);
+}
+.wrapper .following {
+  border-color: rgb(208, 209, 211);
+}
+.wrapper .following .fling-text {
+  color: black;
+}
+.wrapper .following:hover {
+  background-color: rgb(248, 248, 248);
+}/*# sourceMappingURL=PostInfor.module.css.map */

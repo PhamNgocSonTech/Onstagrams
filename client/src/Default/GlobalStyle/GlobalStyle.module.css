@@ -1,0 +1,79 @@
+@import 'normalize.css';
+@import url("https://fonts.googleapis.com/css2?family=Comfortaa&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Readex+Pro:wght@300&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Lexend+Deca:wght@300;400;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Baloo+2&display=swap");
+:root {
+  --header-height: 60px;
+  --header-width: 1150px;
+  --sidebar-width: 356px;
+  --sidebar-width-profile-section: 280px;
+  --primary-color: rgba(254, 44, 85, 1.0);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 62.5%;
+}
+
+body {
+  font-family: "ProximaNova";
+  line-height: 1.5;
+  font-size: 1.6rem;
+  overflow-y: overlay;
+}
+
+@font-face {
+  font-family: ProximaNova;
+  src: url("../../assets/fonts/Proxima-Nova-Regular.woff2");
+}
+@font-face {
+  font-family: Sofiapro;
+  src: url("../../assets/fonts/sofiapro-bold.woff2");
+}
+@font-face {
+  font-family: ProximaNovaBold;
+  src: url("../../assets/fonts/Proxima-Nova-Bold.woff");
+}
+input, button {
+  border: none;
+  outline: none;
+}
+
+a {
+  text-decoration: none;
+}
+
+html *::-webkit-scrollbar {
+  border-radius: 0;
+  width: 8px;
+}
+
+html *::-webkit-scrollbar-thumb {
+  border-radius: 4px;
+  background-color: rgba(0, 0, 0, 0.15);
+}
+
+html *::-webkit-scrollbar-track {
+  border-radius: 0;
+  background-color: rgba(0, 0, 0, 0);
+}
+
+input[type=file]::-webkit-file-upload-button {
+  cursor: pointer;
+}
+
+input[type=password]::-ms-reveal,
+input[type=password]::-ms-clear {
+  display: none;
+}
+
+input[type=password] {
+  font-family: Verdana;
+}/*# sourceMappingURL=GlobalStyle.module.css.map */

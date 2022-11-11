@@ -1,0 +1,21 @@
+.empty-content {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 0px auto;
+  opacity: 0.5;
+  height: 490px;
+}
+.empty-content > img {
+  width: 90px;
+  height: 90px;
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+.empty-content > h2 {
+  margin-top: 15px;
+  font-family: "Lexend Deca", sans-serif;
+  font-weight: bold;
+}/*# sourceMappingURL=EmptyContent.module.css.map */

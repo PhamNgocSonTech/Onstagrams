@@ -1,0 +1,276 @@
+.wrapper {
+  display: flex;
+  height: 100%;
+  position: relative;
+  background-color: white;
+}
+.wrapper .close-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgb(95, 89, 89);
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  padding: 10px;
+  border-radius: 50%;
+  top: 20px;
+  left: 20px;
+  z-index: 99;
+}
+.wrapper .close-btn:hover {
+  background-color: rgb(105, 98, 98);
+  cursor: pointer;
+}
+.wrapper .close-btn:active {
+  background-color: rgb(131, 122, 122);
+}
+.wrapper .img-section {
+  background-color: rgb(207, 201, 201);
+  width: 60%;
+  height: 100%;
+  position: relative;
+}
+.wrapper .img-section img {
+  width: 100%;
+  height: 100%;
+  -o-object-fit: contain;
+     object-fit: contain;
+}
+.wrapper .img-section .slide {
+  position: absolute;
+  width: 45px;
+  height: 45px;
+}
+.wrapper .img-section .slide:hover {
+  cursor: pointer;
+}
+.wrapper .img-section .slide:active {
+  opacity: 0.9;
+}
+.wrapper .img-section .slide.left {
+  left: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+.wrapper .img-section .slide.right {
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+.wrapper .cmt-section {
+  flex-grow: 1;
+  height: 100%;
+  margin-top: 45px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  border-bottom: 1px solid black;
+}
+.wrapper .cmt-section .owner-infor {
+  padding: 0 20px;
+  width: 100%;
+}
+.wrapper .cmt-section .owner-infor .owner {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 15px;
+}
+.wrapper .cmt-section .owner-infor .owner .owner-avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+.wrapper .cmt-section .owner-infor .owner .infor {
+  margin-left: 12px;
+  flex-grow: 1;
+}
+.wrapper .cmt-section .owner-infor .owner .infor h3 {
+  font-family: "Lexend Deca", sans-serif;
+}
+.wrapper .cmt-section .owner-infor .owner .infor h4 {
+  font-weight: 300;
+  margin-top: -2px;
+}
+.wrapper .cmt-section .owner-infor .cap {
+  font-family: "Be Vietnam Pro", sans-serif;
+  font-size: 15px;
+}
+.wrapper .cmt-section .actions {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  justify-content: center;
+  padding-bottom: 15px;
+}
+.wrapper .cmt-section .actions .action {
+  margin: 0 10px;
+}
+.wrapper .cmt-section .actions .action .act-btn, .wrapper .cmt-section .actions .action .act-text {
+  display: block;
+}
+.wrapper .cmt-section .actions .action .act-btn {
+  width: 48px;
+  height: 48px;
+  background-color: rgba(22, 24, 35, 0.06);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 8px 0 6px 0;
+}
+.wrapper .cmt-section .actions .action .act-btn:hover {
+  background-color: rgba(22, 24, 35, 0.1);
+  cursor: pointer;
+}
+.wrapper .cmt-section .actions .action .act-text {
+  color: rgba(22, 24, 35, 0.75);
+  font-size: 12px;
+  font-weight: 800;
+  line-height: 17px;
+  text-align: center;
+}
+.wrapper .cmt-section .comments {
+  border-top: 1px solid rgba(22, 24, 35, 0.2);
+  background-color: rgb(255, 255, 255);
+  width: 100%;
+  padding: 20px 32px;
+  height: 352px;
+  overflow: scroll;
+}
+.wrapper .cmt-section .comments .comment {
+  display: flex;
+  margin-bottom: 15px;
+}
+.wrapper .cmt-section .comments .comment > img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+.wrapper .cmt-section .comments .comment .action-cmt {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.wrapper .cmt-section .comments .comment .action-cmt .act-btn-cmt {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.wrapper .cmt-section .comments .comment .action-cmt .act-text-cmt {
+  opacity: 0.7;
+  margin-top: 3px;
+  font-size: 15px;
+  text-align: center;
+}
+.wrapper .cmt-section .comments .empty-cmt {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.5;
+  font-family: "Lexend Deca", sans-serif;
+}
+.wrapper .cmt-section .comments .empty-cmt img {
+  width: 40px;
+  height: 40px;
+  margin-bottom: 10px;
+}
+.wrapper .cmt-section .comments .comment-content {
+  margin-left: 12px;
+  flex-grow: 1;
+}
+.wrapper .cmt-section .comments .comment-content > h4 {
+  margin-top: 2px;
+  font-family: "Baloo 2", cursive;
+  font-weight: 500;
+  font-size: 16px;
+}
+.wrapper .cmt-section .comments .comment-content > h3 {
+  font-family: "Baloo 2", cursive;
+  font-size: 17px;
+}
+.wrapper .cmt-section .comments .comment-content .cmt-footer {
+  margin-top: 4px;
+}
+.wrapper .cmt-section .comments .comment-content .cmt-footer .cmt-time {
+  opacity: 0.7;
+  font-size: 14px;
+}
+.wrapper .cmt-section .comments .comment-content .cmt-footer .cmt-reply {
+  font-size: 14px;
+  opacity: 0.7;
+  margin-left: 30px;
+}
+.wrapper .cmt-section .add-comment {
+  display: flex;
+  padding: 15px 30px;
+  margin: 0 30px;
+  width: 100%;
+}
+.wrapper .cmt-section .add-comment .input-field {
+  flex-grow: 1;
+  display: flex;
+  position: relative;
+}
+.wrapper .cmt-section .add-comment .input-field .emote-picker {
+  position: absolute;
+  bottom: 100%;
+  right: 2%;
+  z-index: 999;
+}
+.wrapper .cmt-section .add-comment .input-field > input {
+  font-family: "Baloo 2", cursive;
+  background-color: rgb(242, 239, 239);
+  height: 100%;
+  font-size: 15px;
+  padding: 10px;
+  width: 88%;
+  border-radius: 10px 0 0 10px;
+}
+.wrapper .cmt-section .add-comment .input-field > img {
+  background-color: rgb(241, 238, 238);
+  width: 40px;
+  border-left: 1px solid rgb(214, 204, 204);
+  border-radius: 0 10px 10px 0;
+  padding: 9px;
+}
+.wrapper .cmt-section .add-comment .input-field > img:hover {
+  cursor: pointer;
+}
+.wrapper .cmt-section .add-comment .input-field > img:active {
+  background-color: rgba(68, 67, 68, 0.445);
+}
+.wrapper .follow, .wrapper .following {
+  border: 1px solid var(--primary-color);
+  color: var(--primary-color);
+  border-radius: 4px;
+  width: 88px;
+  height: 35px;
+  padding: 0 10px;
+  align-self: center;
+}
+.wrapper .follow .fl-text, .wrapper .following .fl-text, .wrapper .following .fling-text {
+  flex-grow: 1;
+  text-align: center;
+  font-size: 12px;
+}
+.wrapper .follow:hover, .wrapper .following:hover {
+  background-color: rgba(254, 44, 85, 0.06);
+}
+.wrapper .following {
+  border-color: rgb(208, 209, 211);
+}
+.wrapper .following .fling-text {
+  color: black;
+}
+.wrapper .following:hover {
+  background-color: rgb(248, 248, 248);
+}/*# sourceMappingURL=Comment.module.css.map */

@@ -1,0 +1,98 @@
+.login-modal {
+  padding: 48px 0px 0px;
+  height: 66% !important;
+}
+.login-modal .header-modal .close-btn {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgb(245, 245, 245);
+  width: 40px;
+  height: 40px;
+  padding: 10px;
+  border-radius: 50%;
+  right: 20px;
+  top: 20px;
+}
+.login-modal .header-modal .close-btn:hover {
+  cursor: pointer;
+}
+.login-modal .header-modal .close-btn:active {
+  background-color: rgb(231, 224, 224);
+}
+.login-modal .body-modal {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 375px;
+  height: 280px;
+  margin: 0 auto;
+}
+.login-modal .body-modal .introduce {
+  margin-bottom: 10px;
+}
+.login-modal .body-modal .des {
+  margin-top: 15px;
+}
+.login-modal .body-modal .des .ques {
+  display: flex;
+  margin-bottom: 5px;
+}
+.login-modal .body-modal .des .ques img {
+  margin-right: 5px;
+}
+.login-modal .body-modal .text {
+  font-family: "Lexend Deca", sans-serif;
+  margin-top: 90px;
+  margin-bottom: 15px;
+  text-align: center;
+  color: var(--primary-color);
+  word-spacing: 2px;
+}
+.login-modal .body-modal .login-section {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  border-bottom: 1px solid #ccc;
+}
+.login-modal .body-modal .login-section .input-control {
+  font-family: "ProximaNova";
+  width: 200px;
+  text-align: center;
+  border-radius: 4px;
+  background-color: rgba(166, 168, 179, 0.06);
+  border: 1px solid rgba(22, 24, 35, 0.12);
+  -webkit-padding-start: 12px;
+          padding-inline-start: 12px;
+  color: rgb(22, 24, 35);
+  line-height: 100%;
+  outline: none;
+  font-size: 16px;
+  height: 45px;
+  caret-color: rgb(254, 44, 85);
+  -webkit-padding-end: unset;
+          padding-inline-end: unset;
+  margin-bottom: 15px;
+  padding-right: 10px;
+}
+.login-modal .body-modal .login-section .input-control::-webkit-outer-spin-button, .login-modal .body-modal .login-section .input-control::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.login-modal .body-modal .login-section .btn-login {
+  height: 45px;
+  font-size: 16px;
+  width: 140px;
+  margin-left: 0;
+  font-weight: 500;
+  justify-content: center !important;
+  font-family: "Readex Pro", sans-serif;
+}
+.login-modal .body-modal .login-section .img-login {
+  margin-right: 18px;
+}
+.login-modal .body-modal .login-section .btn-login + .btn-login {
+  margin-top: 20px;
+}/*# sourceMappingURL=VerifyAccount.module.css.map */

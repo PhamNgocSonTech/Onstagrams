@@ -1,0 +1,75 @@
+.login-modal {
+  padding: 48px 0px 0px;
+}
+.login-modal .header-modal .close-btn {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgb(245, 245, 245);
+  width: 40px;
+  height: 40px;
+  padding: 10px;
+  border-radius: 50%;
+  right: 20px;
+  top: 20px;
+}
+.login-modal .header-modal .close-btn:hover {
+  cursor: pointer;
+}
+.login-modal .header-modal .close-btn:active {
+  background-color: rgb(231, 224, 224);
+}
+.login-modal .body-modal {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.login-modal .body-modal .text {
+  font-family: "Lexend Deca", sans-serif;
+  margin-top: 20px;
+  text-align: center;
+  color: var(--primary-color);
+  word-spacing: 2px;
+}
+.login-modal .body-modal .login-section {
+  width: 375px;
+  height: 280px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: 0 auto;
+  border-bottom: 1px solid rgba(146, 146, 146, 0.712);
+}
+.login-modal .body-modal .login-section .btn-login {
+  height: 58px;
+  font-size: 16px;
+  width: 100%;
+  margin-left: 0;
+  font-weight: 500;
+  justify-content: start;
+  font-family: "Readex Pro", sans-serif;
+}
+.login-modal .body-modal .login-section .img-login {
+  margin-right: 18px;
+}
+.login-modal .body-modal .login-section .btn-login + .btn-login {
+  margin-top: 20px;
+}
+.login-modal .footer-modal .register-recommend {
+  margin-top: 35px;
+}
+.login-modal .footer-modal .register-recommend > h3 {
+  font-weight: 300;
+  font-size: 18px;
+  text-align: center;
+}
+.login-modal .footer-modal .register-recommend .register-btn {
+  margin-left: 10px;
+  font-weight: 600;
+  color: var(--primary-color);
+}
+.login-modal .footer-modal .register-recommend .register-btn:hover {
+  cursor: pointer;
+  color: rgb(255, 0, 51);
+}/*# sourceMappingURL=Login.module.css.map */
