@@ -364,7 +364,7 @@ export const addProfileTags = (src) => {
             contents: src,
         },
         {
-            name: "Shared",
+            name: "Posts",
             icon: profile_share,
             frame: SharedGallery,
         },

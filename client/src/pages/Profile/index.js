@@ -25,6 +25,7 @@ import EditProfile from "../../components/EditProfile";
 import Login from "../../components/Login";
 import jwt_decode from "jwt-decode";
 import { Skeleton } from "@mui/material";
+import { AnimatePresence } from "framer-motion";
 
 const cn = classNames.bind(styles);
 
@@ -428,7 +429,14 @@ function Profile() {
             </div>
 
             {/* Edit PopUp */}
-            {isOpenEditPopUp && <EditProfile setIsOpenEditPopUp={setIsOpenEditPopUp} />}
+            <AnimatePresence>
+                {isOpenEditPopUp && (
+                    <EditProfile
+                        key={"edit"}
+                        setIsOpenEditPopUp={setIsOpenEditPopUp}
+                    />
+                )}
+            </AnimatePresence>
         </div>
     );
 }

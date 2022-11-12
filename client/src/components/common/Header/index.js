@@ -2,7 +2,7 @@ import styles from "./Header.module.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleXmark, faSpinner } from "@fortawesome/free-solid-svg-icons";
 import classNames from "classnames/bind";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import logo from "../../../assets/image/header/logo.svg";
 import plus from "../../../assets/image/header/plus.svg";
 import more from "../../../assets/image/header/more.svg";
@@ -246,7 +246,14 @@ function Header({ isShowUploadBtn = true }) {
                 </div>
             </div>
             {/* Handle Login <Login handleClosePanel={setIsShowLogInPanel}*/}
-            {isShowLogInPanel && <Login handleClosePanel={setIsShowLogInPanel} />}
+            <AnimatePresence>
+                {isShowLogInPanel && (
+                    <Login
+                        key={"login"}
+                        handleClosePanel={setIsShowLogInPanel}
+                    />
+                )}
+            </AnimatePresence>
         </header>
     );
 }

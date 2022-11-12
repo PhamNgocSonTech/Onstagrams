@@ -7,10 +7,15 @@ import Button from "../common/Button";
 import { convert_milions } from "../../Default/constant";
 
 import check from "../../assets/image/header/check.svg";
+import { useNavigate } from "react-router-dom";
 
 const cn = classNames.bind(styles);
 
 function ProfilePopover({ className, userInfor }) {
+    const navigate = useNavigate();
+    function handleNegativeToProfile(id) {
+        navigate(`/profile/${id}`);
+    }
     return (
         <Popover className={cn("wrapper", { [className]: className })}>
             <div className={cn("header")}>
@@ -18,6 +23,7 @@ function ProfilePopover({ className, userInfor }) {
                     className={cn("avt")}
                     alt='img'
                     src={userInfor.avatar}
+                    onClick={() => handleNegativeToProfile(userInfor._id)}
                 />
                 <Button
                     className={cn("follow")}
@@ -26,7 +32,10 @@ function ProfilePopover({ className, userInfor }) {
                     Follow
                 </Button>
             </div>
-            <Button className={cn("username")}>
+            <Button
+                className={cn("username")}
+                onClick={() => handleNegativeToProfile(userInfor._id)}
+            >
                 {userInfor.username}
                 {userInfor.followers.length >= 5 && (
                     <img
@@ -36,7 +45,12 @@ function ProfilePopover({ className, userInfor }) {
                     />
                 )}
             </Button>
-            <p className={cn("name")}>{userInfor.fullname}</p>
+            <p
+                className={cn("name")}
+                onClick={() => handleNegativeToProfile(userInfor._id)}
+            >
+                {userInfor.fullname}
+            </p>
             <div className={cn("number-des")}>
                 <span className={cn("num")}>{convert_milions(userInfor.followers.length)}</span>
                 <span className={cn("label")}>Followers</span>

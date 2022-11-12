@@ -44,3 +44,11 @@ export const deletePost = async (accessToken, postId) => {
     });
     return results;
 };
+
+// Comment
+export const createComment = async (accessToken, postId, cmt) => {
+    const results = await usersConfig.put(`/comment/post/${postId}`, cmt, {
+        headers: { token: accessToken },
+    });
+    return results;
+};
