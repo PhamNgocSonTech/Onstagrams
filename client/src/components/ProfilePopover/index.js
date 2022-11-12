@@ -28,7 +28,7 @@ function ProfilePopover({ className, userInfor }) {
             </div>
             <Button className={cn("username")}>
                 {userInfor.username}
-                {userInfor.badge && (
+                {userInfor.followers.length >= 5 && (
                     <img
                         className={cn("check")}
                         src={check}

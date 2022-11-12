@@ -73,10 +73,10 @@ function Comment({ setIsShowComment, dataShow = [] }) {
 
     const [isShowEditMode, setIsShowEditMode] = useState(false);
 
-    const [isShowToast, setIsShowToast] = useState({ isShow: false, type: true, message: "" });
+    const [isShowToast, setIsShowToast] = useState({ isShow: false, type: false, message: "" });
     const [isShowLoadingModal, setIsShowLoadingModal] = useState(false);
 
-    const [isShowSubToast, setisShowSubToast] = useState({ isShow: false, type: true, message: "" });
+    const [isShowSubToast, setisShowSubToast] = useState({ isShow: false, type: false, message: "" });
 
     const [animate, setAnimate] = useState(false);
 
@@ -93,21 +93,71 @@ function Comment({ setIsShowComment, dataShow = [] }) {
     }
 
     function handleDeletePost() {
-        // setIsShowLoadingModal(true);
-        // const token = window.localStorage.getItem("accessToken");
-        // deletePost(token, postCurrent._id).then((res) => {
-        //     setIsShowLoadingModal(false);
-        //     console.log(isShowToast);
-        //     if (res.status === 200 || res.status === 304) {
-        //         setisShowSubToast({ isShow: true, type: false, message: res.data });
-        //         setTimeout(() => {
-        //             window.location.reload();
-        //         }, 1000);
-        //     } else {
-        //         setisShowSubToast({ isShow: true, type: false, message: res.data });
-        //     }
-        //     setisShowSubToast({ isShow: false, type: false, message: "" });
-        // });
+        setIsShowLoadingModal(true);
+        getPostByIdPost(srcDataShow.current[currentComment].postID).then((res) => {
+            const currPost = res.data[0];
+            const listImage = currPost.img.filter((imgUrl) => imgUrl.url !== srcDataShow.current[currentComment].url);
+            if (listImage.length > 0) {
+                // UPADATE PHOTO OF POST
+                const urlForm = listImage.map((img) => ({
+                    url: img.url,
+                    name: `${img.etag}.${img.format}`,
+                }));
+                Promise.all(urlForm.map((imgurl) => urlToObject(imgurl.url, imgurl.name))).then((res) => {
+                    let frmData = new FormData();
+                    res.forEach((file) => {
+                        frmData.append("img", file, file.name);
+                    });
+                    editPost(
+                        window.localStorage.getItem("accessToken"),
+                        srcDataShow.current[currentComment].postID,
+                        frmData
+                    ).then((res) => {
+                        setIsShowLoadingModal(false);
+                        if (res.status === 200 || res.status === 304) {
+                            setIsShowToast({
+                                isShow: true,
+                                type: true,
+                                message: "Deleted this photo successfully!",
+                            });
+                            setTimeout(() => {
+                                window.location.reload(true);
+                            }, 1000);
+                        } else {
+                            setIsShowToast({
+                                isShow: false,
+                                type: false,
+                                message: res.data,
+                            });
+                        }
+                    });
+                });
+            } else {
+                // LAST IMAGE => DELETE POST
+                deletePost(window.localStorage.getItem("accessToken"), srcDataShow.current[currentComment].postID).then(
+                    (res) => {
+                        setIsShowLoadingModal(false);
+                        if (res.status === 200 || res.status === 304) {
+                            setIsShowToast({
+                                isShow: true,
+                                type: true,
+                                message: "Deleted this photo successfully!",
+                            });
+                            setTimeout(() => {
+                                window.location.reload(true);
+                            }, 1000);
+                        } else {
+                            setIsShowToast({
+                                isShow: false,
+                                type: false,
+                                message: res.data,
+                            });
+                        }
+                    }
+                );
+            }
+            setIsShowToast({ isShow: false, type: false, message: "" });
+        });
     }
 
     const handleUpdatePost = () => {

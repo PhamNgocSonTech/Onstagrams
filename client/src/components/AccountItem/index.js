@@ -25,7 +25,7 @@ function AccountItem({ bold, smdes, userInfor, onMouseEnter, onMouseLeave }) {
             <div className={cn("infor")}>
                 <h4 className={cn({ bold })}>
                     {userInfor.username}
-                    {userInfor.badge && (
+                    {userInfor.followers.length >= 5 && (
                         <img
                             src={check}
                             alt='img'
