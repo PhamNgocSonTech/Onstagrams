@@ -63,7 +63,7 @@ router.post("/register", async(req, res) => {
         // const passwordHash = await bcrypt.hash(password, 12)
 
         const newUser = new User({
-            fullname, username, email, password: hashedPassword, gender, bio, external
+            fullname, username, email, password, gender, bio, external
         })
 
         const accessTokenJWT = jwt.sign({
@@ -194,13 +194,13 @@ router.post("/login", async(req, res) => {
 // };
 
 // This is the route for initiating the OAuth flow to Google
+
 router.get('/google', passport.authenticate('google', {scope: ['profile', 'email']})
 );
 
-// This is the route for initiating the OAuth flow to Facebook
-/* router.get('/facebook',
-  passport.authenticate('facebook', { scope: 'email' })
-); */
+router.get('/facebook', passport.authenticate('facebook', {scope: ['profile', 'email']})
+);
+
 
 
 // This is the callback\redirect url after the OAuth login at Google.
@@ -222,6 +222,18 @@ router.get("/google/callback", passport.authenticate('google', { session: false 
   }
 );
 
+router.get("/facebook/callback", passport.authenticate('facebook', { session: false }), (req, res) => {
+  jwt.sign({ user: req.user }, process.env.SESSION_SECRET, { expiresIn: "1h" }, (err, token) => {
+      if (err) {
+        return res.json({
+          token: null,
+        });
+      }
+      res.json({token});
+    });
+}
+);
+
 
 // This is the callback\redirect url after the OAuth login at Facebook.
 /* router.get(
@@ -235,10 +247,10 @@ router.get("/google/callback", passport.authenticate('google', { session: false 
 ); */
 
 // Navigating to the root url will ask passport to check for a valid token
-router.get('/', passport.authenticate('jwt', { session: false, failureRedirect: '/login' }), (req, res) => {
-    //res.render('home', { user: req.user });
-  }
-);
+// router.get('/', passport.authenticate('jwt', { session: false, failureRedirect: '/login' }), (req, res) => {
+//     //res.render('home', { user: req.user });
+//   }
+// );
 
 router.get('/logoutSso', (req, res) => {
   res.clearCookie('jwt');

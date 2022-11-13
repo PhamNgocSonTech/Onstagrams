@@ -1,6 +1,6 @@
 const passport = require("passport");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
-//const FacebookStrategy = require("passport-facebook").Strategy;
+const FacebookStrategy = require("passport-facebook").Strategy;
 const JWTStrategy = require("passport-jwt").Strategy;
 const { ExtractJwt } = require("passport-jwt");
 
@@ -49,20 +49,54 @@ passport.use(
   )
 );
 
-// passport.use(
-//   new FacebookStrategy(
-//     {
-//       clientID: facebookAppId,
-//       clientSecret: facebookSecretId,
-//       callbackURL: "/facebook/callback",
-//       profileFields: ['id', 'displayName', 'email', 'picture'],
+passport.use(
+  new FacebookStrategy(
+    {
+      clientID: facebookAppId,
+      clientSecret: facebookSecretId,
+      callbackURL: "api/auth/facebook/callback",
+    },
+    function (accessToken, refreshToken, profile, done) {
+      done(null, profile);
+    }
+  )
+);
 
-//     },
-//     function (accessToken, refreshToken, profile, done) {
-//       done(null, profile);
-//     }
-//   )
-// );
+/* passport.use(
+  new FacebookStrategy(
+    {
+      clientID: facebookAppId,
+      clientSecret: facebookSecretId,
+      callbackURL: "/api/auth/facebook/callback",
+      //profileFields: ['id', 'displayName', 'email', 'picture'],
+
+    },
+    async (request, accessToken, refreshToken, profile, done) => {
+      try {
+          let existingUser = await User.findOne({ 'email': profile.emails });
+          // if user exists return the user 
+          if (existingUser) {
+            return done(null, `user already exists ${existingUser}`);
+          }
+          // if user does not exist create a new user 
+          console.log('Creating new user...');
+          const newUser = new User({
+            method: 'facebook',
+              username: profile.displayName,
+              gender: 1,
+              password: '1111',
+              email: profile.emails,
+              accountType: 'facebook_account'
+            
+          });
+          await newUser.save();
+          return done(null, newUser);
+      } catch (error) {
+          return done(error, false)
+      }
+    }
+  )
+); */
 
 // passport.use(
 //   new JWTStrategy(

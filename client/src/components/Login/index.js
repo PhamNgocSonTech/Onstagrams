@@ -37,6 +37,10 @@ function Login({ handleClosePanel, className }) {
         window.open("http://localhost:5000/api/auth/google", "_self");
     };
 
+    const facebookHandle = () => {
+        window.open("http://localhost:5000/api/auth/facebook", "_self");
+    };
+
     return (
         <ParentContext.Provider
             value={{
@@ -65,6 +69,7 @@ function Login({ handleClosePanel, className }) {
                             className={cn("btn-login")}
                             classNameImg={cn("img-login")}
                             leftIcon={facebook}
+                            onClick={facebookHandle}
                             outline
                         >
                             Login with Facebook
