@@ -1,7 +1,7 @@
 import classNames from "classnames/bind";
 import styles from "./PostInfor.module.scss";
 import { useEffect, useRef, useState } from "react";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { ImageList, ImageListItem, Skeleton } from "@mui/material";
 import moment from "moment";
 
@@ -25,6 +25,7 @@ import jwt_decode from "jwt-decode";
 import { deletePost } from "../../utils/HttpRequest/post_request";
 import Toast from "../common/Toast";
 import LoadingModal from "../common/LoadingModal";
+import { useNavigate } from "react-router-dom";
 
 const cn = classNames.bind(styles);
 
@@ -83,6 +84,8 @@ function PostInfor({ postData = {} }) {
     const [isShowToast, setIsShowToast] = useState({ isShow: false, type: false, message: "" });
 
     const [isShowLoadingModal, setIsShowLoadingModal] = useState(false);
+
+    const negative = useNavigate();
 
     const ref = useRef();
 
@@ -149,6 +152,10 @@ function PostInfor({ postData = {} }) {
         dislike: {},
     };
 
+    function handleChangeToProfile(id) {
+        negative(`/profile/${id}`);
+    }
+
     function handleMouseHoverAvt() {
         setIsUnderlineUsername(true);
     }
@@ -190,6 +197,7 @@ function PostInfor({ postData = {} }) {
             {isGetAPIDone ? (
                 <img
                     className={cn("avatar")}
+                    onClick={() => handleChangeToProfile(dataUser._id)}
                     alt='avt'
                     src={dataUser.avatar}
                     onMouseEnter={handleMouseHoverAvt}
@@ -210,6 +218,7 @@ function PostInfor({ postData = {} }) {
                                 className={cn("username", {
                                     active: isUnderlineUsername,
                                 })}
+                                onClick={() => handleChangeToProfile(dataUser._id)}
                             >
                                 {dataUser.username}
                             </h3>
@@ -217,6 +226,7 @@ function PostInfor({ postData = {} }) {
                                 className={cn("name")}
                                 onMouseEnter={handleMouseHoverAvt}
                                 onMouseLeave={handleMouseLeaveAvt}
+                                onClick={() => handleChangeToProfile(dataUser._id)}
                             >
                                 {dataUser.fullname}
                             </h4>
@@ -348,11 +358,11 @@ function PostInfor({ postData = {} }) {
                                 <ImageListItem className={cn("last-imgs")}>
                                     <img
                                         className={cn("video")}
-                                        src={postData.img[4].url}
+                                        src={postData.img[3].url}
                                     />
                                     <div
                                         className={cn("excess-img")}
-                                        onClick={() => handleOpenComment(postData.img[4].url)}
+                                        onClick={() => handleOpenComment(postData.img[3].url)}
                                     >
                                         <h1>+{postData.img.length - 4}</h1>
                                     </div>
@@ -369,6 +379,7 @@ function PostInfor({ postData = {} }) {
                                     <motion.img
                                         alt='img'
                                         variants={animations}
+                                        whileHover={{ rotate: ["0", "-45deg", "45deg", "0deg"] }}
                                         src={isLike ? pink_heart : black_heart}
                                         animate={isLike ? "like" : "dislike"}
                                     />
@@ -380,18 +391,20 @@ function PostInfor({ postData = {} }) {
                                     className={cn("act-btn")}
                                     onClick={handleOpenCommentSection}
                                 >
-                                    <img
+                                    <motion.img
                                         alt='img'
                                         src={comment}
+                                        whileHover={{ rotate: ["0", "-45deg", "45deg", "0deg"] }}
                                     />
                                 </div>
                                 <span className={cn("act-text")}>{postData.comments.length}</span>
                             </div>
                             <div className={cn("action")}>
                                 <div className={cn("act-btn")}>
-                                    <img
+                                    <motion.img
                                         alt='img'
                                         src={share}
+                                        whileHover={{ rotate: ["0", "-45deg", "45deg", "0deg"] }}
                                     />
                                 </div>
                                 <span className={cn("act-text")}>0</span>
@@ -456,18 +469,24 @@ function PostInfor({ postData = {} }) {
             )}
 
             {/* Comment Section */}
-            {isShowPanel &&
-                (didLogin ? (
-                    <Comment setIsShowComment={setIsShowPanel} />
-                ) : (
-                    <Login handleClosePanel={setIsShowPanel} />
-                ))}
+            <AnimatePresence>
+                {isShowPanel &&
+                    (didLogin ? (
+                        <Comment setIsShowComment={setIsShowPanel} />
+                    ) : (
+                        <Login
+                            key={"oppenLogin"}
+                            handleClosePanel={setIsShowPanel}
+                        />
+                    ))}
+            </AnimatePresence>
             {isShowComment.isShow && (
                 <Comment
                     setIsShowComment={setIsShowComment}
                     dataShow={isShowComment.data}
                 />
             )}
+
             {isShowLoadingModal && <LoadingModal />}
             {isShowToast.isShow && (
                 <Toast

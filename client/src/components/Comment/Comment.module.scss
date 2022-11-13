@@ -49,6 +49,8 @@
 
             &:active {
                 opacity: 0.9;
+                scale: 1.1;
+                transition: all 0.3s;
             }
 
             &.left {
@@ -67,10 +69,10 @@
 
     .cmt-section {
         flex-grow: 1;
-        height: 100%;
         width: 528px;
-        margin-top: 45px;
+        margin-top: 40px;
         display: flex;
+        position: relative;
         align-items: center;
         flex-direction: column;
         border-bottom: 1px solid black;
@@ -78,6 +80,138 @@
         .owner-infor {
             padding: 0 20px;
             width: 100%;
+            max-height: 180px;
+            overflow-y: auto;
+
+            .cap-upload {
+                flex-grow: 1;
+                display: flex;
+                flex-direction: column;
+                padding: 0 20px;
+                width: 100%;
+                position: absolute;
+                left: 0;
+            
+                .hashtag2 {
+    
+                    .add-comment2 {
+                        display: flex;
+                        width: 100%;
+                        padding: 0;
+                        margin: 0;
+            
+            
+                        .input-field2 {
+                            flex-grow: 1;
+                            display: flex;
+                            position: relative;
+                            height: 46px;
+            
+                            & > input {
+                                background-color: rgb(255, 255, 255);
+                                border-left: 1px solid rgba(22, 24, 35, 0.12);
+                                border-top: 1px solid rgba(22, 24, 35, 0.12);
+                                border-bottom: 1px solid rgba(22, 24, 35, 0.12);
+                                border-radius: 4px;
+                                height: 100%;
+                                padding: 5px 15px;
+                                font-weight: 600;
+                                font-size: 15px;
+                                line-height: 18px;
+                                width: 1000%;
+                                border-radius: 5px 0 0 5px;
+                            }
+                            & > img {
+                                background-color: rgb(255, 255, 255);
+                                width: 40px;
+                                border-top: 1px solid rgb(214, 204, 204);
+                                border-right: 1px solid rgb(214, 204, 204);
+                                border-bottom: 1px solid rgb(214, 204, 204);
+                                border-radius: 0 5px 5px 0;
+                                padding: 9px;
+            
+                                &:hover {
+                                    cursor: pointer;
+                                }
+                                &:active {
+                                    background-color: rgba(184, 179, 184, 0.445);
+                                }
+                            }
+                        }
+                    }
+                }
+    
+                .caption2 {
+                    flex-grow: 1;
+                    margin-top: 15px;
+    
+                    .add-comment2 {
+                        display: flex;
+                        width: 100%;
+                        height: 440px;
+                        padding: 0;
+                        margin: 0;
+            
+                        .input-field2 {
+                            flex-grow: 1;
+                            display: flex;
+                            position: relative;
+                            height: 100%;
+    
+                            .emote-picker2 {
+                                position: absolute;
+                                bottom: 10px;
+                                right: 50px;
+                                z-index: 99;
+                            } 
+            
+                            & > textarea {
+                                resize: none;
+                                background-color: rgb(255, 255, 255);
+                                border: 1px solid rgba(22, 24, 35, 0.12);
+                                border-radius: 5px;
+                                font-family: "ProximaNova";
+                                height: 100%;
+                                padding: 5px 15px;
+                                font-weight: 500;
+                                font-size: 15px;
+                                line-height: 25px;
+                                width: 100%;
+                                overflow: auto;
+                                outline: none;
+                                -webkit-box-shadow: none;
+                                -moz-box-shadow: none;
+                                box-shadow: none;
+                            }
+                            & > img {
+                                background-color: rgb(255, 255, 255);
+                                width: 40px;
+                                border: 1px solid rgb(214, 204, 204);
+                                border-radius: 5px;
+    
+                                padding: 9px;
+                                position: absolute;
+                                right: 10px;
+                                bottom: 10px;
+            
+                                &:hover {
+                                    cursor: pointer;
+                                }
+                                &:active {
+                                    background-color: rgba(184, 179, 184, 0.445);
+                                }
+                            }
+                        }
+                    }
+                }
+    
+                .submit-update2 {
+                    display: flex;
+                    justify-content: flex-end;
+                    margin-top: 15px;
+                }
+            }
+
             .hashtag {
                 display: inline-block;
                 font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -94,6 +228,12 @@
                     margin-left: 5px;
                 }
             }
+            .cap {
+                font-family: 'Be Vietnam Pro', sans-serif;
+                font-size: 15px;
+                word-break: break-all;
+            }
+
             .owner {
                 display: flex;
                 flex-direction: row;
@@ -168,6 +308,10 @@
                     height: 50px;
                     border-radius: 50%;
                     object-fit: cover;
+
+                    &:hover {
+                        cursor: pointer;
+                    }
                 }
 
                 .infor {
@@ -176,6 +320,11 @@
 
                     h3 {
                         font-family: 'Lexend Deca', sans-serif;
+
+                        &:hover {
+                            cursor: pointer;
+                            text-decoration: underline;
+                        }
                     }
 
                     h4 {
@@ -183,139 +332,11 @@
                         margin-top: 2px;
                         font-family: "Be Vietnam Pro", sans-serif;
                         font-size: 14px;
-                    }
-                }
-            }
 
-            .cap {
-                font-family: 'Be Vietnam Pro', sans-serif;
-                font-size: 15px;
-                max-height: 45px;
-                word-break: break-all;
-                overflow-y: auto;
-            }
-
-            .cap-upload {
-                flex-grow: 1;
-                display: flex;
-                flex-direction: column;
-                .hashtag {
-    
-                    .add-comment {
-                        display: flex;
-                        width: 100%;
-                        padding: 0;
-                        margin: 0;
-            
-            
-                        .input-field {
-                            flex-grow: 1;
-                            display: flex;
-                            position: relative;
-                            height: 46px;
-            
-                            & > input {
-                                background-color: rgb(255, 255, 255);
-                                border-left: 1px solid rgba(22, 24, 35, 0.12);
-                                border-top: 1px solid rgba(22, 24, 35, 0.12);
-                                border-bottom: 1px solid rgba(22, 24, 35, 0.12);
-                                border-radius: 4px;
-                                height: 100%;
-                                padding: 5px 15px;
-                                font-weight: 600;
-                                font-size: 15px;
-                                line-height: 18px;
-                                width: 1000%;
-                                border-radius: 5px 0 0 5px;
-                            }
-                            & > img {
-                                background-color: rgb(255, 255, 255);
-                                width: 40px;
-                                border-top: 1px solid rgb(214, 204, 204);
-                                border-right: 1px solid rgb(214, 204, 204);
-                                border-bottom: 1px solid rgb(214, 204, 204);
-                                border-radius: 0 5px 5px 0;
-                                padding: 9px;
-            
-                                &:hover {
-                                    cursor: pointer;
-                                }
-                                &:active {
-                                    background-color: rgba(184, 179, 184, 0.445);
-                                }
-                            }
+                        &:hover {
+                            cursor: pointer;
                         }
                     }
-                }
-    
-                .caption {
-                    flex-grow: 1;
-                    margin-top: 15px;
-    
-                    .add-comment {
-                        display: flex;
-                        width: 100%;
-                        height: 440px;
-                        padding: 0;
-                        margin: 0;
-            
-                        .input-field {
-                            flex-grow: 1;
-                            display: flex;
-                            position: relative;
-                            height: 100%;
-    
-                            .emote-picker {
-                                position: absolute;
-                                bottom: 10px;
-                                right: 50px;
-                                z-index: 99;
-                            } 
-            
-                            & > textarea {
-                                resize: none;
-                                background-color: rgb(255, 255, 255);
-                                border: 1px solid rgba(22, 24, 35, 0.12);
-                                border-radius: 5px;
-                                font-family: "ProximaNova";
-                                height: 100%;
-                                padding: 5px 15px;
-                                font-weight: 500;
-                                font-size: 15px;
-                                line-height: 25px;
-                                width: 100%;
-                                overflow: auto;
-                                outline: none;
-                                -webkit-box-shadow: none;
-                                -moz-box-shadow: none;
-                                box-shadow: none;
-                            }
-                            & > img {
-                                background-color: rgb(255, 255, 255);
-                                width: 40px;
-                                border: 1px solid rgb(214, 204, 204);
-                                border-radius: 5px;
-    
-                                padding: 9px;
-                                position: absolute;
-                                right: 10px;
-                                bottom: 10px;
-            
-                                &:hover {
-                                    cursor: pointer;
-                                }
-                                &:active {
-                                    background-color: rgba(184, 179, 184, 0.445);
-                                }
-                            }
-                        }
-                    }
-                }
-
-                .submit-update {
-                    display: flex;
-                    justify-content: flex-end;
-                    margin-top: 10px;
                 }
             }
         }
@@ -378,6 +399,10 @@
                     height: 50px;
                     border-radius: 50%;
                     object-fit: cover;
+
+                    &:hover {
+                        cursor: pointer;
+                    }
                 }
 
                 .action-cmt {
@@ -431,6 +456,10 @@
                 & > h3 {
                     font-family: 'Baloo 2', cursive;
                     font-size: 17px;
+                    &:hover {
+                        cursor: pointer;
+                        text-decoration: underline;
+                    }
                 }
 
                 .cmt-footer {
@@ -455,6 +484,15 @@
             padding: 10px 30px;
             margin: 0 30px;
             width: 100%;
+            bottom: 0;
+            position: absolute;
+            background-color: white;
+
+            .login-btn {
+                width: 100%;
+                display: flex;
+                justify-content: center;
+            }
 
 
             .input-field {

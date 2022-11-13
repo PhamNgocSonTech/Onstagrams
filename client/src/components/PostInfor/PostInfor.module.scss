@@ -156,7 +156,6 @@
         .video-container{
             width: 100%;
             border-radius: 8px;
-            height: 600px;
             cursor: pointer;
             background: #ffffff center no-repeat;
             margin-right: 20px;
@@ -228,6 +227,7 @@
 
             .video {
                 border-radius: 3px;
+                object-fit: cover;
 
                 &:hover {
                     cursor: pointer;

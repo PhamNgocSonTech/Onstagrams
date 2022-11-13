@@ -13,6 +13,10 @@
             height: 44px;
             border-radius: 50%;
             object-fit: cover;
+
+            &:hover {
+                cursor: pointer;
+            }
         }
 
         .follow {
@@ -35,13 +39,16 @@
         .check {
             margin-left: 4px;
         }
-
     }
     .name {
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         font-weight: 600;
         font-size: 13px;
         line-height: 20px;
+
+        &:hover {
+            cursor: pointer;
+        }
     }
 
     .number-des {

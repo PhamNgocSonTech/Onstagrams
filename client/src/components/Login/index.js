@@ -12,6 +12,7 @@ import person from "../../assets/image/login/person.svg";
 import PersonalLogIn from "../PersonalLogIn";
 import Register from "../Register";
 import { createContext, useState } from "react";
+import { AnimatePresence } from "framer-motion";
 
 const cn = classNames.bind(styles);
 export const ParentContext = createContext();
@@ -102,10 +103,16 @@ function Login({ handleClosePanel, className }) {
                         </h3>
                     </div>
                 </div>
-
                 {/* Handle Open Another Form */}
-                {isOpenRegisterForm && <Register />}
-                {isOpenPersonalLogInForm.open && <PersonalLogIn isShowDoneRegister={isOpenPersonalLogInForm.panel} />}
+                <AnimatePresence>
+                    {isOpenRegisterForm && <Register key={"regis"} />}
+                    {isOpenPersonalLogInForm.open && (
+                        <PersonalLogIn
+                            key={"perlog"}
+                            isShowDoneRegister={isOpenPersonalLogInForm.panel}
+                        />
+                    )}
+                </AnimatePresence>
             </Modal_Center>
         </ParentContext.Provider>
     );

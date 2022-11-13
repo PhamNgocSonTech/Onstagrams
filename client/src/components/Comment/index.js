@@ -18,7 +18,7 @@ import right from "../../assets/image/comment/right.svg";
 import comments from "../../assets/image/comment/comments.svg";
 import more from "../../assets/image/comment/more.svg";
 import hashtag from "../../assets/image/upload/hashtag.svg";
-import { deletePost, editPost, getPostByIdPost } from "../../utils/HttpRequest/post_request";
+import { createComment, createPost, deletePost, editPost, getPostByIdPost } from "../../utils/HttpRequest/post_request";
 import { getUserById } from "../../utils/HttpRequest/user_request";
 import { urlToObject } from "../../utils/URLtoFileObject/convertURL";
 import moment from "moment";
@@ -29,6 +29,7 @@ import Popover from "../common/Popover";
 import Modal_Center from "../common/Modal/Modal_Center";
 import Toast from "../common/Toast";
 import LoadingModal from "../common/LoadingModal";
+import { useNavigate } from "react-router-dom";
 
 const cn = classNames.bind(styles);
 
@@ -64,6 +65,8 @@ function Comment({ setIsShowComment, dataShow = [] }) {
     const refDelete = useRef();
     const refUpdate = useRef();
     const htRef = useRef();
+    const ipcmtRef = useRef();
+    const navigate = useNavigate();
 
     const [isOpenFormDelete, setIsOpenFormDelete] = useState(false);
     const [isOpenAcceptDeleteOption, setIsOpenAcceptDeleteOption] = useState(false);
@@ -73,12 +76,14 @@ function Comment({ setIsShowComment, dataShow = [] }) {
 
     const [isShowEditMode, setIsShowEditMode] = useState(false);
 
-    const [isShowToast, setIsShowToast] = useState({ isShow: false, type: true, message: "" });
+    const [isShowToast, setIsShowToast] = useState({ isShow: false, type: false, message: "" });
     const [isShowLoadingModal, setIsShowLoadingModal] = useState(false);
 
-    const [isShowSubToast, setisShowSubToast] = useState({ isShow: false, type: true, message: "" });
+    const [isShowSubToast, setisShowSubToast] = useState({ isShow: false, type: false, message: "" });
 
     const [animate, setAnimate] = useState(false);
+
+    const [refreshData, setRefreshData] = useState(false);
 
     function handleInputChange(index, e) {
         if (index === 0) {
@@ -92,22 +97,86 @@ function Comment({ setIsShowComment, dataShow = [] }) {
         }
     }
 
+    function handleNavigateToProfile(id) {
+        navigate(`/profile/${id}`);
+        setIsShowComment(false);
+    }
+
+    function handleSubmitComment() {
+        const token = window.localStorage.getItem("accessToken");
+        const idPost = srcDataShow.current[currentComment].postID;
+        createComment(token, idPost, { comment: cmt }).then((res) => {
+            setRefreshData(!refreshData);
+            setCmt("");
+        });
+    }
+
     function handleDeletePost() {
-        // setIsShowLoadingModal(true);
-        // const token = window.localStorage.getItem("accessToken");
-        // deletePost(token, postCurrent._id).then((res) => {
-        //     setIsShowLoadingModal(false);
-        //     console.log(isShowToast);
-        //     if (res.status === 200 || res.status === 304) {
-        //         setisShowSubToast({ isShow: true, type: false, message: res.data });
-        //         setTimeout(() => {
-        //             window.location.reload();
-        //         }, 1000);
-        //     } else {
-        //         setisShowSubToast({ isShow: true, type: false, message: res.data });
-        //     }
-        //     setisShowSubToast({ isShow: false, type: false, message: "" });
-        // });
+        setIsShowLoadingModal(true);
+        getPostByIdPost(srcDataShow.current[currentComment].postID).then((res) => {
+            const currPost = res.data[0];
+            const listImage = currPost.img.filter((imgUrl) => imgUrl.url !== srcDataShow.current[currentComment].url);
+            if (listImage.length > 0) {
+                // UPADATE PHOTO OF POST
+                const urlForm = listImage.map((img) => ({
+                    url: img.url,
+                    name: `${img.etag}.${img.format}`,
+                }));
+                Promise.all(urlForm.map((imgurl) => urlToObject(imgurl.url, imgurl.name))).then((res) => {
+                    let frmData = new FormData();
+                    res.forEach((file) => {
+                        frmData.append("img", file, file.name);
+                    });
+                    editPost(
+                        window.localStorage.getItem("accessToken"),
+                        srcDataShow.current[currentComment].postID,
+                        frmData
+                    ).then((res) => {
+                        setIsShowLoadingModal(false);
+                        if (res.status === 200 || res.status === 304) {
+                            setIsShowToast({
+                                isShow: true,
+                                type: true,
+                                message: "Deleted this photo successfully!",
+                            });
+                            setTimeout(() => {
+                                window.location.reload(true);
+                            }, 1000);
+                        } else {
+                            setIsShowToast({
+                                isShow: false,
+                                type: false,
+                                message: res.data,
+                            });
+                        }
+                    });
+                });
+            } else {
+                // LAST IMAGE => DELETE POST
+                deletePost(window.localStorage.getItem("accessToken"), srcDataShow.current[currentComment].postID).then(
+                    (res) => {
+                        setIsShowLoadingModal(false);
+                        if (res.status === 200 || res.status === 304) {
+                            setIsShowToast({
+                                isShow: true,
+                                type: true,
+                                message: "Deleted this photo successfully!",
+                            });
+                            setTimeout(() => {
+                                window.location.reload(true);
+                            }, 1000);
+                        } else {
+                            setIsShowToast({
+                                isShow: false,
+                                type: false,
+                                message: res.data,
+                            });
+                        }
+                    }
+                );
+            }
+            setIsShowToast({ isShow: false, type: false, message: "" });
+        });
     }
 
     const handleUpdatePost = () => {
@@ -212,8 +281,15 @@ function Comment({ setIsShowComment, dataShow = [] }) {
                         setUserCurrent(user.data);
                         const token = window.localStorage.getItem("accessToken");
                         if (token) {
+                            // LOGGED IN
                             const id_current = jwt_decode(token)._id;
-                            id_current === user.data._id && setIsMyPost(true);
+                            // CHECK FOLLOW
+                            if (id_current === user.data._id) {
+                                setIsMyPost(true);
+                            } else {
+                                user.data.followers.filter((Idfollower) => Idfollower === id_current).length > 0 &&
+                                    setIsFollow(true);
+                            }
                         }
                     }
                 });
@@ -232,7 +308,7 @@ function Comment({ setIsShowComment, dataShow = [] }) {
                 });
             }
         });
-    }, [currentComment]);
+    }, [currentComment, refreshData]);
 
     const handleNextClick = () => {
         setIsShowEditMode(false);
@@ -301,8 +377,12 @@ function Comment({ setIsShowComment, dataShow = [] }) {
                                 className={cn("owner-avatar")}
                                 src={userCurrent.avatar}
                                 alt=''
+                                onClick={() => handleNavigateToProfile(userCurrent._id)}
                             />
-                            <div className={cn("infor")}>
+                            <div
+                                className={cn("infor")}
+                                onClick={() => handleNavigateToProfile(userCurrent._id)}
+                            >
                                 <h3>{userCurrent.username}</h3>
                                 <h4>
                                     {userCurrent.fullname} - {moment(postCurrent.createdAt).fromNow()}
@@ -343,35 +423,40 @@ function Comment({ setIsShowComment, dataShow = [] }) {
                                             </Button>
                                         </Popover>
                                     )}
-                                    {isOpenFormDelete && (
-                                        <Modal_Center className={cn("accept-delete-form")}>
-                                            <h2>Are you sure to delete this photo ? </h2>
-                                            <div className={cn("accept-btns")}>
-                                                <Button
-                                                    className={cn("accept-btn")}
-                                                    outlinePrimary
-                                                    onClick={() => {
-                                                        setIsOpenFormDelete(false);
-                                                    }}
-                                                >
-                                                    No
-                                                </Button>
-                                                <Button
-                                                    className={cn("accept-btn")}
-                                                    outlinePrimary
-                                                    onClick={handleDeletePost}
-                                                >
-                                                    Yes
-                                                </Button>
-                                            </div>
-                                            {isShowSubToast.isShow && (
-                                                <Toast
-                                                    message={isShowSubToast.message}
-                                                    state={isShowSubToast.type}
-                                                />
-                                            )}
-                                        </Modal_Center>
-                                    )}
+                                    <AnimatePresence>
+                                        {isOpenFormDelete && (
+                                            <Modal_Center
+                                                key={"deleteMD"}
+                                                className={cn("accept-delete-form")}
+                                            >
+                                                <h2>Are you sure to delete this photo ? </h2>
+                                                <div className={cn("accept-btns")}>
+                                                    <Button
+                                                        className={cn("accept-btn")}
+                                                        outlinePrimary
+                                                        onClick={() => {
+                                                            setIsOpenFormDelete(false);
+                                                        }}
+                                                    >
+                                                        No
+                                                    </Button>
+                                                    <Button
+                                                        className={cn("accept-btn")}
+                                                        outlinePrimary
+                                                        onClick={handleDeletePost}
+                                                    >
+                                                        Yes
+                                                    </Button>
+                                                </div>
+                                                {isShowSubToast.isShow && (
+                                                    <Toast
+                                                        message={isShowSubToast.message}
+                                                        state={isShowSubToast.type}
+                                                    />
+                                                )}
+                                            </Modal_Center>
+                                        )}
+                                    </AnimatePresence>
                                 </div>
                             ) : isFollow ? (
                                 <Button
@@ -391,7 +476,6 @@ function Comment({ setIsShowComment, dataShow = [] }) {
                                 </Button>
                             )}
                         </div>
-
                         <AnimatePresence>
                             {isShowEditMode ? (
                                 <motion.div
@@ -407,9 +491,9 @@ function Comment({ setIsShowComment, dataShow = [] }) {
                                     animate={{ opacity: 1, x: 0 }}
                                     exit={{ opacity: 0, x: 100 }}
                                 >
-                                    <div className={cn("hashtag")}>
-                                        <div className={cn("add-comment")}>
-                                            <div className={cn("input-field")}>
+                                    <div className={cn("hashtag2")}>
+                                        <div className={cn("add-comment2")}>
+                                            <div className={cn("input-field2")}>
                                                 <input
                                                     type='text'
                                                     placeholder='Add hashtag...'
@@ -425,14 +509,14 @@ function Comment({ setIsShowComment, dataShow = [] }) {
                                             </div>
                                         </div>
                                     </div>
-                                    <div className={cn("caption")}>
-                                        <div className={cn("add-comment")}>
+                                    <div className={cn("caption2")}>
+                                        <div className={cn("add-comment2")}>
                                             <div
-                                                className={cn("input-field")}
+                                                className={cn("input-field2")}
                                                 ref={refUpdate}
                                             >
                                                 <textarea
-                                                    className={cn("cap-input")}
+                                                    className={cn("cap-input2")}
                                                     placeholder='Hmmmm, What are you thinking about...?'
                                                     value={descBind}
                                                     onChange={(e) => handleInputChange(1, e)}
@@ -444,7 +528,7 @@ function Comment({ setIsShowComment, dataShow = [] }) {
                                                     onClick={() => setIsShowEmotePicker(!isShowEmotePicker)}
                                                 />
                                                 {isShowEmotePicker && (
-                                                    <div className={cn("emote-picker")}>
+                                                    <div className={cn("emote-picker2")}>
                                                         <EmojiPicker
                                                             emojiStyle='facebook'
                                                             onEmojiClick={handleEmoteClick}
@@ -455,7 +539,7 @@ function Comment({ setIsShowComment, dataShow = [] }) {
                                             </div>
                                         </div>
                                     </div>
-                                    <div className={cn("submit-update")}>
+                                    <div className={cn("submit-update2")}>
                                         <Button
                                             outlinePrimary
                                             onClick={() => {
@@ -488,6 +572,7 @@ function Comment({ setIsShowComment, dataShow = [] }) {
                             )}
                         </AnimatePresence>
                     </div>
+
                     {!isShowEditMode && (
                         <>
                             <div className={cn("actions")}>
@@ -499,6 +584,7 @@ function Comment({ setIsShowComment, dataShow = [] }) {
                                         <motion.img
                                             alt='img'
                                             variants={animations}
+                                            whileHover={{ rotate: ["0", "-45deg", "45deg", "0deg"] }}
                                             src={isLike ? pink_heart : black_heart}
                                             animate={isLike ? "like" : "unlike"}
                                         />
@@ -507,8 +593,9 @@ function Comment({ setIsShowComment, dataShow = [] }) {
                                 </div>
                                 <div className={cn("action")}>
                                     <div className={cn("act-btn")}>
-                                        <img
+                                        <motion.img
                                             alt='img'
+                                            whileHover={{ rotate: ["0", "-45deg", "45deg", "0deg"] }}
                                             src={comment}
                                         />
                                     </div>
@@ -516,7 +603,8 @@ function Comment({ setIsShowComment, dataShow = [] }) {
                                 </div>
                                 <div className={cn("action")}>
                                     <div className={cn("act-btn")}>
-                                        <img
+                                        <motion.img
+                                            whileHover={{ rotate: ["0", "-45deg", "45deg", "0deg"] }}
                                             alt='img'
                                             src={share}
                                         />
@@ -535,9 +623,22 @@ function Comment({ setIsShowComment, dataShow = [] }) {
                                                 <img
                                                     src={postCurrent.usercomments[index].data.avatar}
                                                     alt='avatar'
+                                                    onClick={() =>
+                                                        handleNavigateToProfile(
+                                                            postCurrent.usercomments[index].data._id
+                                                        )
+                                                    }
                                                 />
                                                 <div className={cn("comment-content")}>
-                                                    <h3>{postCurrent.usercomments[index].data.username}</h3>
+                                                    <h3
+                                                        onClick={() =>
+                                                            handleNavigateToProfile(
+                                                                postCurrent.usercomments[index].data._id
+                                                            )
+                                                        }
+                                                    >
+                                                        {postCurrent.usercomments[index].data.username}
+                                                    </h3>
                                                     <h4>{cmt.comment}</h4>
                                                     <div className={cn("cmt-footer")}>
                                                         <span className={cn("cmt-time")}>
@@ -569,32 +670,52 @@ function Comment({ setIsShowComment, dataShow = [] }) {
                                 )}
                             </div>
                             <div className={cn("add-comment")}>
-                                <div
-                                    className={cn("input-field")}
-                                    ref={ref}
-                                >
-                                    {isShowEmotePicker && (
-                                        <div className={cn("emote-picker")}>
-                                            <EmojiPicker
-                                                emojiStyle='facebook'
-                                                onEmojiClick={handleEmoteClick}
+                                {window.localStorage.getItem("accessToken") ? (
+                                    <>
+                                        {" "}
+                                        <div
+                                            className={cn("input-field")}
+                                            ref={ref}
+                                        >
+                                            {isShowEmotePicker && (
+                                                <div className={cn("emote-picker")}>
+                                                    <EmojiPicker
+                                                        emojiStyle='facebook'
+                                                        onEmojiClick={(emote) => setCmt((pre) => pre + emote.emoji)}
+                                                        lazyLoadEmojis={true}
+                                                    />
+                                                </div>
+                                            )}
+
+                                            <input
+                                                type='text'
+                                                value={cmt}
+                                                onChange={handleCommentType}
+                                                placeholder='Add comment...'
+                                                onFocus={handleHideEmotePicker}
+                                                ref={ipcmtRef}
+                                            />
+                                            <img
+                                                onClick={handleToggleEmotePicker}
+                                                src={smile}
+                                                alt=''
                                             />
                                         </div>
-                                    )}
-                                    <input
-                                        type='text'
-                                        value={cmt}
-                                        onChange={handleCommentType}
-                                        placeholder='Add comment...'
-                                        onFocus={handleHideEmotePicker}
-                                    />
-                                    <img
-                                        onClick={handleToggleEmotePicker}
-                                        src={smile}
-                                        alt=''
-                                    />
-                                </div>
-                                <Button outline>Post</Button>
+                                        <Button
+                                            outline
+                                            onClick={handleSubmitComment}
+                                        >
+                                            Post
+                                        </Button>
+                                    </>
+                                ) : (
+                                    <Button
+                                        outlinePrimary={true}
+                                        className={cn("login-btn")}
+                                    >
+                                        Login to comment this post
+                                    </Button>
+                                )}
                             </div>
                         </>
                     )}

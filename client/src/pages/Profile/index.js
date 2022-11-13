@@ -9,6 +9,7 @@ import { getUserById, followUserHasId, unfollowUserHasId } from "../../utils/Htt
 import { getPostByIdUser } from "../../utils/HttpRequest/post_request";
 
 import Popover from "../../components/common/Popover";
+import check from "../../assets/image/header/check.svg";
 import VerifyAccount from "../../components/VerifyAccount";
 import Button from "../../components/common/Button";
 import edit from "../../assets/image/profile/edit.svg";
@@ -24,6 +25,7 @@ import EditProfile from "../../components/EditProfile";
 import Login from "../../components/Login";
 import jwt_decode from "jwt-decode";
 import { Skeleton } from "@mui/material";
+import { AnimatePresence } from "framer-motion";
 
 const cn = classNames.bind(styles);
 
@@ -201,7 +203,16 @@ function Profile() {
                                 </div>
                             ) : (
                                 <>
-                                    <h2>{user.username}</h2>
+                                    <h2>
+                                        {user.username}
+                                        {user.followers.length >= 5 && (
+                                            <img
+                                                src={check}
+                                                alt=''
+                                                style={{ marginLeft: "10px" }}
+                                            />
+                                        )}
+                                    </h2>
                                     <h5>{user.fullname}</h5>
                                 </>
                             )}
@@ -418,7 +429,14 @@ function Profile() {
             </div>
 
             {/* Edit PopUp */}
-            {isOpenEditPopUp && <EditProfile setIsOpenEditPopUp={setIsOpenEditPopUp} />}
+            <AnimatePresence>
+                {isOpenEditPopUp && (
+                    <EditProfile
+                        key={"edit"}
+                        setIsOpenEditPopUp={setIsOpenEditPopUp}
+                    />
+                )}
+            </AnimatePresence>
         </div>
     );
 }
