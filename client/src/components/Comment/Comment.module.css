@@ -26,7 +26,7 @@
   background-color: rgb(131, 122, 122);
 }
 .wrapper .img-section {
-  background-color: rgb(207, 201, 201);
+  background-color: rgb(0, 0, 0);
   width: 60%;
   height: 100%;
   position: relative;
@@ -61,6 +61,7 @@
 .wrapper .cmt-section {
   flex-grow: 1;
   height: 100%;
+  width: 528px;
   margin-top: 45px;
   display: flex;
   align-items: center;
@@ -71,10 +72,83 @@
   padding: 0 20px;
   width: 100%;
 }
+.wrapper .cmt-section .owner-infor .hashtag {
+  display: inline-block;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  color: rgb(22, 24, 35);
+  font-size: 16px;
+  padding: 0;
+  font-weight: 600;
+}
+.wrapper .cmt-section .owner-infor .hashtag:hover {
+  cursor: pointer;
+}
+.wrapper .cmt-section .owner-infor .hashtag + .hashtag {
+  margin-left: 5px;
+}
 .wrapper .cmt-section .owner-infor .owner {
   display: flex;
   flex-direction: row;
   margin-bottom: 15px;
+}
+.wrapper .cmt-section .owner-infor .owner .more-btn {
+  position: relative;
+}
+.wrapper .cmt-section .owner-infor .owner .more-btn:hover {
+  cursor: pointer;
+}
+.wrapper .cmt-section .owner-infor .owner .more-btn .delete-post {
+  position: absolute;
+  right: 2px;
+  margin-top: 0;
+  white-space: nowrap;
+  padding-top: 0;
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
+  z-index: 99;
+}
+.wrapper .cmt-section .owner-infor .owner .more-btn .delete-post .btn-option {
+  margin: 0;
+  width: 100%;
+  margin: 0;
+  border-radius: 0;
+  display: flex;
+  font-size: 13px;
+  justify-content: center;
+}
+.wrapper .cmt-section .owner-infor .owner .more-btn .delete-post .btn-option.btn-1 {
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
+  border-bottom-color: transparent;
+}
+.wrapper .cmt-section .owner-infor .owner .more-btn .delete-post .btn-option.btn-2 {
+  border-bottom-left-radius: 3px;
+  border-bottom-right-radius: 3px;
+}
+.wrapper .cmt-section .owner-infor .owner .more-btn .delete-post:active {
+  opacity: 0.7;
+}
+.wrapper .cmt-section .owner-infor .owner .more-btn .accept-delete-form {
+  padding: 20px 0;
+  height: 21% !important;
+}
+.wrapper .cmt-section .owner-infor .owner .more-btn .accept-delete-form h2 {
+  text-align: center;
+  margin-bottom: 15px;
+  color: var(--primary-color);
+  font-family: "Lexend Deca", sans-serif;
+}
+.wrapper .cmt-section .owner-infor .owner .more-btn .accept-delete-form .accept-btns {
+  display: flex;
+  justify-content: center;
+}
+.wrapper .cmt-section .owner-infor .owner .more-btn .accept-delete-form .accept-btns .accept-btn {
+  width: 205px;
+  height: 45px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .wrapper .cmt-section .owner-infor .owner .owner-avatar {
   width: 50px;
@@ -91,12 +165,123 @@
   font-family: "Lexend Deca", sans-serif;
 }
 .wrapper .cmt-section .owner-infor .owner .infor h4 {
-  font-weight: 300;
   margin-top: -2px;
+  margin-top: 2px;
+  font-family: "Be Vietnam Pro", sans-serif;
+  font-size: 14px;
 }
 .wrapper .cmt-section .owner-infor .cap {
   font-family: "Be Vietnam Pro", sans-serif;
   font-size: 15px;
+  max-height: 45px;
+  word-break: break-all;
+  overflow-y: auto;
+}
+.wrapper .cmt-section .owner-infor .cap-upload {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+.wrapper .cmt-section .owner-infor .cap-upload .hashtag .add-comment {
+  display: flex;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+}
+.wrapper .cmt-section .owner-infor .cap-upload .hashtag .add-comment .input-field {
+  flex-grow: 1;
+  display: flex;
+  position: relative;
+  height: 46px;
+}
+.wrapper .cmt-section .owner-infor .cap-upload .hashtag .add-comment .input-field > input {
+  background-color: rgb(255, 255, 255);
+  border-left: 1px solid rgba(22, 24, 35, 0.12);
+  border-top: 1px solid rgba(22, 24, 35, 0.12);
+  border-bottom: 1px solid rgba(22, 24, 35, 0.12);
+  border-radius: 4px;
+  height: 100%;
+  padding: 5px 15px;
+  font-weight: 600;
+  font-size: 15px;
+  line-height: 18px;
+  width: 1000%;
+  border-radius: 5px 0 0 5px;
+}
+.wrapper .cmt-section .owner-infor .cap-upload .hashtag .add-comment .input-field > img {
+  background-color: rgb(255, 255, 255);
+  width: 40px;
+  border-top: 1px solid rgb(214, 204, 204);
+  border-right: 1px solid rgb(214, 204, 204);
+  border-bottom: 1px solid rgb(214, 204, 204);
+  border-radius: 0 5px 5px 0;
+  padding: 9px;
+}
+.wrapper .cmt-section .owner-infor .cap-upload .hashtag .add-comment .input-field > img:hover {
+  cursor: pointer;
+}
+.wrapper .cmt-section .owner-infor .cap-upload .hashtag .add-comment .input-field > img:active {
+  background-color: rgba(184, 179, 184, 0.445);
+}
+.wrapper .cmt-section .owner-infor .cap-upload .caption {
+  flex-grow: 1;
+  margin-top: 15px;
+}
+.wrapper .cmt-section .owner-infor .cap-upload .caption .add-comment {
+  display: flex;
+  width: 100%;
+  height: 440px;
+  padding: 0;
+  margin: 0;
+}
+.wrapper .cmt-section .owner-infor .cap-upload .caption .add-comment .input-field {
+  flex-grow: 1;
+  display: flex;
+  position: relative;
+  height: 100%;
+}
+.wrapper .cmt-section .owner-infor .cap-upload .caption .add-comment .input-field .emote-picker {
+  position: absolute;
+  bottom: 10px;
+  right: 50px;
+  z-index: 99;
+}
+.wrapper .cmt-section .owner-infor .cap-upload .caption .add-comment .input-field > textarea {
+  resize: none;
+  background-color: rgb(255, 255, 255);
+  border: 1px solid rgba(22, 24, 35, 0.12);
+  border-radius: 5px;
+  font-family: "ProximaNova";
+  height: 100%;
+  padding: 5px 15px;
+  font-weight: 500;
+  font-size: 15px;
+  line-height: 25px;
+  width: 100%;
+  overflow: auto;
+  outline: none;
+  box-shadow: none;
+}
+.wrapper .cmt-section .owner-infor .cap-upload .caption .add-comment .input-field > img {
+  background-color: rgb(255, 255, 255);
+  width: 40px;
+  border: 1px solid rgb(214, 204, 204);
+  border-radius: 5px;
+  padding: 9px;
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+}
+.wrapper .cmt-section .owner-infor .cap-upload .caption .add-comment .input-field > img:hover {
+  cursor: pointer;
+}
+.wrapper .cmt-section .owner-infor .cap-upload .caption .add-comment .input-field > img:active {
+  background-color: rgba(184, 179, 184, 0.445);
+}
+.wrapper .cmt-section .owner-infor .cap-upload .submit-update {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 10px;
 }
 .wrapper .cmt-section .actions {
   margin-top: 10px;
@@ -211,7 +396,7 @@
 }
 .wrapper .cmt-section .add-comment {
   display: flex;
-  padding: 15px 30px;
+  padding: 10px 30px;
   margin: 0 30px;
   width: 100%;
 }

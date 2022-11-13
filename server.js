@@ -7,6 +7,8 @@ const helmet = require("helmet");
 const dotenv = require("dotenv");
 const bodyParser = require("body-parser");
 // const cookieSession = require('cookie-session')
+// const session = require('express-session')
+const cookieParser = require("cookie-parser");
 const passport = require("passport");
 const cors = require("cors");
 const userRoute = require("./route/users");
@@ -26,18 +28,22 @@ mongoose.connect(process.env.MONGO_URL, (err) => {
     else console.log("Connected to MongoDB");
 });
 
-// mongoose.connect(process.env.MONGO_URL, ()=>{
-//     console.log("Connected to MongoDB");
-// })
+
 
 //MIDDLEWARE
+// app.use(
+//   cookieSession({ name: "son", keys: ["sonlogin"], maxAge: 24 * 60 * 60 * 100 })
+// );
+// app.use(session({ secret: 'sonlody' }));
+
 app.use(express.json())
 app.use(helmet())
 app.use(morgan("dev"))
 app.use(bodyParser.json())
+app.use(cookieParser())
+app.use(passport.initialize());
 
-// app.use(passport.initialize());
-// app.use(passport.session());
+
 
 app.use(cors({
   origin: true,
@@ -54,6 +60,8 @@ app.use("/api/chat", chatRoute);
 
 
 app.listen(port, () => console.log("Server is running on port is:", port));
+
+
 // COOKIES SESSION
 
 // app.use(cookieSession({

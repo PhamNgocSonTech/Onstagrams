@@ -33,7 +33,7 @@ function Login({ handleClosePanel, className }) {
     }
 
     const googleHandle = () => {
-        window.open("https://localhost:5000/api/auth/login-google", "_self");
+        window.open("http://localhost:5000/api/auth/google", "_self");
     };
 
     return (
@@ -72,7 +72,7 @@ function Login({ handleClosePanel, className }) {
                             className={cn("btn-login")}
                             classNameImg={cn("img-login")}
                             leftIcon={google}
-                            //onClick={googleHandle}
+                            onClick={googleHandle}
                             outline
                         >
                             Login with Google

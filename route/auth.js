@@ -5,8 +5,8 @@ const jwt = require('jsonwebtoken')
 const nodemailer = require('nodemailer')
 const {OAuth2Client} = require('google-auth-library')
 const { nanoid } = require('nanoid');
-
-//const passport = require('passport')
+const passport = require('passport')
+require('../utils/passport')
 
 
 // UTILS REQUIRE
@@ -27,6 +27,8 @@ const dotenv = require('dotenv').config()
 
 // DECLARE VARIABLE refreshTokens IS TYPE ARRAY TO STORE REFRESH_TOKEN ELEMENT
 let refreshTokens = []
+
+//const CLIENT_URL = "http://localhost:3000";
 
 
 // CONFIG FOR GOOGLE SEND MAIL
@@ -56,8 +58,8 @@ router.post("/register", async(req, res) => {
         return res.status(400).json({msg: "Password must be at least 6 characters."})
 
         //hash password  => generate new password
-        const salt = await bcrypt.genSalt(10)
-        const hashedPassword = await bcrypt.hash(password, salt)
+        /* const salt = await bcrypt.genSalt(10)
+        const hashedPassword = await bcrypt.hash(password, salt) */
         // const passwordHash = await bcrypt.hash(password, 12)
 
         const newUser = new User({
@@ -164,7 +166,6 @@ router.post('/verify/mail', async(req, res) => {
 // NEW LOGIN CAN CREATE ACCESS_TOKEN AND REFRESH_TOKEN
 router.post("/login", async(req, res) => {
     try {
-        //const { email, password } = req.body
         const user = await User.findOne({email: req.body.email});
         if(!user)return res.status(400).json("User doesn't found")  
         
@@ -186,7 +187,85 @@ router.post("/login", async(req, res) => {
     }     
 })
 
+// Function for generating jwt tokens
+// const generateJwtToken = (user) => {
+//   jwt.sign({user: req.user }, process.env.SESSION_SECRET, {expiresIn: '7d'});
+//   return token;
+// };
 
+// This is the route for initiating the OAuth flow to Google
+router.get('/google', passport.authenticate('google', {scope: ['profile', 'email']})
+);
+
+// This is the route for initiating the OAuth flow to Facebook
+/* router.get('/facebook',
+  passport.authenticate('facebook', { scope: 'email' })
+); */
+
+
+// This is the callback\redirect url after the OAuth login at Google.
+// router.get('/google/callback', passport.authenticate('google', { failureRedirect: '/login' }), (req, res) => {
+//     const token = generateJwtToken(req.user);
+//     res.cookie('jwt', token);
+//     res.redirect('/');
+//   }
+// );
+router.get("/google/callback", passport.authenticate('google', { session: false }), (req, res) => {
+    jwt.sign({ user: req.user }, process.env.SESSION_SECRET, { expiresIn: "1h" }, (err, token) => {
+        if (err) {
+          return res.json({
+            token: null,
+          });
+        }
+        res.json({token});
+      });
+  }
+);
+
+
+// This is the callback\redirect url after the OAuth login at Facebook.
+/* router.get(
+  '/facebook/callback',
+  passport.authenticate('facebook', { failureRedirect: '/login' }),
+  (req, res) => {
+    const token = generateJwtToken(req.user);
+    res.cookie('jwt', token);
+    res.redirect('/');
+  }
+); */
+
+// Navigating to the root url will ask passport to check for a valid token
+router.get('/', passport.authenticate('jwt', { session: false, failureRedirect: '/login' }), (req, res) => {
+    //res.render('home', { user: req.user });
+  }
+);
+
+router.get('/logoutSso', (req, res) => {
+  res.clearCookie('jwt');
+  res.redirect('/');
+});
+
+
+/* router.get("/google", passport.authenticate("google", { scope: ["profile"] }));
+
+router.get(
+  "/google/callback",
+  passport.authenticate("google", {
+    successRedirect: CLIENT_URL,
+    failureRedirect: "/login/",
+  })
+);
+
+
+router.get("/facebook", passport.authenticate("facebook", { scope: ["profile"] }));
+
+router.get(
+  "/facebook/callback",
+  passport.authenticate("facebook", {
+    successRedirect: CLIENT_URL,
+    failureRedirect: "/login/",
+  })
+); */
 // LOGOUT USER WILL DELETE REFRESH_TOKEN
 router.post('/logout', (req, res) => {
   const refreshToken = req.body.token;
@@ -279,7 +358,6 @@ router.put('/reset/password', verifyToken, async(req, res) => {
   
 })
    
-
 
 // REFRESH ACCESS_TOKEN WHEN IT EXPIRES
 router.post('/refreshToken', async (req, res) => {
@@ -375,7 +453,7 @@ router.post("/register",  async(req, res) => {
         const user = await newUser.save()
         res.status(200).json(user)
     } catch(err){
-        return res.status(400).json({err: 'Something wrong happened!!! Try again'})
+        return res.status(400).json({err: 'Something wrong hrouterened!!! Try again'})
     }
 })
 

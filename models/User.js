@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const bcrypt = require('bcrypt')
 
 const UserSchema = new mongoose.Schema(
   {
@@ -11,7 +12,7 @@ const UserSchema = new mongoose.Schema(
     },
     fullname: {
       type: String,
-      required: true
+      //required: true
     },
     gender: {
       type: String,
@@ -52,9 +53,29 @@ const UserSchema = new mongoose.Schema(
       required:true,
       default:false
     },
+    accountType:{
+      type: String,
+      default: 'system_account'
+    }
    
   },
   { timestamps: true }
 );
 
+UserSchema.pre('save', async function(next) {
+  try {
+    // check method of register
+    const user = this;
+    if (!user.isModified('password')) next();
+    // generate salt
+    const salt = await bcrypt.genSalt(10);
+    // hash the password
+    const hashedPassword = await bcrypt.hash(this.password, salt);
+    // replace plain text password with hashed password
+    this.password = hashedPassword;
+    next();
+  } catch (error) {
+    return next(error);
+  }
+});
 module.exports = mongoose.model("User", UserSchema);
