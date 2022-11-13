@@ -1,7 +1,7 @@
 import classNames from "classnames/bind";
 import styles from "./Comment.module.scss";
 import { motion, AnimatePresence } from "framer-motion";
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import EmojiPicker from "emoji-picker-react";
 
 import Modal from "../common/Modal";
@@ -30,6 +30,7 @@ import Modal_Center from "../common/Modal/Modal_Center";
 import Toast from "../common/Toast";
 import LoadingModal from "../common/LoadingModal";
 import { useNavigate } from "react-router-dom";
+import { FollowRefreshData } from "../../pages/Follow";
 
 const cn = classNames.bind(styles);
 

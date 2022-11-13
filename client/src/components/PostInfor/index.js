@@ -69,8 +69,10 @@ function PostInfor({ postData = {} }) {
     const [isShowComment, setIsShowComment] = useState({ isShow: false, data: {} });
     const [isMyAccount, setIsMyAccount] = useState(() => {
         const token = window.localStorage.getItem("accessToken");
-        if (jwt_decode(token)._id === postData.userId) {
-            return true;
+        if (token) {
+            if (jwt_decode(token)._id === postData.userId) {
+                return true;
+            }
         } else {
             return false;
         }

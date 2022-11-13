@@ -1,14 +1,20 @@
 import jwt_decode from "jwt-decode";
-import { useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getPostFromFollowingUsers, getUserById } from "../../utils/HttpRequest/user_request";
 import PostInfor from "../../components/PostInfor";
 import Toast from "../../components/common/Toast";
+export const FollowRefreshData = createContext();
 
 function Follow() {
     const negative = useNavigate();
     const [PostData, setPostData] = useState([]);
     const [isShowToast, setIsShowToast] = useState({ isShow: false, message: "" });
+
+    const [refreshData, setRefreshData] = useState(false);
+    const handleRefreshData = () => {
+        setRefreshData(!refreshData);
+    };
 
     useEffect(() => {
         const token = localStorage.getItem("accessToken");
@@ -24,10 +30,10 @@ function Follow() {
         } else {
             negative("/");
         }
-    }, []);
+    }, [refreshData]);
 
     return (
-        <>
+        <FollowRefreshData.Provider value={handleRefreshData}>
             {PostData.map((post, index) => {
                 return (
                     <PostInfor
@@ -42,7 +48,7 @@ function Follow() {
                     message={isShowToast.message}
                 />
             )}
-        </>
+        </FollowRefreshData.Provider>
     );
 }
 
