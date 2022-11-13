@@ -19,18 +19,18 @@ import comments from "../../assets/image/comment/comments.svg";
 import more from "../../assets/image/comment/more.svg";
 import hashtag from "../../assets/image/upload/hashtag.svg";
 import { createComment, createPost, deletePost, editPost, getPostByIdPost } from "../../utils/HttpRequest/post_request";
-import { getUserById } from "../../utils/HttpRequest/user_request";
+import { followUserHasId, getUserById, unfollowUserHasId } from "../../utils/HttpRequest/user_request";
 import { urlToObject } from "../../utils/URLtoFileObject/convertURL";
 import moment from "moment";
 
-import { Skeleton } from "@mui/material";
+import { fabClasses, Skeleton } from "@mui/material";
 import jwt_decode from "jwt-decode";
 import Popover from "../common/Popover";
 import Modal_Center from "../common/Modal/Modal_Center";
 import Toast from "../common/Toast";
 import LoadingModal from "../common/LoadingModal";
 import { useNavigate } from "react-router-dom";
-import { FollowRefreshData } from "../../pages/Follow";
+import Login from "../Login";
 
 const cn = classNames.bind(styles);
 
@@ -81,6 +81,7 @@ function Comment({ setIsShowComment, dataShow = [] }) {
     const [isShowLoadingModal, setIsShowLoadingModal] = useState(false);
 
     const [isShowSubToast, setisShowSubToast] = useState({ isShow: false, type: false, message: "" });
+    const [isShowLoginForm, setIsShowLoginForm] = useState();
 
     const [animate, setAnimate] = useState(false);
 
@@ -210,7 +211,26 @@ function Comment({ setIsShowComment, dataShow = [] }) {
     };
 
     function handleChangeFollower() {
-        setIsFollow(!isFollow);
+        const token = window.localStorage.getItem("accessToken");
+        if (token) {
+            if (isFollow) {
+                // Handle Unfollow
+                unfollowUserHasId(userCurrent._id, token).then((res) => {
+                    if (res.status === 200 || res.status === 304) {
+                        setIsFollow(false);
+                    }
+                });
+            } else {
+                // Handle Follow
+                followUserHasId(userCurrent._id, token).then((res) => {
+                    if (res.status === 200 || res.status === 304) {
+                        setIsFollow(true);
+                    }
+                });
+            }
+        } else {
+            setIsShowLoginForm(true);
+        }
     }
 
     function handleClickHashTag() {
@@ -710,12 +730,25 @@ function Comment({ setIsShowComment, dataShow = [] }) {
                                         </Button>
                                     </>
                                 ) : (
-                                    <Button
-                                        outlinePrimary={true}
-                                        className={cn("login-btn")}
-                                    >
-                                        Login to comment this post
-                                    </Button>
+                                    <>
+                                        <Button
+                                            outlinePrimary={true}
+                                            className={cn("login-btn")}
+                                            onClick={() => setIsShowLoginForm(true)}
+                                        >
+                                            Login to comment this post
+                                        </Button>
+                                        {
+                                            <AnimatePresence>
+                                                {isShowLoginForm && (
+                                                    <Login
+                                                        key={"lg"}
+                                                        handleClosePanel={setIsShowLoginForm}
+                                                    />
+                                                )}
+                                            </AnimatePresence>
+                                        }
+                                    </>
                                 )}
                             </div>
                         </>
