@@ -54,10 +54,33 @@ passport.use(
     {
       clientID: facebookAppId,
       clientSecret: facebookSecretId,
-      callbackURL: "api/auth/facebook/callback",
+      callbackURL: "/api/auth/facebook/callback",
+      profileFields: ['displayName', 'email'],
+
     },
-    function (accessToken, refreshToken, profile, done) {
-      done(null, profile);
+    async (request, accessToken, refreshToken, profile, done) => {
+      try {
+          let existingUser = await User.findOne({ 'email': profile.email });
+          // if user exists return the user 
+          if (existingUser) {
+            return done(null, `user already exists ${existingUser}`);
+          }
+          // if user does not exist create a new user 
+          console.log('Creating new user...');
+          const newUser = new User({
+            method: 'facebook',
+              username: profile.displayName,
+              gender: 1,
+              password: '1111',
+              email: profile.emails[0].value,
+              accountType: 'facebook_account',
+            
+          });
+          await newUser.save();
+          return done(null, newUser);
+      } catch (error) {
+          return done(error, false)
+      }
     }
   )
 );

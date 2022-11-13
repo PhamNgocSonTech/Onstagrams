@@ -197,30 +197,19 @@ router.post("/login", async(req, res) => {
 
 router.get('/google', passport.authenticate('google', {scope: ['profile', 'email']})
 );
-
-router.get('/facebook', passport.authenticate('facebook', {scope: ['profile', 'email']})
-);
-
-
-
-// This is the callback\redirect url after the OAuth login at Google.
-// router.get('/google/callback', passport.authenticate('google', { failureRedirect: '/login' }), (req, res) => {
-//     const token = generateJwtToken(req.user);
-//     res.cookie('jwt', token);
-//     res.redirect('/');
-//   }
-// );
 router.get("/google/callback", passport.authenticate('google', { session: false }), (req, res) => {
-    jwt.sign({ user: req.user }, process.env.SESSION_SECRET, { expiresIn: "1h" }, (err, token) => {
-        if (err) {
-          return res.json({
-            token: null,
-          });
-        }
-        res.json({token});
-      });
-  }
+  jwt.sign({ user: req.user }, process.env.SESSION_SECRET, { expiresIn: "1h" }, (err, token) => {
+      if (err) {
+        return res.json({
+          token: null,
+        });
+      }
+      res.json({token});
+    });
+}
 );
+router.get('/facebook', passport.authenticate('facebook', { scope : ['email'] }))
+
 
 router.get("/facebook/callback", passport.authenticate('facebook', { session: false }), (req, res) => {
   jwt.sign({ user: req.user }, process.env.SESSION_SECRET, { expiresIn: "1h" }, (err, token) => {
@@ -233,6 +222,22 @@ router.get("/facebook/callback", passport.authenticate('facebook', { session: fa
     });
 }
 );
+
+// This is the callback\redirect url after the OAuth login at Google.
+// router.get('/google/callback', passport.authenticate('google', { failureRedirect: '/login' }), (req, res) => {
+//     const token = generateJwtToken(req.user);
+//     res.cookie('jwt', token);
+//     res.redirect('/');
+//   }
+// );
+
+/* router.get("/facebook/callback", passport.authenticate("facebook", {
+    successRedirect: "http://localhost:3000/",
+    // failureRedirect: "/login/failed",
+  })
+); */
+
+
 
 
 // This is the callback\redirect url after the OAuth login at Facebook.
