@@ -17,6 +17,7 @@ import { gapi } from "gapi-script";
 
 import { GoogleLogin, useGoogleLogin } from "react-google-login";
 import { loginGoogle } from "../../utils/HttpRequest/auth_request";
+import { useGoogleAuth } from "../common/GoogleAuth/googleAuth";
 
 const cn = classNames.bind(styles);
 export const ParentContext = createContext();
@@ -47,9 +48,7 @@ function Login({ handleClosePanel, className }) {
         console.log(res);
     };
 
-    const handleLoginGG = () => {
-        loginGoogle().then((res) => console.log(res));
-    };
+    const { signIn } = useGoogleAuth();
 
     const facebookHandle = () => {
         window.open("http://localhost:5000/api/auth/facebook", "_self");
@@ -103,17 +102,10 @@ function Login({ handleClosePanel, className }) {
                             classNameImg={cn("img-login")}
                             leftIcon={google}
                             outline
-                            onClick={handleLoginGG}
+                            onClick={signIn}
                         >
                             Login with Google
                         </Button>
-                        {/* <GoogleLogin
-                            clientId={client_id}
-                            buttonText='Login with google'
-                            onSuccess={googleHandleSuccess}
-                            onFailure={googleHandleFailed}
-                            cookiePolicy={"single_host_origin"}
-                        /> */}
                         <Button
                             className={cn("btn-login")}
                             classNameImg={cn("img-login")}

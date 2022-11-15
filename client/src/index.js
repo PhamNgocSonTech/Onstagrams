@@ -4,16 +4,18 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import GlobalStyle from "./Default/GlobalStyle";
 import { BrowserRouter } from "react-router-dom";
-
 import store from "./app/store";
 import { Provider } from "react-redux";
+import { GoogleAuthProvider } from "./components/common/GoogleAuth/googleAuth";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
     <BrowserRouter>
         <GlobalStyle>
             <Provider store={store}>
-                <App />
+                <GoogleAuthProvider>
+                    <App />
+                </GoogleAuthProvider>
             </Provider>
         </GlobalStyle>
     </BrowserRouter>
