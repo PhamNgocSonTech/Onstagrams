@@ -396,7 +396,10 @@ router.post('/refreshToken', async (req, res) => {
         console.log(err, data)
         if(err) res.status(403)
         const accessToken = jwt.sign(
-            {username: data.username},
+            {
+              _id: data._id,
+              username: data.username
+            },
             process.env.ACCESS_TOKEN_SECRET, {expiresIn: '30m'})
         res.status(200).json({accessToken})
     } )
