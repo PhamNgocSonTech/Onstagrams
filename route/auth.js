@@ -127,10 +127,12 @@ router.post('/verify/mail', async(req, res) => {
     const getUser = await User.findById(userId)
     if(!getUser) return res.status(400).json('User Not Found')
     if(getUser.verifed === true)return res.status(400).json('User Already Verify Mail')
+
     const getToken = await VerificationMail.findOne({user: getUser._id})
     if(!getToken)return res.status(400).json('OTP Not Found')
     const checkMatch = await bcrypt.compareSync(otp, getToken.token)
     if(!checkMatch)return res.status(400).json('WRONG OTP')
+
     getUser.verifed = true;
     await VerificationMail.findByIdAndDelete(getToken._id)
     getUser.save()
@@ -303,7 +305,7 @@ router.post('/forgot/password', async(req, res) => {
 
   const codeRandom = nanoid(10)
   const resetToken = new ResetToken({
-    userEmail: getEmail.email,
+    userEmail: getEmail,
     token: codeRandom
   })
   resetToken.save()
@@ -334,6 +336,7 @@ router.post('/forgot/password', async(req, res) => {
 router.put('/reset/password', async(req, res) => {
   try{
     const {password, token, email} = req.body
+
   if(!token){
       return res.status(500).json('Request failed')
   }
@@ -345,12 +348,14 @@ router.put('/reset/password', async(req, res) => {
   if(!resetToken){
     return res.status(500).json('Reset token not found')
   }
-  console.log(resetToken.token)
+
   const isMatch = await bcrypt.compareSync(token, resetToken.token)
   if(!isMatch){
     return res.status(500).json('Wrong reset token!!! Please try again')
   }
   user.password = password;
+  await ResetToken.findByIdAndDelete(resetToken._id)
+
   // const hashPass = await bcrypt.hash(password, 10)
   // user.password = hashPass
   await user.save()
