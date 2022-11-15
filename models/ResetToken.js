@@ -1,10 +1,10 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 const ResetTokenSchema = new mongoose.Schema({
-          user:{
-                    type:mongoose.Schema.Types.ObjectId,
+          email:{
+                    type:String,
                     ref:"user",
-                    required:true
+                    //required:true
           },
           token:{
                     type:String,

@@ -28,7 +28,8 @@ const dotenv = require('dotenv').config()
 // DECLARE VARIABLE refreshTokens IS TYPE ARRAY TO STORE REFRESH_TOKEN ELEMENT
 let refreshTokens = []
 
-//const CLIENT_URL = "http://localhost:3000";
+
+const CLIENT_URL = "http://localhost:3000/";
 
 
 // CONFIG FOR GOOGLE SEND MAIL
@@ -43,7 +44,7 @@ const myOAuth2Client = new OAuth2Client(
   })
 
 // NEW REGISTER CAN SEND OTP CODE TO EMAIL FOR USERS
-router.post("/register", async(req, res) => {
+router.post('/register', async(req, res) => {
     try {
         const { fullname, username, email, password, gender, bio, external } = req.body
         // let newUserName = username.toLowerCase().replace(/ /g, '')
@@ -164,7 +165,7 @@ router.post('/verify/mail', async(req, res) => {
 })
 
 // NEW LOGIN CAN CREATE ACCESS_TOKEN AND REFRESH_TOKEN
-router.post("/login", async(req, res) => {
+router.post('/login', async(req, res) => {
     try {
         const user = await User.findOne({email: req.body.email});
         if(!user)return res.status(400).json("User doesn't found")  
@@ -197,7 +198,11 @@ router.post("/login", async(req, res) => {
 
 router.get('/google', passport.authenticate('google', {scope: ['profile', 'email']})
 );
-router.get("/google/callback", passport.authenticate('google', { session: false }), (req, res) => {
+router.get('/google/callback', passport.authenticate('google', { 
+  session: false,
+  successRedirect: 'CLIENT_URL',
+ }), 
+  (req, res) => {
   jwt.sign({ user: req.user }, process.env.SESSION_SECRET, { expiresIn: "1h" }, (err, token) => {
       if (err) {
         return res.json({
@@ -211,14 +216,12 @@ router.get("/google/callback", passport.authenticate('google', { session: false 
 router.get('/facebook', passport.authenticate('facebook', { scope : ['email'] }))
 
 
-router.get("/facebook/callback", passport.authenticate('facebook', { session: false }), (req, res) => {
-  jwt.sign({ user: req.user }, process.env.SESSION_SECRET, { expiresIn: "1h" }, (err, token) => {
+router.get('/facebook/callback', passport.authenticate('facebook', { session: false }), (req, res) => {
+  jwt.sign({ user: req.user }, process.env.SESSION_SECRET, { expiresIn: '1h' }, (err, token) => {
       if (err) {
-        return res.json({
-          token: null,
-        });
+        return res.json({token: null});
       }
-      res.json({token});
+      return res.json({token});
     });
 }
 );
@@ -291,14 +294,16 @@ router.post('/logout', (req, res) => {
 });
 
 router.post('/forgot/password', async(req, res) => {
-  const {email} = req.body
-  const user = await User.findOne({email: email})
-  if(!user) return res.status(500).json('User not found')
-  const token = await ResetToken.findOne({user: user._id})
+  //const {email} = req.body
+  const getEmail = await User.findOne({email: req.body.email})
+  if(!getEmail) return res.status(500).json('User not found')
+
+  const token = await ResetToken.findOne({userEmail: getEmail.email})
   if(token) return res.status(500).json('Token already exists')
+
   const codeRandom = nanoid(10)
   const resetToken = new ResetToken({
-    user: user._id,
+    userEmail: getEmail.email,
     token: codeRandom
   })
   resetToken.save()
@@ -316,9 +321,9 @@ router.post('/forgot/password', async(req, res) => {
  
   let mailOptions = {
     from: `Admin_Onstagram💎 <${mailConfig.FROM_EMAIL_ADDRESS}>`, 
-    to: user.email, 
+    to: getEmail.email, 
     subject: 'Using Token From Onstagrams To Reset Password', 
-    html:`<h1>Hello ✔ <span style="color:blue;text-align:center;">${user.username}</span> <p>Your TOKEN RESET PASSWORD => <span style="color:red;">${codeRandom}</span> </p></h1>`, 
+    html:`<h1>Hello ✔ <span style="color:blue;text-align:center;">${getEmail.username}</span> <p>Your TOKEN RESET PASSWORD => <span style="color:red;">${codeRandom}</span> </p></h1>`, 
   };
 
   await transporter.sendMail(mailOptions)
@@ -326,17 +331,17 @@ router.post('/forgot/password', async(req, res) => {
 
 })
 
-router.put('/reset/password', verifyToken, async(req, res) => {
+router.put('/reset/password', async(req, res) => {
   try{
-    const {password, token} = req.body
-  if(!token || !req.user._id){
+    const {password, token, email} = req.body
+  if(!token){
       return res.status(500).json('Request failed')
   }
-  const user = await User.findOne({_id: req.user._id})
+  const user = await User.findOne({email: email})
   if(!user){
     return res.status(500).json('User not found')
   }
-  const resetToken = await ResetToken.findOne({user: user._id})
+  const resetToken = await ResetToken.findOne({user: user.email})
   if(!resetToken){
     return res.status(500).json('Reset token not found')
   }
@@ -345,8 +350,9 @@ router.put('/reset/password', verifyToken, async(req, res) => {
   if(!isMatch){
     return res.status(500).json('Wrong reset token!!! Please try again')
   }
-  const hashPass = await bcrypt.hash(password, 10)
-  user.password = hashPass
+  user.password = password;
+  // const hashPass = await bcrypt.hash(password, 10)
+  // user.password = hashPass
   await user.save()
 
   let transporter = nodemailer.createTransport({
@@ -368,7 +374,7 @@ router.put('/reset/password', verifyToken, async(req, res) => {
   };
 
   await transporter.sendMail(mailOptions)
-  res.status(200).json({msg:"Send Success! Check your mail!!"})
+  res.status(200).json({msg:"Reset Password Success!"})
   }catch(err){
     return res.status(500).json({msg: err.message});
   }
