@@ -18,6 +18,16 @@ export const login = async (body) => {
     return results.data;
 };
 
+export const loginGoogle = async () => {
+    const results = await usersConfig.get("/google");
+    return results;
+};
+
+export const responseGoogle = async () => {
+    const results = await usersConfig.get("/google/callback");
+    return results;
+};
+
 export const register = async (body) => {
     const results = await usersConfig.post("/register/", body);
     return results;
@@ -25,5 +35,12 @@ export const register = async (body) => {
 
 export const verifyEmail = async (userId, otp) => {
     const results = await usersConfig.post("/verify/mail/", { userId, otp });
+    return results;
+};
+
+export const refreshToken = async (rt) => {
+    console.log(rt);
+    const results = await usersConfig.post("/refreshToken", { token: rt });
+    console.log(results);
     return results;
 };

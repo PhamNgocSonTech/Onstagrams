@@ -11,8 +11,12 @@ import person from "../../assets/image/login/person.svg";
 
 import PersonalLogIn from "../PersonalLogIn";
 import Register from "../Register";
-import { createContext, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import { AnimatePresence } from "framer-motion";
+import { gapi } from "gapi-script";
+
+import { GoogleLogin, useGoogleLogin } from "react-google-login";
+import { loginGoogle } from "../../utils/HttpRequest/auth_request";
 
 const cn = classNames.bind(styles);
 export const ParentContext = createContext();
@@ -20,6 +24,8 @@ export const ParentContext = createContext();
 function Login({ handleClosePanel, className }) {
     const [isOpenRegisterForm, setIsOpenRegisterForm] = useState(false);
     const [isOpenPersonalLogInForm, setIsOpenPersonalLogInForm] = useState({ open: false, panel: "" });
+
+    const client_id = "841192353210-1b7o6v02khn2gs7sl801pbt9hmhjejtu.apps.googleusercontent.com";
 
     function handleCloseModal() {
         handleClosePanel(false);
@@ -33,13 +39,31 @@ function Login({ handleClosePanel, className }) {
         setIsOpenPersonalLogInForm({ open: true, panel: "" });
     }
 
-    const googleHandle = () => {
-        window.open("http://localhost:5000/api/auth/google", "_self");
+    const googleHandleSuccess = (res) => {
+        console.log(res);
+    };
+
+    const googleHandleFailed = (res) => {
+        console.log(res);
+    };
+
+    const handleLoginGG = () => {
+        loginGoogle().then((res) => console.log(res));
     };
 
     const facebookHandle = () => {
         window.open("http://localhost:5000/api/auth/facebook", "_self");
     };
+
+    useEffect(() => {
+        function start() {
+            gapi.client.init({
+                clientId: client_id,
+                scope: "",
+            });
+        }
+        gapi.load("client:auth2", start);
+    });
 
     return (
         <ParentContext.Provider
@@ -78,11 +102,18 @@ function Login({ handleClosePanel, className }) {
                             className={cn("btn-login")}
                             classNameImg={cn("img-login")}
                             leftIcon={google}
-                            onClick={googleHandle}
                             outline
+                            onClick={handleLoginGG}
                         >
                             Login with Google
                         </Button>
+                        {/* <GoogleLogin
+                            clientId={client_id}
+                            buttonText='Login with google'
+                            onSuccess={googleHandleSuccess}
+                            onFailure={googleHandleFailed}
+                            cookiePolicy={"single_host_origin"}
+                        /> */}
                         <Button
                             className={cn("btn-login")}
                             classNameImg={cn("img-login")}

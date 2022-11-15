@@ -14,6 +14,8 @@ import { useNavigate } from "react-router-dom";
 import LoadingModal from "../../components/common/LoadingModal";
 import jwt_decode from "jwt-decode";
 import Toast from "../../components/common/Toast";
+import { refreshToken } from "../../utils/HttpRequest/auth_request";
+import { checkExpiredToken } from "../../utils/CheckExpiredToken/checkExpiredToken";
 
 const cn = classNames.bind(styles);
 
@@ -31,11 +33,21 @@ function Upload() {
     const ref = useRef();
     const htip = useRef();
 
-    const handlePost = () => {
+    const handlePost = async () => {
         // Hanlde Check Login
-        const token = window.localStorage.getItem("accessToken");
+        let token = window.localStorage.getItem("accessToken");
         if (token) {
             // LOGGED IN
+
+            if (checkExpiredToken(token)) {
+                // Expired token
+                const rt = window.localStorage.getItem("refreshToken");
+                await refreshToken(rt).then((newat) => {
+                    token = newat.data.accessToken;
+                    window.localStorage.setItem("accessToken", newat.data.accessToken);
+                });
+            }
+
             setIsShowLoadingModal(true);
             const frmData = new FormData();
             images.forEach((image) => {

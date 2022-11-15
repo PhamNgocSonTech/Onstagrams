@@ -77,6 +77,7 @@ function PersonalLogIn({ isShowDoneRegister = "" }) {
                 if (typeof res == "object") {
                     dispatch(setUserInfor(res.other));
                     window.localStorage.setItem("accessToken", res.accessToken);
+                    window.localStorage.setItem("refreshToken", res.refreshToken);
                     setIsShowToast({ isShow: true, message: "Login Sucessfully!" });
                     setTimeout(() => {
                         window.location.reload(true);

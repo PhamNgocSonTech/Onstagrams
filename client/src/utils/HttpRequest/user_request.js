@@ -29,6 +29,11 @@ export const getUserById = async (id) => {
     return results;
 };
 
+export const getUserByUsername = async (username) => {
+    const results = await usersConfig2.get(`/search/${username}`);
+    return results;
+};
+
 export const followUserHasId = async (id, accessToken) => {
     const results = await usersConfig2.put(`/${id}/follow`, {}, { headers: { token: accessToken } });
     return results;

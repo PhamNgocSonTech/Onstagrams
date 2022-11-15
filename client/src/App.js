@@ -17,18 +17,14 @@ function App() {
 
     const token = window.localStorage.getItem("accessToken");
     useEffect(() => {
-        console.log(`Check localStorage to get access token`);
         try {
             const decode = jwt_decode(token);
             getUser(decode._id).then((user) => {
                 if (user.status === 200) {
                     dispatch(setUserInfor(user.data));
-                    console.log(`This person is logged in !`);
                 }
             });
-        } catch (Ex) {
-            console.log(`Not have token => This person doesn't loggin => Force login`);
-        }
+        } catch (Ex) {}
     }, []);
 
     return (

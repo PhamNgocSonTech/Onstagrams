@@ -20,7 +20,7 @@ import { MENU_SETTING, MENU_SETTING_USER, export_MENU_SETTING_USER } from "../..
 import PopUpNotification from "../PopUpNotification";
 import Tooltip from "../Tooltip";
 import useDebounce from "../../../CustomHooks/useDebounce";
-import { getUsers } from "../../../utils/HttpRequest/user_request";
+import { getUsers, getUserByUsername } from "../../../utils/HttpRequest/user_request";
 
 import Login from "../../Login";
 import { useDispatch, useSelector } from "react-redux";
@@ -68,7 +68,7 @@ function Header({ isShowUploadBtn = true }) {
     const handleLogOut = () => {
         dispatch(removeUserInfor());
         window.localStorage.removeItem("accessToken");
-        console.log(didLogin);
+        window.localStorage.removeItem("refreshToken");
         setIsAppear(false);
     };
 
@@ -98,11 +98,9 @@ function Header({ isShowUploadBtn = true }) {
 
     useEffect(() => {
         if (lastText) {
-            getUsers("", {
-                nickname: lastText,
-            }).then((data) => {
+            getUserByUsername(lastText).then((data) => {
                 setPopover_search(true);
-                setSearchData(data);
+                setSearchData(data.data);
                 setLoading(false);
                 setClearBtn(true);
             });

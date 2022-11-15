@@ -10,6 +10,8 @@ import { useSelector } from "react-redux";
 import { editUser } from "../../utils/HttpRequest/user_request";
 import LoadingModal from "../common/LoadingModal";
 import Toast from "../common/Toast";
+import { refreshToken } from "../../utils/HttpRequest/auth_request";
+import { checkExpiredToken } from "../../utils/CheckExpiredToken/checkExpiredToken";
 
 const cn = classNames.bind(styles);
 
@@ -63,10 +65,10 @@ function EditProfile({ setIsOpenEditPopUp }) {
         e.target.value = null;
     };
 
-    const handleSubmitData = () => {
+    const handleSubmitData = async () => {
         setIsShowLoading(true);
         let frmData = new FormData();
-        const token = window.localStorage.getItem("accessToken");
+        let token = window.localStorage.getItem("accessToken");
 
         // If have image.size => Edit image
         if (image.size) {
@@ -76,6 +78,15 @@ function EditProfile({ setIsOpenEditPopUp }) {
         frmData.append("fullname", dataAllInputField[1]);
         frmData.append("bio", dataAllInputField[2]);
         frmData.append("external", dataAllInputField[3]);
+
+        if (checkExpiredToken(token)) {
+            // Expired token
+            const rt = window.localStorage.getItem("refreshToken");
+            await refreshToken(rt).then((newat) => {
+                token = newat.data.accessToken;
+                window.localStorage.setItem("accessToken", newat.data.accessToken);
+            });
+        }
 
         editUser(token, didLogin._id, frmData).then((res) => {
             setIsShowLoading(false);
@@ -88,7 +99,6 @@ function EditProfile({ setIsOpenEditPopUp }) {
                 setIsShowToast({ isShow: true, state: false, message: res.data });
             }
         });
-        console.log(image);
     };
 
     return (

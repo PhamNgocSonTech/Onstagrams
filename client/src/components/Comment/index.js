@@ -31,6 +31,8 @@ import Toast from "../common/Toast";
 import LoadingModal from "../common/LoadingModal";
 import { useNavigate } from "react-router-dom";
 import Login from "../Login";
+import { checkExpiredToken } from "../../utils/CheckExpiredToken/checkExpiredToken";
+import { refreshToken } from "../../utils/HttpRequest/auth_request";
 
 const cn = classNames.bind(styles);
 
@@ -104,8 +106,18 @@ function Comment({ setIsShowComment, dataShow = [] }) {
         setIsShowComment(false);
     }
 
-    function handleSubmitComment() {
-        const token = window.localStorage.getItem("accessToken");
+    async function handleSubmitComment() {
+        let token = window.localStorage.getItem("accessToken");
+
+        if (checkExpiredToken(token)) {
+            // Expired token
+            const rt = window.localStorage.getItem("refreshToken");
+            await refreshToken(rt).then((newat) => {
+                token = newat.data.accessToken;
+                window.localStorage.setItem("accessToken", newat.data.accessToken);
+            });
+        }
+
         const idPost = srcDataShow.current[currentComment].postID;
         createComment(token, idPost, { comment: cmt }).then((res) => {
             setRefreshData(!refreshData);
@@ -113,8 +125,20 @@ function Comment({ setIsShowComment, dataShow = [] }) {
         });
     }
 
-    function handleDeletePost() {
+    async function handleDeletePost() {
         setIsShowLoadingModal(true);
+
+        let token = window.localStorage.getItem("accessToken");
+
+        if (checkExpiredToken(token)) {
+            // Expired token
+            const rt = window.localStorage.getItem("refreshToken");
+            await refreshToken(rt).then((newat) => {
+                token = newat.data.accessToken;
+                window.localStorage.setItem("accessToken", newat.data.accessToken);
+            });
+        }
+
         getPostByIdPost(srcDataShow.current[currentComment].postID).then((res) => {
             const currPost = res.data[0];
             const listImage = currPost.img.filter((imgUrl) => imgUrl.url !== srcDataShow.current[currentComment].url);
@@ -129,11 +153,7 @@ function Comment({ setIsShowComment, dataShow = [] }) {
                     res.forEach((file) => {
                         frmData.append("img", file, file.name);
                     });
-                    editPost(
-                        window.localStorage.getItem("accessToken"),
-                        srcDataShow.current[currentComment].postID,
-                        frmData
-                    ).then((res) => {
+                    editPost(token, srcDataShow.current[currentComment].postID, frmData).then((res) => {
                         setIsShowLoadingModal(false);
                         if (res.status === 200 || res.status === 304) {
                             setIsShowToast({
@@ -155,33 +175,41 @@ function Comment({ setIsShowComment, dataShow = [] }) {
                 });
             } else {
                 // LAST IMAGE => DELETE POST
-                deletePost(window.localStorage.getItem("accessToken"), srcDataShow.current[currentComment].postID).then(
-                    (res) => {
-                        setIsShowLoadingModal(false);
-                        if (res.status === 200 || res.status === 304) {
-                            setIsShowToast({
-                                isShow: true,
-                                type: true,
-                                message: "Deleted this photo successfully!",
-                            });
-                            setTimeout(() => {
-                                window.location.reload(true);
-                            }, 1000);
-                        } else {
-                            setIsShowToast({
-                                isShow: false,
-                                type: false,
-                                message: res.data,
-                            });
-                        }
+                deletePost(token, srcDataShow.current[currentComment].postID).then((res) => {
+                    setIsShowLoadingModal(false);
+                    if (res.status === 200 || res.status === 304) {
+                        setIsShowToast({
+                            isShow: true,
+                            type: true,
+                            message: "Deleted this photo successfully!",
+                        });
+                        setTimeout(() => {
+                            window.location.reload(true);
+                        }, 1000);
+                    } else {
+                        setIsShowToast({
+                            isShow: false,
+                            type: false,
+                            message: res.data,
+                        });
                     }
-                );
+                });
             }
             setIsShowToast({ isShow: false, type: false, message: "" });
         });
     }
 
-    const handleUpdatePost = () => {
+    const handleUpdatePost = async () => {
+        let token = window.localStorage.getItem("accessToken");
+
+        if (checkExpiredToken(token)) {
+            // Expired token
+            const rt = window.localStorage.getItem("refreshToken");
+            await refreshToken(rt).then((newat) => {
+                token = newat.data.accessToken;
+                window.localStorage.setItem("accessToken", newat.data.accessToken);
+            });
+        }
         setIsShowLoadingModal(true);
         const imgArr = postCurrent.img.map((img) => ({
             url: img.url,
@@ -194,7 +222,6 @@ function Comment({ setIsShowComment, dataShow = [] }) {
             });
             frmData.append("desc", descBind);
             frmData.append("hashtag", hashtagBind);
-            const token = window.localStorage.getItem("accessToken");
             editPost(token, postCurrent._id, frmData).then((res) => {
                 setIsShowLoadingModal(false);
                 if (res.status === 200 || res.status === 304) {
@@ -210,9 +237,19 @@ function Comment({ setIsShowComment, dataShow = [] }) {
         });
     };
 
-    function handleChangeFollower() {
-        const token = window.localStorage.getItem("accessToken");
+    async function handleChangeFollower() {
+        let token = window.localStorage.getItem("accessToken");
+
         if (token) {
+            if (checkExpiredToken(token)) {
+                // Expired token
+                const rt = window.localStorage.getItem("refreshToken");
+                await refreshToken(rt).then((newat) => {
+                    token = newat.data.accessToken;
+                    window.localStorage.setItem("accessToken", newat.data.accessToken);
+                });
+            }
+
             if (isFollow) {
                 // Handle Unfollow
                 unfollowUserHasId(userCurrent._id, token).then((res) => {

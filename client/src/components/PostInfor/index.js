@@ -26,6 +26,8 @@ import { deletePost } from "../../utils/HttpRequest/post_request";
 import Toast from "../common/Toast";
 import LoadingModal from "../common/LoadingModal";
 import { useNavigate } from "react-router-dom";
+import { checkExpiredToken } from "../../utils/CheckExpiredToken/checkExpiredToken";
+import { refreshToken } from "../../utils/HttpRequest/auth_request";
 
 const cn = classNames.bind(styles);
 
@@ -131,9 +133,19 @@ function PostInfor({ postData = {} }) {
 
     const didLogin = useSelector((state) => state.loginState_reducer.user);
 
-    function handleDeletePost() {
+    async function handleDeletePost() {
         setIsShowLoadingModal(true);
-        const token = window.localStorage.getItem("accessToken");
+        let token = window.localStorage.getItem("accessToken");
+
+        if (checkExpiredToken(token)) {
+            // Expired token
+            const rt = window.localStorage.getItem("refreshToken");
+            await refreshToken(rt).then((newat) => {
+                token = newat.data.accessToken;
+                window.localStorage.setItem("accessToken", newat.data.accessToken);
+            });
+        }
+
         deletePost(token, postData._id).then((res) => {
             setIsShowLoadingModal(false);
             if (res.status === 200 || res.status === 304) {
