@@ -20,6 +20,7 @@ import {
     getFollowingsOfUser,
     getUsers,
 } from "../../../utils/HttpRequest/user_request";
+import jwt_decode from "jwt-decode";
 
 const cn = classNames.bind(styles);
 export const TopPosition = createContext();
@@ -40,6 +41,7 @@ function Sidebar({
     const [FollowingAccounts, setFollowingAccounts] = useState([]); // If dont have data => Show area div => OK
     const [FollowerAccounts, setFollowerAccounts] = useState([]); // If dont have data => Hide
     const [showLoginForm, setShowLoginForm] = useState(false);
+    const [refreshData, setRefreshData] = useState(false);
     let idLeave = useRef();
     let idHover = useRef();
 
@@ -49,6 +51,11 @@ function Sidebar({
 
     const [isGetAPIDone, setIsGetAPIDone] = useState(false);
     const [isGetAPIFollowingDone, setIsGetFollowingAPIDone] = useState(false);
+
+    const handleRefreshData = () => {
+        setRefreshData(!refreshData);
+    };
+
     useEffect(() => {
         if (userId) {
             // If have followerAccounts => Handle
@@ -71,12 +78,20 @@ function Sidebar({
         }
         // Not loggin or Logged in can get Suggestd Account
         getAllUsers().then((res) => {
-            const tmp = res.slice(0, 5);
+            let tmp = res.slice(0, 5);
+
+            // Remove profile myself
+            const token = window.localStorage.getItem("accessToken");
+            if (token) {
+                const myId = jwt_decode(token)._id;
+                tmp = res.filter((user) => user._id !== myId).slice(0, 5);
+            }
+
             setSuggestdAccounts(tmp);
             SuggestdAccountsUR.current = res;
         });
         setIsGetAPIDone(true);
-    }, [userId]);
+    }, [userId, refreshData]);
 
     const [Profile, setProfile] = useState({
         index: -1,
@@ -356,6 +371,8 @@ function Sidebar({
                                         <ProfilePopover
                                             className={cn("profile-popover")}
                                             userInfor={Profile.user}
+                                            showLoginForm={setShowLoginForm}
+                                            funcRefresh={handleRefreshData}
                                         />
                                     </TopPosition.Provider>
                                 ))}
