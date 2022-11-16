@@ -22,7 +22,7 @@ import FrameRecommendVideo from "../common/FrameRecommendVideo";
 import Popover from "../common/Popover";
 import Modal_Center from "../common/Modal/Modal_Center";
 import jwt_decode from "jwt-decode";
-import { deletePost } from "../../utils/HttpRequest/post_request";
+import { changeLikeAndUnlikeState, deletePost } from "../../utils/HttpRequest/post_request";
 import Toast from "../common/Toast";
 import LoadingModal from "../common/LoadingModal";
 import { useNavigate } from "react-router-dom";
@@ -69,6 +69,7 @@ function PostInfor({ postData = {}, refreshFunction }) {
     const [isFollow, setIsFollow] = useState(false);
     const [isShowPanel, setIsShowPanel] = useState(false);
     const [isShowComment, setIsShowComment] = useState({ isShow: false, data: {} });
+    const [isShowLoginForm, setIsShowLoginForm] = useState(false);
     const [isMyAccount, setIsMyAccount] = useState(() => {
         const token = window.localStorage.getItem("accessToken");
         if (token) {
@@ -88,6 +89,12 @@ function PostInfor({ postData = {}, refreshFunction }) {
     const [isShowToast, setIsShowToast] = useState({ isShow: false, type: false, message: "" });
 
     const [isShowLoadingModal, setIsShowLoadingModal] = useState(false);
+
+    const [currentRefreshFunc, setCurrentRefreshFunc] = useState(false);
+
+    function handleRefreshCurrent() {
+        setCurrentRefreshFunc(!currentRefreshFunc);
+    }
 
     const negative = useNavigate();
 
@@ -129,7 +136,15 @@ function PostInfor({ postData = {}, refreshFunction }) {
             setDataUser(user.data);
             setIsGetAPIDone(true);
         });
-    }, []);
+
+        const token = window.localStorage.getItem("accessToken");
+        if (token) {
+            console.log(postData);
+            postData.likes.filter((iduser) => iduser === jwt_decode(token)._id).length > 0
+                ? setIsLike(true)
+                : setIsLike(false);
+        }
+    }, [currentRefreshFunc]);
 
     const didLogin = useSelector((state) => state.loginState_reducer.user);
 
@@ -179,7 +194,17 @@ function PostInfor({ postData = {}, refreshFunction }) {
     }
 
     function handleLike() {
-        setIsLike(!isLike);
+        const token = window.localStorage.getItem("accessToken");
+        if (token) {
+            // Handle like/unlike
+            changeLikeAndUnlikeState(token, postData._id).then((res) => {
+                refreshFunction();
+                setIsLike(!isLike);
+            });
+        } else {
+            // Force login
+            setIsShowLoginForm(true);
+        }
     }
 
     function handleChangeFollower() {
@@ -494,11 +519,13 @@ function PostInfor({ postData = {}, refreshFunction }) {
                         />
                     ))}
             </AnimatePresence>
+            <AnimatePresence>{isShowLoginForm && <Login handleClosePanel={setIsShowLoginForm} />}</AnimatePresence>
             {isShowComment.isShow && (
                 <Comment
                     setIsShowComment={setIsShowComment}
                     dataShow={isShowComment.data}
                     refreshFunction={refreshFunction}
+                    refreshPostInforFunction={handleRefreshCurrent}
                 />
             )}
 

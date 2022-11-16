@@ -18,7 +18,14 @@ import right from "../../assets/image/comment/right.svg";
 import comments from "../../assets/image/comment/comments.svg";
 import more from "../../assets/image/comment/more.svg";
 import hashtag from "../../assets/image/upload/hashtag.svg";
-import { createComment, createPost, deletePost, editPost, getPostByIdPost } from "../../utils/HttpRequest/post_request";
+import {
+    changeLikeAndUnlikeState,
+    createComment,
+    createPost,
+    deletePost,
+    editPost,
+    getPostByIdPost,
+} from "../../utils/HttpRequest/post_request";
 import { followUserHasId, getUserById, unfollowUserHasId } from "../../utils/HttpRequest/user_request";
 import { urlToObject } from "../../utils/URLtoFileObject/convertURL";
 import moment from "moment";
@@ -36,7 +43,7 @@ import { refreshToken } from "../../utils/HttpRequest/auth_request";
 
 const cn = classNames.bind(styles);
 
-function Comment({ setIsShowComment, dataShow = [], refreshFunction }) {
+function Comment({ setIsShowComment, dataShow = [], refreshFunction, refreshPostInforFunction }) {
     /** dataShow
      * [
      *    {
@@ -284,7 +291,16 @@ function Comment({ setIsShowComment, dataShow = [], refreshFunction }) {
     }
 
     function handleLike() {
-        setIsLike(!isLike);
+        const token = window.localStorage.getItem("accessToken");
+        if (token) {
+            changeLikeAndUnlikeState(token, postCurrent._id).then(async () => {
+                setIsLike(!isLike);
+                refreshFunction();
+                setRefreshData(!refreshData);
+            });
+        } else {
+            setIsShowLoginForm(true);
+        }
     }
 
     function handleCommentType(e) {
@@ -365,6 +381,11 @@ function Comment({ setIsShowComment, dataShow = [], refreshFunction }) {
                     post.data[0].usercomments = allRes;
                     setPostCurrent(post.data[0]);
                     setDescBind(post.data[0].desc);
+                    const token = window.localStorage.getItem("accessToken");
+                    if (token) {
+                        const usersLike = post.data[0].likes.filter((iduser) => iduser === jwt_decode(token)._id);
+                        usersLike.length > 0 ? setIsLike(true) : setIsLike(false);
+                    }
                     setHashtagBind(post.data[0].hashtag);
                     setIsGetAPIDone(true);
                 });

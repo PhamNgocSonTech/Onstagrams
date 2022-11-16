@@ -44,3 +44,13 @@ export const refreshToken = async (rt) => {
     console.log(results);
     return results;
 };
+
+export const forgotPassword = async (email) => {
+    const results = await usersConfig.post("/forgot/password", { email });
+    return results;
+};
+
+export const resetPassword = async (otp, password, email) => {
+    const results = await usersConfig.post("/reset/password", { token: otp, password, email });
+    return results;
+};

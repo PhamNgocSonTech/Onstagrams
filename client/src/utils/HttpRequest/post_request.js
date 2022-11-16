@@ -52,3 +52,15 @@ export const createComment = async (accessToken, postId, cmt) => {
     });
     return results;
 };
+
+// Like + Unlike
+export const changeLikeAndUnlikeState = async (accessToken, postId) => {
+    const results = await usersConfig.put(
+        `/like/${postId}`,
+        {},
+        {
+            headers: { token: accessToken },
+        }
+    );
+    return results;
+};
