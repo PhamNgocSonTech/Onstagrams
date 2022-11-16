@@ -8,7 +8,6 @@ const { nanoid } = require('nanoid');
 const passport = require('passport')
 require('../utils/passport')
 
-
 // UTILS REQUIRE
 const cloudinary = require('../utils/cloudinary')
 const upload = require('../utils/multer')
@@ -37,7 +36,8 @@ const CLIENT_URL = "http://localhost:3000/";
 const myOAuth2Client = new OAuth2Client(
     process.env.GOOGLE_MAILER_CLIENT_ID,
     process.env.GOOGLE_MAILER_CLIENT_SECRET
-  )
+)
+
 // Set Refresh Token vào OAuth2Client Credentials
   myOAuth2Client.setCredentials({
     refresh_token: process.env.GOOGLE_MAILER_REFRESH_TOKEN
@@ -200,6 +200,7 @@ router.post('/login', async(req, res) => {
 
 router.get('/google', passport.authenticate('google', {scope: ['profile', 'email']})
 );
+
 router.get('/google/callback', passport.authenticate('google', { 
   session: false,
   successRedirect: 'CLIENT_URL',
@@ -215,8 +216,8 @@ router.get('/google/callback', passport.authenticate('google', {
     });
 }
 );
-router.get('/facebook', passport.authenticate('facebook', { scope : ['email'] }))
 
+router.get('/facebook', passport.authenticate('facebook', { scope : ['email'] }))
 
 router.get('/facebook/callback', passport.authenticate('facebook', { session: false }), (req, res) => {
   jwt.sign({ user: req.user }, process.env.SESSION_SECRET, { expiresIn: '1h' }, (err, token) => {
@@ -228,66 +229,7 @@ router.get('/facebook/callback', passport.authenticate('facebook', { session: fa
 }
 );
 
-// This is the callback\redirect url after the OAuth login at Google.
-// router.get('/google/callback', passport.authenticate('google', { failureRedirect: '/login' }), (req, res) => {
-//     const token = generateJwtToken(req.user);
-//     res.cookie('jwt', token);
-//     res.redirect('/');
-//   }
-// );
 
-/* router.get("/facebook/callback", passport.authenticate("facebook", {
-    successRedirect: "http://localhost:3000/",
-    // failureRedirect: "/login/failed",
-  })
-); */
-
-
-
-
-// This is the callback\redirect url after the OAuth login at Facebook.
-/* router.get(
-  '/facebook/callback',
-  passport.authenticate('facebook', { failureRedirect: '/login' }),
-  (req, res) => {
-    const token = generateJwtToken(req.user);
-    res.cookie('jwt', token);
-    res.redirect('/');
-  }
-); */
-
-// Navigating to the root url will ask passport to check for a valid token
-// router.get('/', passport.authenticate('jwt', { session: false, failureRedirect: '/login' }), (req, res) => {
-//     //res.render('home', { user: req.user });
-//   }
-// );
-
-router.get('/logoutSso', (req, res) => {
-  res.clearCookie('jwt');
-  res.redirect('/');
-});
-
-
-/* router.get("/google", passport.authenticate("google", { scope: ["profile"] }));
-
-router.get(
-  "/google/callback",
-  passport.authenticate("google", {
-    successRedirect: CLIENT_URL,
-    failureRedirect: "/login/",
-  })
-);
-
-
-router.get("/facebook", passport.authenticate("facebook", { scope: ["profile"] }));
-
-router.get(
-  "/facebook/callback",
-  passport.authenticate("facebook", {
-    successRedirect: CLIENT_URL,
-    failureRedirect: "/login/",
-  })
-); */
 // LOGOUT USER WILL DELETE REFRESH_TOKEN
 router.post('/logout', (req, res) => {
   const refreshToken = req.body.token;
@@ -305,7 +247,7 @@ router.post('/forgot/password', async(req, res) => {
 
   const codeRandom = nanoid(10)
   const resetToken = new ResetToken({
-    userEmail: getEmail,
+    userEmail: getEmail.email,
     token: codeRandom
   })
   resetToken.save()
@@ -344,7 +286,7 @@ router.put('/reset/password', async(req, res) => {
   if(!user){
     return res.status(500).json('User not found')
   }
-  const resetToken = await ResetToken.findOne({user: user.email})
+  const resetToken = await ResetToken.findOne({userEmail: user.email})
   if(!resetToken){
     return res.status(500).json('Reset token not found')
   }
@@ -412,7 +354,6 @@ router.post('/refreshToken', async (req, res) => {
 
   
 // ***********CANCELED CODE***********
-
 /* SEND MAIL
 router.post('/send/mail', async (req, res) => {
     let subject = "Hello ✔️ This is mail for test send mail from Onstagrams"
@@ -502,5 +443,63 @@ try {
     return res.status(401).json(err)
 }
 })
+ */
+// This is the callback\redirect url after the OAuth login at Facebook.
+/* router.get(
+  '/facebook/callback',
+  passport.authenticate('facebook', { failureRedirect: '/login' }),
+  (req, res) => {
+    const token = generateJwtToken(req.user);
+    res.cookie('jwt', token);
+    res.redirect('/');
+  }
+);
+
+// Navigating to the root url will ask passport to check for a valid token
+router.get('/', passport.authenticate('jwt', { session: false, failureRedirect: '/login' }), (req, res) => {
+    //res.render('home', { user: req.user });
+  }
+);
+
+router.get('/logoutSso', (req, res) => {
+  res.clearCookie('jwt');
+  res.redirect('/');
+});
+
+
+router.get("/google", passport.authenticate("google", { scope: ["profile"] }));
+
+router.get(
+  "/google/callback",
+  passport.authenticate("google", {
+    successRedirect: CLIENT_URL,
+    failureRedirect: "/login/",
+  })
+);
+
+
+router.get("/facebook", passport.authenticate("facebook", { scope: ["profile"] }));
+
+router.get(
+  "/facebook/callback",
+  passport.authenticate("facebook", {
+    successRedirect: CLIENT_URL,
+    failureRedirect: "/login/",
+  })
+); */
+
+// This is the callback\redirect url after the OAuth login at Google.
+/* router.get('/google/callback', passport.authenticate('google', { failureRedirect: '/login' }), (req, res) => {
+    const token = generateJwtToken(req.user);
+    res.cookie('jwt', token);
+    res.redirect('/');
+  }
+);
+
+router.get("/facebook/callback", passport.authenticate("facebook", {
+    successRedirect: "http://localhost:3000/",
+    // failureRedirect: "/login/failed",
+  })
+);
  */
 module.exports = router
