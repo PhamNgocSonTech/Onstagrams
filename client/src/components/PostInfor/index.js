@@ -31,7 +31,7 @@ import { refreshToken } from "../../utils/HttpRequest/auth_request";
 
 const cn = classNames.bind(styles);
 
-function PostInfor({ postData = {} }) {
+function PostInfor({ postData = {}, refreshFunction }) {
     /** postData
      * 
      * {
@@ -151,7 +151,7 @@ function PostInfor({ postData = {} }) {
             if (res.status === 200 || res.status === 304) {
                 setIsShowToast({ isShow: true, type: true, message: "Deleted successfully !" });
                 setTimeout(() => {
-                    window.location.reload();
+                    refreshFunction();
                 }, 1000);
             } else {
                 setIsShowToast({ isShow: true, type: false, message: res.data });
@@ -498,6 +498,7 @@ function PostInfor({ postData = {} }) {
                 <Comment
                     setIsShowComment={setIsShowComment}
                     dataShow={isShowComment.data}
+                    refreshFunction={refreshFunction}
                 />
             )}
 

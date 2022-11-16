@@ -8,7 +8,7 @@ import { useState } from "react";
 
 const cn = classNames.bind(styles);
 
-function PhotoGallery({ contents = [], isMyProfile = false }) {
+function PhotoGallery({ contents = [], isMyProfile = false, refreshFunction }) {
     /** contents
    *[
         {
@@ -85,6 +85,7 @@ function PhotoGallery({ contents = [], isMyProfile = false }) {
             })}
             {isShowComment.isShow && (
                 <Comment
+                    refreshFunction={refreshFunction}
                     setIsShowComment={setIsShowComment}
                     dataShow={isShowComment.data}
                 />

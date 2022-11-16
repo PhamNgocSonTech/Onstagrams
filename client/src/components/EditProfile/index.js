@@ -7,15 +7,17 @@ import close from "../../assets/image/modal/close-dark.svg";
 import pencil from "../../assets/image/edit/pencil.svg";
 import { useState } from "react";
 import { useSelector } from "react-redux";
-import { editUser } from "../../utils/HttpRequest/user_request";
+import { editUser, getUserById } from "../../utils/HttpRequest/user_request";
 import LoadingModal from "../common/LoadingModal";
 import Toast from "../common/Toast";
 import { refreshToken } from "../../utils/HttpRequest/auth_request";
 import { checkExpiredToken } from "../../utils/CheckExpiredToken/checkExpiredToken";
+import { useDispatch } from "react-redux";
+import { setUserInfor } from "../../reducers/LoginStateManager";
 
 const cn = classNames.bind(styles);
 
-function EditProfile({ setIsOpenEditPopUp }) {
+function EditProfile({ setIsOpenEditPopUp, refreshFunction }) {
     const didLogin = useSelector((state) => state.loginState_reducer.user);
     const [image, setImage] = useState(didLogin);
     const [isShowLoading, setIsShowLoading] = useState(false);
@@ -33,6 +35,14 @@ function EditProfile({ setIsOpenEditPopUp }) {
         didLogin.bio ? didLogin.bio : "",
         didLogin.external ? didLogin.external : "",
     ]);
+
+    const dispatch = useDispatch();
+
+    const updateUserInfoOnRedux = async () => {
+        await getUserById(didLogin._id).then((user) => {
+            dispatch(setUserInfor(user.data));
+        });
+    };
 
     const handleChangeDataAllFields = (index, event) => {
         let ArrTmp = [...dataAllInputField];
@@ -88,13 +98,15 @@ function EditProfile({ setIsOpenEditPopUp }) {
             });
         }
 
-        editUser(token, didLogin._id, frmData).then((res) => {
+        editUser(token, didLogin._id, frmData).then(async (res) => {
             setIsShowLoading(false);
             if (res.status === 200) {
                 setIsShowToast({ isShow: true, state: true, message: "Edit user successfully !" });
+                await refreshFunction();
+                await updateUserInfoOnRedux();
                 setTimeout(() => {
-                    window.location.reload(true);
-                }, 1500);
+                    setIsOpenEditPopUp(false);
+                }, 1000);
             } else {
                 setIsShowToast({ isShow: true, state: false, message: res.data });
             }

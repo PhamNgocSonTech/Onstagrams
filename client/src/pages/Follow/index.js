@@ -11,6 +11,11 @@ function Follow() {
     const negative = useNavigate();
     const [PostData, setPostData] = useState([]);
     const [isShowToast, setIsShowToast] = useState({ isShow: false, message: "" });
+    const [refreshData, setRefreshData] = useState(false);
+
+    const refreshFunction = () => {
+        setRefreshData(!refreshData);
+    };
 
     useEffect(() => {
         const getData = async () => {
@@ -38,7 +43,7 @@ function Follow() {
         };
 
         getData();
-    }, []);
+    }, [refreshData]);
 
     return (
         <>
@@ -47,6 +52,7 @@ function Follow() {
                     <PostInfor
                         key={index}
                         postData={post}
+                        refreshFunction={refreshFunction}
                     />
                 );
             })}

@@ -46,6 +46,12 @@ function Profile() {
     const [followerNum, setFollowerNum] = useState(0);
     const [followingNum, setFollowingNum] = useState(0);
 
+    const [refreshData, setRefreshData] = useState(false);
+
+    const handleRefreshData = () => {
+        setRefreshData(!refreshData);
+    };
+
     const handleVerify = () => {
         setIsShowVeryfyForm(true);
     };
@@ -84,7 +90,7 @@ function Profile() {
             src.length > 0 ? setSrc(src) : setSrc([]);
             setIsGetAPIDone(true);
         });
-    }, [id]);
+    }, [id, refreshData]);
     const [tabChoose, setTabChoose] = useState(0);
 
     const [isOpenEditPopUp, setIsOpenEditPopUp] = useState(false);
@@ -103,7 +109,7 @@ function Profile() {
     }
 
     if (tabChoose === 2) {
-        // Shared
+        // Post
         Frame = addProfileTags(src)[2].frame;
         contents = addProfileTags(src)[2].contents;
     }
@@ -423,6 +429,7 @@ function Profile() {
                         <Frame
                             contents={contents}
                             isMyProfile={viewType}
+                            refreshFunction={handleRefreshData}
                         />
                     )}
                 </div>
@@ -434,6 +441,7 @@ function Profile() {
                     <EditProfile
                         key={"edit"}
                         setIsOpenEditPopUp={setIsOpenEditPopUp}
+                        refreshFunction={handleRefreshData}
                     />
                 )}
             </AnimatePresence>

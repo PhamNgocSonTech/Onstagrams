@@ -36,7 +36,7 @@ import { refreshToken } from "../../utils/HttpRequest/auth_request";
 
 const cn = classNames.bind(styles);
 
-function Comment({ setIsShowComment, dataShow = [] }) {
+function Comment({ setIsShowComment, dataShow = [], refreshFunction }) {
     /** dataShow
      * [
      *    {
@@ -119,8 +119,9 @@ function Comment({ setIsShowComment, dataShow = [] }) {
         }
 
         const idPost = srcDataShow.current[currentComment].postID;
-        createComment(token, idPost, { comment: cmt }).then((res) => {
+        createComment(token, idPost, { comment: cmt }).then(() => {
             setRefreshData(!refreshData);
+            refreshFunction();
             setCmt("");
         });
     }
@@ -153,7 +154,7 @@ function Comment({ setIsShowComment, dataShow = [] }) {
                     res.forEach((file) => {
                         frmData.append("img", file, file.name);
                     });
-                    editPost(token, srcDataShow.current[currentComment].postID, frmData).then((res) => {
+                    editPost(token, srcDataShow.current[currentComment].postID, frmData).then(async (res) => {
                         setIsShowLoadingModal(false);
                         if (res.status === 200 || res.status === 304) {
                             setIsShowToast({
@@ -161,8 +162,9 @@ function Comment({ setIsShowComment, dataShow = [] }) {
                                 type: true,
                                 message: "Deleted this photo successfully!",
                             });
+                            await refreshFunction();
                             setTimeout(() => {
-                                window.location.reload(true);
+                                setIsShowComment(false);
                             }, 1000);
                         } else {
                             setIsShowToast({
@@ -175,7 +177,7 @@ function Comment({ setIsShowComment, dataShow = [] }) {
                 });
             } else {
                 // LAST IMAGE => DELETE POST
-                deletePost(token, srcDataShow.current[currentComment].postID).then((res) => {
+                deletePost(token, srcDataShow.current[currentComment].postID).then(async (res) => {
                     setIsShowLoadingModal(false);
                     if (res.status === 200 || res.status === 304) {
                         setIsShowToast({
@@ -183,8 +185,9 @@ function Comment({ setIsShowComment, dataShow = [] }) {
                             type: true,
                             message: "Deleted this photo successfully!",
                         });
+                        await refreshFunction();
                         setTimeout(() => {
-                            window.location.reload(true);
+                            setIsShowComment(false);
                         }, 1000);
                     } else {
                         setIsShowToast({
@@ -222,10 +225,11 @@ function Comment({ setIsShowComment, dataShow = [] }) {
             });
             frmData.append("desc", descBind);
             frmData.append("hashtag", hashtagBind);
-            editPost(token, postCurrent._id, frmData).then((res) => {
+            editPost(token, postCurrent._id, frmData).then(async (res) => {
                 setIsShowLoadingModal(false);
                 if (res.status === 200 || res.status === 304) {
                     setIsShowToast({ isShow: true, type: true, message: "Edit successfully !" });
+                    await refreshFunction();
                     setTimeout(() => {
                         setIsShowEditMode(false);
                     }, 1000);

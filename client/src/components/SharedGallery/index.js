@@ -7,7 +7,7 @@ import PostInfor from "../PostInfor";
 
 const cn = classNames.bind(styles);
 
-function SharedGallery({ isMyProfile = false, contents = [] }) {
+function SharedGallery({ isMyProfile = false, contents = [], refreshFunction }) {
     /**
      * contents: [post1, post2, post3,....]
      */
@@ -20,6 +20,7 @@ function SharedGallery({ isMyProfile = false, contents = [] }) {
                 <PostInfor
                     key={index}
                     postData={post}
+                    refreshFunction={refreshFunction}
                 />
             ))}
         </div>
