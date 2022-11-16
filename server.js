@@ -6,8 +6,7 @@ const morgan = require("morgan");
 const helmet = require("helmet");
 const dotenv = require("dotenv");
 const bodyParser = require("body-parser");
-// const cookieSession = require('cookie-session')
-// const session = require('express-session')
+const path = require("path");
 const cookieParser = require("cookie-parser");
 const passport = require("passport");
 const cors = require("cors");
@@ -57,15 +56,19 @@ app.use("/api/post", postRoute);
 app.use("/api/notify", notifyRoute);
 app.use("/api/chat", chatRoute);
 
+app.use(express.static(path.join(__dirname, 'build')));
+app.get('/*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'build', 'index.html'));
+});
 // Serve static assets if in production
-if (process.env.NODE_ENV === 'production') {
+// if (process.env.NODE_ENV === 'production') {
 //   // Set static folder
-  app.use(express.static('client/build'));
+  // app.use(express.static('client/build'));
 
 //   app.get('*', (req, res) => {
 //     res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
 //   });
-}
+// }
 
 app.listen(port, () => console.log("Server is running on port is:", port));
 
