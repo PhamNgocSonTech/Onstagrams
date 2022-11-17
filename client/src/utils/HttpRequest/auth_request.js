@@ -51,6 +51,6 @@ export const forgotPassword = async (email) => {
 };
 
 export const resetPassword = async (otp, password, email) => {
-    const results = await usersConfig.post("/reset/password", { token: otp, password, email });
+    const results = await usersConfig.put("/reset/password", { token: otp, password, email });
     return results;
 };

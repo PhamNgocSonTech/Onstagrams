@@ -20,6 +20,7 @@ import { login } from "../../utils/HttpRequest/auth_request";
 
 import show from "../../assets/image/register/show.svg";
 import hide from "../../assets/image/register/hide.svg";
+import ForgotPassword from "./ForgotPassword";
 
 const cn = classNames.bind(styles);
 
@@ -32,6 +33,7 @@ function PersonalLogIn({ isShowDoneRegister = "" }) {
     const [isShowPassword, setIsShowPassword] = useState(false);
     const [isShowEyesIcon, setIsShowEyesIcon] = useState(false);
     const [isShowToast, setIsShowToast] = useState({ isShow: false, message: "" });
+    const [isShowForgotPassword, setIsShowForgotPassword] = useState(false);
     const frm = useRef();
 
     const dispatch = useDispatch();
@@ -177,7 +179,10 @@ function PersonalLogIn({ isShowDoneRegister = "" }) {
                             )}
                         </div>
                     </form>
-                    <div className={cn("forgot-pass")}>
+                    <div
+                        className={cn("forgot-pass")}
+                        onClick={() => setIsShowForgotPassword(true)}
+                    >
                         <p>Forgot password?</p>
                     </div>
                     <Button
@@ -210,6 +215,12 @@ function PersonalLogIn({ isShowDoneRegister = "" }) {
                 <Toast
                     message={isShowToast.message}
                     state={true}
+                />
+            )}
+            {isShowForgotPassword && (
+                <ForgotPassword
+                    toast={setIsShowToast}
+                    handleCloseForm={setIsShowForgotPassword}
                 />
             )}
         </Modal_Center>
