@@ -4,6 +4,7 @@ import { faCircleXmark, faSpinner } from "@fortawesome/free-solid-svg-icons";
 import classNames from "classnames/bind";
 import { AnimatePresence, motion } from "framer-motion";
 import logo from "../../../assets/image/header/logo.svg";
+import onstagrams from "../../../assets/image/header/onstagrams.svg";
 import plus from "../../../assets/image/header/plus.svg";
 import more from "../../../assets/image/header/more.svg";
 import search from "../../../assets/image/header/search.svg";
@@ -112,7 +113,7 @@ function Header({ isShowUploadBtn = true }) {
             <div className={cn("content")}>
                 <Button to='/'>
                     <img
-                        src={logo}
+                        src={onstagrams}
                         alt='Tiktok'
                     />
                 </Button>

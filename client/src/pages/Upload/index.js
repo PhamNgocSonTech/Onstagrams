@@ -84,7 +84,6 @@ function Upload() {
                 file.type === "image/jpg" ||
                 file.type === "image/png" ||
                 file.type === "image/jpeg" ||
-                file.type === "video/mp4" ||
                 file.type === "image/jpge"
             ) {
                 file.url = URL.createObjectURL(file);
@@ -144,8 +143,8 @@ function Upload() {
     return (
         <div className={cn("wrapper")}>
             <div className={cn("intro")}>
-                <h3 style={{ fontSize: "30px" }}>Upload your videos or photos</h3>
-                <span style={{ fontSize: "17px", opacity: 0.6 }}>Post the videos or images to your account</span>
+                <h3 style={{ fontSize: "30px" }}>Upload your photos</h3>
+                <span style={{ fontSize: "17px", opacity: 0.6 }}>Post the images to your account</span>
             </div>
             <div className={cn("upload-section")}>
                 <div className={cn("img-vd-section")}>
@@ -155,18 +154,17 @@ function Upload() {
                             multiple
                             style={{ opacity: 0 }}
                             onChange={handleChangeImage}
-                            accept='.jpg, .png, .jpeg, .jpge, .mp4'
+                            accept='.jpg, .png, .jpeg, .jpge'
                         />
                         <div className={cn("guide")}>
                             <img
                                 src={upload}
                                 alt=''
                             />
-                            <h3 style={{ opacity: 0.8 }}>Choose/Drop your image or video here</h3>
+                            <h3 style={{ opacity: 0.8 }}>Choose/Drop your image here</h3>
                             <ul>
                                 <li>Accept .jpg, .png, .jpeg images only</li>
                                 <li>Maximum 10 files upload</li>
-                                <li>Video must less than 2 minutes</li>
                             </ul>
                         </div>
                     </div>
