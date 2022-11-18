@@ -49,8 +49,8 @@ List the ready features here:
 - Install locally using npm, open Terminal in VSCODE:
 
 ```
-install package for client: $ npm install
-install package for server: $ npm run client-install
+install package for server: $ npm install
+install package for client: $ npm run client-install
 
 ```
 
