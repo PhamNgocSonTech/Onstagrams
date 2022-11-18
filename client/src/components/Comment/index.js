@@ -22,6 +22,7 @@ import {
     changeLikeAndUnlikeState,
     createComment,
     createPost,
+    deleteComment,
     deletePost,
     editPost,
     getPostByIdPost,
@@ -40,6 +41,7 @@ import { useNavigate } from "react-router-dom";
 import Login from "../Login";
 import { checkExpiredToken } from "../../utils/CheckExpiredToken/checkExpiredToken";
 import { refreshToken } from "../../utils/HttpRequest/auth_request";
+import { useDispatch, useSelector } from "react-redux";
 
 const cn = classNames.bind(styles);
 
@@ -61,6 +63,7 @@ function Comment({ setIsShowComment, dataShow = [], refreshFunction, refreshPost
      *    }
      * ]
      */
+    const didLogin = useSelector((state) => state.loginState_reducer.user);
     const srcDataShow = useRef(dataShow);
     const [currentComment, setCurrentComment] = useState(srcDataShow.current.findIndex((item) => item.show == true));
     const [userCurrent, setUserCurrent] = useState({});
@@ -92,9 +95,13 @@ function Comment({ setIsShowComment, dataShow = [], refreshFunction, refreshPost
     const [isShowSubToast, setisShowSubToast] = useState({ isShow: false, type: false, message: "" });
     const [isShowLoginForm, setIsShowLoginForm] = useState();
 
+    const [isShowDeleteComment, setIsShowDeleteComment] = useState(false);
+
     const [animate, setAnimate] = useState(false);
 
     const [refreshData, setRefreshData] = useState(false);
+
+    const [idComment, setIdComment] = useState("");
 
     function handleInputChange(index, e) {
         if (index === 0) {
@@ -328,6 +335,21 @@ function Comment({ setIsShowComment, dataShow = [], refreshFunction, refreshPost
             scale: [1, 1.4, 0.8, 1],
         },
         dislike: {},
+    };
+
+    const handleDeleteComment = () => {
+        // console.log("ID COMMENT: " + idComment);
+        // console.log("ID POST: " + srcDataShow.current[currentComment].postID);
+        setIsShowLoadingModal(true);
+        const idCmt = idComment;
+        const idPost = srcDataShow.current[currentComment].postID;
+        deleteComment(idPost, idCmt).then(async (res) => {
+            setIsShowLoadingModal(false);
+            if (res.status === 200 || res.status === 304) {
+                setRefreshData(!refreshData);
+                setIdComment("");
+            }
+        });
     };
 
     useEffect(() => {
@@ -564,12 +586,6 @@ function Comment({ setIsShowComment, dataShow = [], refreshFunction, refreshPost
                                 <motion.div
                                     key={"cut"}
                                     className={cn("cap-upload")}
-                                    // animate={{
-                                    //     rotate: 720,
-                                    //     x: [0, -900, 0, 200, 0],
-                                    //     y: [0, -300, 0, 300, 0],
-                                    // }}
-                                    // transition={{ repeat: Infinity, duration: 20 }}
                                     initial={{ opacity: 0, x: 100 }}
                                     animate={{ opacity: 1, x: 0 }}
                                     exit={{ opacity: 0, x: 100 }}
@@ -725,19 +741,85 @@ function Comment({ setIsShowComment, dataShow = [], refreshFunction, refreshPost
                                                     <h4>{cmt.comment}</h4>
                                                     <div className={cn("cmt-footer")}>
                                                         <span className={cn("cmt-time")}>
-                                                            {moment(cmt.createdAt).fromNow()}
+                                                            {moment(cmt.createAt).fromNow()}
                                                         </span>
                                                         <span className={cn("cmt-reply")}>Reply</span>
                                                     </div>
                                                 </div>
                                                 <div className={cn("action-cmt")}>
-                                                    <div className={cn("act-btn-cmt")}>
-                                                        <img
-                                                            alt='img'
-                                                            src={heart_outline}
-                                                        />
-                                                    </div>
-                                                    <span className={cn("act-text-cmt")}>0</span>
+                                                    {didLogin ? (
+                                                        didLogin._id === postCurrent.usercomments[index].data._id ? (
+                                                            <div className={cn("act-btn-cmt")}>
+                                                                <img
+                                                                    alt='img'
+                                                                    src={more}
+                                                                />
+                                                                <Popover className={cn("delete-post")}>
+                                                                    <Button
+                                                                        className={cn("btn-option", "btn-1")}
+                                                                        outline
+                                                                        onClick={() => setIdComment(cmt._id)}
+                                                                    >
+                                                                        Delete this comment
+                                                                    </Button>
+                                                                </Popover>
+                                                                {idComment && (
+                                                                    <AnimatePresence>
+                                                                        <Modal_Center
+                                                                            key={"deleteMD"}
+                                                                            className={cn("accept-delete-form")}
+                                                                        >
+                                                                            <h2>
+                                                                                Do you want to delete this comment ?{" "}
+                                                                            </h2>
+                                                                            <div className={cn("accept-btns")}>
+                                                                                <Button
+                                                                                    className={cn("accept-btn")}
+                                                                                    outlinePrimary
+                                                                                    onClick={() => setIdComment("")}
+                                                                                >
+                                                                                    No
+                                                                                </Button>
+                                                                                <Button
+                                                                                    className={cn("accept-btn")}
+                                                                                    outlinePrimary
+                                                                                    onClick={handleDeleteComment}
+                                                                                >
+                                                                                    Yes
+                                                                                </Button>
+                                                                            </div>
+                                                                            {isShowSubToast.isShow && (
+                                                                                <Toast
+                                                                                    message={isShowSubToast.message}
+                                                                                    state={isShowSubToast.type}
+                                                                                />
+                                                                            )}
+                                                                        </Modal_Center>
+                                                                    </AnimatePresence>
+                                                                )}
+                                                            </div>
+                                                        ) : (
+                                                            <>
+                                                                <div className={cn("act-btn-cmt")}>
+                                                                    <img
+                                                                        alt='img'
+                                                                        src={heart_outline}
+                                                                    />
+                                                                </div>
+                                                                <span className={cn("act-text-cmt")}>0</span>
+                                                            </>
+                                                        )
+                                                    ) : (
+                                                        <>
+                                                            <div className={cn("act-btn-cmt")}>
+                                                                <img
+                                                                    alt='img'
+                                                                    src={heart_outline}
+                                                                />
+                                                            </div>
+                                                            <span className={cn("act-text-cmt")}>0</span>
+                                                        </>
+                                                    )}
                                                 </div>
                                             </div>
                                         ))}

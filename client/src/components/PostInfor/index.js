@@ -161,12 +161,12 @@ function PostInfor({ postData = {}, refreshFunction }) {
             });
         }
 
-        deletePost(token, postData._id).then((res) => {
+        deletePost(token, postData._id).then(async (res) => {
             setIsShowLoadingModal(false);
             if (res.status === 200 || res.status === 304) {
                 setIsShowToast({ isShow: true, type: true, message: "Deleted successfully !" });
                 setTimeout(() => {
-                    refreshFunction();
+                    window.location.reload();
                 }, 1000);
             } else {
                 setIsShowToast({ isShow: true, type: false, message: res.data });

@@ -12,7 +12,10 @@ const usersConfig = axios.create({
  * url: https://localhost:5000/api/post/{url}
  * options: https://localhost:5000/api/post/{url}&{params}
  */
-export const getAllPost = async (url, options = {}) => {};
+export const getListPosts = async () => {
+    const results = await usersConfig.get("/getListPosts/");
+    return results;
+};
 
 export const getPostByIdUser = async (id) => {
     const results = await usersConfig.get(`/getPostUser/${id}`);
@@ -50,6 +53,11 @@ export const createComment = async (accessToken, postId, cmt) => {
     const results = await usersConfig.put(`/comment/post/${postId}`, cmt, {
         headers: { token: accessToken },
     });
+    return results;
+};
+
+export const deleteComment = async (postId, cmtId) => {
+    const results = await usersConfig.delete(`/delComment/post/${postId}/${cmtId}`);
     return results;
 };
 
