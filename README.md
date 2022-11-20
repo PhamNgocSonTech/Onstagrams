@@ -2,7 +2,7 @@
 
 
 ## Table of Contents :bookmark:
-* [Technologies And Packages Used](#technologies-and-packages-used)
+* [Technologies And Packages Used](#technologies-and-packages-used:mag_right:)
 * [Features](#features)
 * [Screenshots](#screenshots)
 * [Setup](#setup)
