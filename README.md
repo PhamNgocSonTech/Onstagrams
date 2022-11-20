@@ -1,29 +1,39 @@
-# ONSTAGRAMS
+# :star2:ONSTAGRAMS:star2:
 
 
-## Table of Contents
-* [Technologies Used](#technologies-used)
+## :bookmark:Table of Contents
+* [Technologies And Packages Used](#technologies-and-packages-used)
 * [Features](#features)
 * [Screenshots](#screenshots)
 * [Setup](#setup)
 * [Contact](#contact)
 
 
-## Technologies Used
+## :mag_right:Technologies And Packages Used
+**Server:** 
 - NodeJS
 - ExpressJS
-- JWT
 - Mongoose
+- JWT
+- Cloudinary
+- Nodemon
 - Nodemailer
+- Bcrypt
+- Multer
+- Google Auth Library
+- PassportJS
+- Passport-JWT
 - Bootstrap
 - Nanoid
+
+**Client:** 
 - ReactJS
 - Redux
 - Axios
 - Framer-Motion
 
 
-## Features
+## :pencil:Features
 List the ready features here:
 - Register
 - Login With Onstagram Or Login With Google
@@ -39,11 +49,11 @@ List the ready features here:
 - Get Timeline In Homepage If You Following That User
 
 
-## Screenshots
+## :camera:Screenshots
 ![Homepage screenshot](./screenshots/screenshots-readme.png)
 
 
-## Setup
+## :wrench:Setup
 
 - When clone my project to your computer, open it with VSCODE
 - Install locally using npm, open Terminal in VSCODE:
@@ -61,6 +71,6 @@ only run client: $ npm run client
 run server and client: $ npm run dev
 ```
 
-## Contact:
+## :e-mail:Contact:
 - Backend: Phạm Ngọc Sơn
 - Frontend: Nguyễn Huy Cường
