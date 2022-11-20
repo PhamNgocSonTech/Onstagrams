@@ -2,14 +2,14 @@
 
 
 ## Table of Contents :bookmark:
-* [Technologies And Packages Used](#technologies-and-packages-used-mag_right)
-* [Features](#features)
-* [Screenshots](#screenshots)
-* [Setup](#setup)
-* [Contact](#contact)
+* [Technologies And Packages Used](#mag_righttechnologies-and-packages-used)
+* [Features](#pencilfeatures)
+* [Screenshots](#camerascreenshots)
+* [Setup](#wrenchsetup)
+* [Contact](#e-mailcontact)
 
 
-## Technologies And Packages Used :mag_right:
+## :mag_right:Technologies And Packages Used
 **Server:** 
 - NodeJS
 - ExpressJS
