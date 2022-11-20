@@ -1,7 +1,7 @@
 # :star2:ONSTAGRAMS:star2:
 
 
-## :bookmark:Table of Contents
+## Table of Contents :bookmark:
 * [Technologies And Packages Used](#technologies-and-packages-used)
 * [Features](#features)
 * [Screenshots](#screenshots)
@@ -9,7 +9,7 @@
 * [Contact](#contact)
 
 
-## :mag_right:Technologies And Packages Used
+## Technologies And Packages Used :mag_right:
 **Server:** 
 - NodeJS
 - ExpressJS
