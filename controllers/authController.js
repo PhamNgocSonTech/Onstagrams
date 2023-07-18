@@ -6,18 +6,13 @@ const nodemailer = require("nodemailer");
 const {
   sendEmailVerify,
   sendMailForgotPass,
-  notifyEmailIsConfirm,
+  notifyEmailIConfirm,
   sendMailResetPassword,
 } = require("../services/emailServices");
 const { OAuth2Client } = require("google-auth-library");
 const { nanoid } = require("nanoid");
 const passport = require("passport");
 require("../utils/passport");
-
-// UTILS REQUIRE
-const cloudinary = require("../utils/cloudinary");
-const upload = require("../utils/multer");
-const mailConfig = require("../configs/mailConfig");
 
 // MODELS REQUIRE
 const VerificationMail = require("../models/VerificationMail");
@@ -121,7 +116,7 @@ const verifyEmail = async (req, res) => {
   getUser.verifed = true;
   await VerificationMail.findByIdAndDelete(getToken._id);
   getUser.save();
-  await notifyEmailIsConfirm(getUser.email);
+  await notifyEmailIConfirm(getUser.email);
   const accessToken = jwt.sign(
     {
       _id: getUser._id,

@@ -15,10 +15,13 @@ const {
   getAllPostForUser,
   deleteAllPost,
 } = require("../controllers/postController");
+const upload = require("../utils/multer");
 
 const router = express.Router();
-router.post("/", verifyToken, createPost);
-router.put("/updatePost/:id", verifyToken, updatePost);
+
+router.post("/", upload.array("img", 10), verifyToken, createPost);
+
+router.put("/updatePost/:id", upload.array("img", 10), verifyToken, updatePost);
 router.delete("/delete/:id", verifyToken, deletePost);
 router.put("/comment/post/:id", verifyToken, comment);
 router.delete("/delComment/post/:firstId/:secondId", deleteComment);

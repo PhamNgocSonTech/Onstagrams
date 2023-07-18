@@ -32,7 +32,7 @@ const sendEmailVerify = async (toEmail, username, otp) => {
   await transporter.sendMail(mailOptions);
 };
 
-const notifyEmailIsConfirm = async (email) => {
+const notifyEmailIConfirm = async (email) => {
   let transporter = nodemailer.createTransport({
     host: mailConfig.HOST,
     auth: {
@@ -116,6 +116,6 @@ const sendMailResetPassword = async (email, username) => {
 module.exports = {
   sendEmailVerify,
   sendMailForgotPass,
-  notifyEmailIsConfirm,
+  notifyEmailIConfirm,
   sendMailResetPassword,
 };

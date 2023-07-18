@@ -8,7 +8,7 @@ const upload = require("../utils/multer");
 //CREATE POST
 const createPost = async (req, res) => {
   try {
-    upload.array("img", 10);
+    // upload.array("img", 10);
     const { desc, video, hashtag } = req.body;
     const imgFiles = req.files;
     if (!imgFiles) return res.status(500).json({ msg: "No image file" });
@@ -48,7 +48,6 @@ const createPost = async (req, res) => {
 //UPDATE POST
 const updatePost = async (req, res) => {
   try {
-    upload.array("img", 10);
     const { desc, hashtag } = req.body;
     let post = await Post.findById(req.params.id);
     if (!post) return res.status(500).json("Post not found");
