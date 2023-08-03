@@ -51,7 +51,7 @@ function Login({ handleClosePanel, className }) {
     const { signIn } = useGoogleAuth();
 
     const facebookHandle = () => {
-        window.open("http://localhost:5000/api/auth/facebook", "_self");
+        window.open("https://onstagramapi.onrender.com/api/auth/facebook", "_self");
     };
 
     useEffect(() => {

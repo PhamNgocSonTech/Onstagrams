@@ -1,5 +1,5 @@
 import axios from "axios";
-import { END_POINT_API, END_POINT_API2 } from "../../Default/constant";
+// import { END_POINT_API, END_POINT_API2 } from "../../Default/constant";
 
 const usersConfig = axios.create({
     // baseURL: `http://localhost:5000/api/users`,
@@ -7,7 +7,7 @@ const usersConfig = axios.create({
 });
 
 const usersConfig2 = axios.create({
-    baseURL: `http://localhost:5000/api/user`,
+    baseURL: `https://onstagramapi.onrender.com/api/user`,
     validateStatus: function (status) {
         return status >= 200 && status <= 500;
     },
