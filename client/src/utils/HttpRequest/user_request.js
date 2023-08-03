@@ -2,7 +2,8 @@ import axios from "axios";
 import { END_POINT_API, END_POINT_API2 } from "../../Default/constant";
 
 const usersConfig = axios.create({
-    baseURL: `http://localhost:5000/api/users`,
+    // baseURL: `http://localhost:5000/api/users`,
+    baseURL: `https://onstagramapi.onrender.com/api/users`,
 });
 
 const usersConfig2 = axios.create({
