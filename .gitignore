@@ -5,3 +5,4 @@ client/src/components/Comment/Comment.module.css
 client/src/components/Comment/Comment.module.css.map
 client/src/components/PostInfor/PostInfor.module.css
 client/src/components/PostInfor/PostInfor.module.css.map
+/.env

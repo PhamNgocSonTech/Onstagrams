@@ -36,7 +36,7 @@
 ## :pencil:Features
 List the ready features here:
 - Register
-- Login With Onstagram Or Login With Google
+- <del> Login With Onstagram Or Login With Google </del> (maintance)
 - Forgot Password/Reset Password
 - Verify Email
 - Edit Your Profile
