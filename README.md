@@ -52,6 +52,9 @@ List the ready features here:
 ## :camera:Screenshots
 ![Homepage screenshot](./screenshots/screenshots-readme.png)
 
+![Reset Token Mail screenshot](./screenshots/forgot-pass.png)
+
+
 
 ## :wrench:Setup
 
