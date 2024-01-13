@@ -1,6 +1,6 @@
 const bcrypt = require("bcrypt");
 const cloudinary = require("../utils/cloudinary");
-const upload = require("../utils/multer");
+// const upload = require("../utils/multer");
 const User = require("../models/User");
 const Post = require("../models/Post");
 
@@ -36,7 +36,6 @@ const getAllUsers = async (req, res) => {
 
 //UPDATE PROFILE AND CHANGE AVATAR
 const updateUser = async (req, res) => {
-  upload.single("img");
   // try {
   if (req.params.id === req.user._id) {
     if (req.body.password) {

@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const upload = require("../utils/multer");
 const { verifyToken } = require("../middleware/verifyToken");
 const {
   searchUserWithUsername,
@@ -18,7 +19,7 @@ const {
 router.get("/search/:username", searchUserWithUsername);
 router.get("/get/:id", getUserByID);
 router.get("/getListUsers/", getAllUsers);
-router.put("/updateProfile/:id", verifyToken, updateUser);
+router.put("/updateProfile/:id", verifyToken, upload.single("img"), updateUser);
 router.delete("/delete/:id", verifyToken, deleteUser);
 router.delete("/deleteAll", deleteAllUser);
 router.put("/:id/follow", verifyToken, followUser);
