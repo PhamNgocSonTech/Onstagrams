@@ -1,12 +1,12 @@
 # :star2:ONSTAGRAMS:star2:
 
 
-## :bookmark:Table of Contents
-* [Technologies And Packages Used](#technologies-and-packages-used)
-* [Features](#features)
-* [Screenshots](#screenshots)
-* [Setup](#setup)
-* [Contact](#contact)
+## Table of Contents :bookmark:
+* [Technologies And Packages Used](#mag_righttechnologies-and-packages-used)
+* [Features](#pencilfeatures)
+* [Screenshots](#camerascreenshots)
+* [Setup](#wrenchsetup)
+* [Contact](#e-mailcontact)
 
 
 ## :mag_right:Technologies And Packages Used
@@ -51,6 +51,9 @@ List the ready features here:
 
 ## :camera:Screenshots
 ![Homepage screenshot](./screenshots/screenshots-readme.png)
+
+![Reset Token Mail screenshot](./screenshots/forgot-pass.png)
+
 
 
 ## :wrench:Setup
