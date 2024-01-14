@@ -14,7 +14,6 @@
   margin-top: 0;
   white-space: nowrap;
   padding-top: 0;
-  width: -webkit-fit-content;
   width: -moz-fit-content;
   width: fit-content;
   z-index: 99;
@@ -138,7 +137,6 @@
 .wrapper .details .video-container {
   width: 100%;
   border-radius: 8px;
-  height: 600px;
   cursor: pointer;
   background: #ffffff center no-repeat;
   margin-right: 20px;
@@ -197,6 +195,8 @@
 }
 .wrapper .details .video-container .video {
   border-radius: 3px;
+  -o-object-fit: cover;
+     object-fit: cover;
 }
 .wrapper .details .video-container .video:hover {
   cursor: pointer;
@@ -207,14 +207,14 @@
 .wrapper .details .actions {
   display: flex;
   flex-direction: column;
-  width: -webkit-fit-content;
   width: -moz-fit-content;
   width: fit-content;
   position: absolute;
   right: -62px;
   bottom: 0;
 }
-.wrapper .details .actions .action .act-btn, .wrapper .details .actions .action .act-text {
+.wrapper .details .actions .action .act-btn,
+.wrapper .details .actions .action .act-text {
   display: block;
 }
 .wrapper .details .actions .action .act-btn {
