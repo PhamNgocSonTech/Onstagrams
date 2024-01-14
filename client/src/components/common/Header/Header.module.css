@@ -21,7 +21,6 @@
   justify-content: space-between;
 }
 .content img {
-  height: -webkit-fit-content;
   height: -moz-fit-content;
   height: fit-content;
 }
@@ -51,9 +50,6 @@
   caret-color: var(--primary-color);
 }
 .content .search input:not(:-moz-placeholder-shown) ~ .search-btn {
-  color: black;
-}
-.content .search input:not(:-ms-input-placeholder) ~ .search-btn {
   color: black;
 }
 .content .search input:not(:placeholder-shown) ~ .search-btn {

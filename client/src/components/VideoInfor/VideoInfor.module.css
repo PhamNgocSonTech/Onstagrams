@@ -80,7 +80,6 @@
 .wrapper .details .actions {
   display: flex;
   flex-direction: column;
-  width: -webkit-fit-content;
   width: -moz-fit-content;
   width: fit-content;
   position: absolute;

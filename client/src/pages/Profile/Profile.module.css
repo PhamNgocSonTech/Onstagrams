@@ -30,7 +30,6 @@
   display: flex;
 }
 .wrapper .user-infor .infor-section .name-infor .name .ed .edit-profile-button {
-  width: -webkit-fit-content;
   width: -moz-fit-content;
   width: fit-content;
 }

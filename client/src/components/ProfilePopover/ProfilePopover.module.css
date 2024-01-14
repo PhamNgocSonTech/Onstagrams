@@ -15,6 +15,9 @@
   -o-object-fit: cover;
      object-fit: cover;
 }
+.wrapper .header .avt:hover {
+  cursor: pointer;
+}
 .wrapper .header .follow {
   width: 106px;
   height: 34px;
@@ -38,6 +41,9 @@
   font-weight: 600;
   font-size: 13px;
   line-height: 20px;
+}
+.wrapper .name:hover {
+  cursor: pointer;
 }
 .wrapper .number-des {
   margin-top: 8px;

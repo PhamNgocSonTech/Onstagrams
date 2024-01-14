@@ -10,42 +10,45 @@ import jwt_decode from "jwt-decode";
 import { useDispatch } from "react-redux";
 
 function App() {
-    const dispatch = useDispatch();
-    const getUser = (id) => {
-        return getUserById(id).then((user) => user);
-    };
+  const dispatch = useDispatch();
 
-    const token = window.localStorage.getItem("accessToken");
-    useEffect(() => {
-        try {
-            const decode = jwt_decode(token);
-            getUser(decode._id).then((user) => {
-                if (user.status === 200) {
-                    dispatch(setUserInfor(user.data));
-                }
-            });
-        } catch (Ex) {}
-    }, []);
+  const userId = window.localStorage.getItem("id");
+  console.log("userId", userId);
+  useEffect(() => {
+    if (userId) {
+      try {
+        getUserById(userId).then((user) => {
+          if (user.status === 200) {
+            dispatch(setUserInfor(user.data));
+          }
+        });
+      } catch (Ex) {}
+    }
+  }, []);
 
-    return (
-        <Routes>
-            {pubRoutes.map((route, index) => {
-                const Layout =
-                    route.layout === null ? React.Fragment : route.layout === undefined ? DefaultLayout : route.layout;
-                return (
-                    <Route
-                        key={index}
-                        path={route.path}
-                        element={
-                            <Layout {...route.parameters}>
-                                <route.element />
-                            </Layout>
-                        }
-                    />
-                );
-            })}
-        </Routes>
-    );
+  return (
+    <Routes>
+      {pubRoutes.map((route, index) => {
+        const Layout =
+          route.layout === null
+            ? React.Fragment
+            : route.layout === undefined
+            ? DefaultLayout
+            : route.layout;
+        return (
+          <Route
+            key={index}
+            path={route.path}
+            element={
+              <Layout {...route.parameters}>
+                <route.element />
+              </Layout>
+            }
+          />
+        );
+      })}
+    </Routes>
+  );
 }
 
 export default App;
