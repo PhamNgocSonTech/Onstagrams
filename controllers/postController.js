@@ -321,6 +321,59 @@ const deleteAllPost = async (req, res) => {
   }
 };
 
+
+// ********************************************//
+//SHARE POST
+
+const sharePost = async (req, res) => {
+  try {
+    const postId = req.params.postId;
+    const userId = req.user._id
+
+    const orginalPost = await Post.findById(postId);
+    const existingShare = await Post.findOne({
+      _id: postId,
+      "shares.users":userId
+    })
+
+    if (!orginalPost) return res.status(404).json("No post found");
+
+    if (existingShare) return res.status(400).json('You already shared this post')
+
+    const user = await User.findById(orginalPost.userId, "username");
+
+    const sharePost = new Post({
+      desc: orginalPost.desc,
+      hashtag: orginalPost.hashtag,
+      img: orginalPost.img,
+      video: orginalPost.video,
+      userId: userId,
+      shares: {
+        count: 0,
+        users: [userId],
+        postShare: postId
+      },
+
+      username: user.username,
+
+    })
+
+    const savedPost = await sharePost.save()
+    
+    orginalPost.shares.count += 1;
+    orginalPost.shares.users.push(userId);
+    orginalPost.save()
+
+    // const updatePost = await post.save()
+    res.status(200).json(savedPost);
+    
+  } catch (err) {
+    return res.status(500).json({err: err.message});
+  }
+
+}
+
+
 module.exports = {
   createPost,
   updatePost,
@@ -335,4 +388,5 @@ module.exports = {
   allTimelinePost,
   getAllPostForUser,
   deleteAllPost,
+  sharePost,
 };

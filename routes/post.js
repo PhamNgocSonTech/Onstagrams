@@ -14,6 +14,7 @@ const {
   allTimelinePost,
   getAllPostForUser,
   deleteAllPost,
+  sharePost,
 } = require("../controllers/postController");
 const upload = require("../utils/multer");
 
@@ -37,4 +38,5 @@ router.get("/getListPosts/", getAllPost);
 router.get("/timeline/:userId", verifyToken, allTimelinePost);
 router.get("/profile/:username", getAllPostForUser);
 router.delete("/deleteAll", deleteAllPost);
+router.post("/:postId/shares", verifyToken, sharePost);
 module.exports = router;
