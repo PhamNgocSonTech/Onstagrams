@@ -13,8 +13,8 @@ const cors = require("cors");
 const userRoute = require("./routes/users");
 const authRoute = require("./routes/auth");
 const postRoute = require("./routes/post");
-const notifyRoute = require("./routes/notify");
-const chatRoute = require("./routes/chat");
+// const notifyRoute = require("./routes/notify");
+// const chatRoute = require("./routes/chat");
 
 // ENV Config
 dotenv.config();
@@ -52,6 +52,12 @@ app.use("/api/user", userRoute);
 app.use("/api/post", postRoute);
 // app.use("/api/notify", notifyRoute);
 // app.use("/api/chat", chatRoute);
+
+
+// ROUTE FOR CHECK HEALTHY
+app.get('/health', (req, res) => {
+    res.status(200).json({status: 'OK', msg: 'API is healthy'});
+})
 
 app.use(express.static(path.join(__dirname, "build")));
 app.get("/*", (req, res) => {

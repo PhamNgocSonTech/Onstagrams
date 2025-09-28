@@ -6,16 +6,23 @@ const upload = require("../utils/multer");
 
 // ********************************************//
 //CREATE POST
+/** 
 const createPost = async (req, res) => {
   try {
     // upload.array("img", 10);
+    const uploadOptions = {
+      upload_preset: "post_upload",
+      resource_type: "auto",
+    };
     const { desc, video, hashtag } = req.body;
     const imgFiles = req.files;
     if (!imgFiles) return res.status(500).json({ msg: "No image file" });
+
     let multiplePicturePromise = imgFiles.map((picture) =>
-      cloudinary.uploader.upload(picture.path, { upload_preset: "post_upload" })
+      cloudinary.uploader.upload(picture.path, uploadOptions)
     );
-    let imageResponses = await Promise.all(multiplePicturePromise);
+    let imageResponses = await Promise.allSettled(multiplePicturePromise);
+    console.log(imageResponses);
     //res.status(200).json({ images: imageResponses });
     //let user = await User.findById(req.params.id);
     // Upload image to cloudinary
@@ -30,10 +37,17 @@ const createPost = async (req, res) => {
     //     // Delete image from cloudinary
     //     // await cloudinary.uploader.destroy(user.cloudinary_id);
     // }
+    const rejectedImg = imageResponses.filter(response => response.status === 'rejected');
+    if (rejectedImg.length > 0) { 
+      return res.status(500).json({msg: "Error uploading files", error: rejectedImg.map(err => err.reason)})
+    }
+
+    const successfullImg = imageResponses.map(response => response.value)
     const newPost = await new Post({
       desc,
       hashtag,
-      img: imageResponses || post.img,
+      // img: imageResponses || post.img,
+      img: successfullImg,
       video,
       userId: req.user._id,
     });
@@ -43,6 +57,64 @@ const createPost = async (req, res) => {
     res.status(500).json({ msg: err.message });
   }
 };
+*/
+
+const createPost = async (req, res) => {
+  try {
+    const { desc, hashtag } = req.body;
+    const imgFiles = req.files;
+    const videoFile =
+      req.files && req.files.find((file) => file.fieldname === "video");
+
+    if (!imgFiles || imgFiles.length === 0) {
+      return res.status(400).json({ msg: "No image files provided" });
+    }
+
+    const uploadOptions = {
+      upload_preset: "post_upload",
+      resource_type: "auto"
+    };
+
+    // Xử lý upload ảnh và video đồng thời
+    const uploadPromises = imgFiles.map((picture) =>
+      cloudinary.uploader.upload(picture.path, uploadOptions)
+    );
+
+    if (videoFile) {
+      uploadPromises.push(
+        cloudinary.uploader.upload(videoFile.path, {
+          ...uploadOptions,
+          resource_type: "video",
+        })
+      );
+    }
+
+    const uploadResults = await Promise.all(uploadPromises);
+
+    // Phân chia kết quả làm ảnh và video
+    const successfulImages = uploadResults.filter(
+      (result) => !result.resource_type || result.resource_type === "image"
+    );
+    const successfulVideos = uploadResults.filter(
+      (result) => result.resource_type === "video"
+    );
+
+    const newPost = await new Post({
+      desc,
+      hashtag,
+      img: successfulImages,
+      video: successfulVideos.length > 0 ? successfulVideos[0] : null,
+      userId: req.user._id,
+    });
+
+    const savePost = await newPost.save();
+    res.status(200).json(savePost);
+  } catch (err) {
+    console.error("Internal server error:", err);
+    res.status(500).json({ msg: "Internal server error" });
+  }
+};
+
 
 // ********************************************//
 //UPDATE POST
@@ -249,6 +321,59 @@ const deleteAllPost = async (req, res) => {
   }
 };
 
+
+// ********************************************//
+//SHARE POST
+
+const sharePost = async (req, res) => {
+  try {
+    const postId = req.params.postId;
+    const userId = req.user._id
+
+    const orginalPost = await Post.findById(postId);
+    const existingShare = await Post.findOne({
+      _id: postId,
+      "shares.users":userId
+    })
+
+    if (!orginalPost) return res.status(404).json("No post found");
+
+    if (existingShare) return res.status(400).json('You already shared this post')
+
+    const user = await User.findById(orginalPost.userId, "username");
+
+    const sharePost = new Post({
+      desc: orginalPost.desc,
+      hashtag: orginalPost.hashtag,
+      img: orginalPost.img,
+      video: orginalPost.video,
+      userId: userId,
+      shares: {
+        count: 0,
+        users: [userId],
+        postShare: postId
+      },
+
+      username: user.username,
+
+    })
+
+    const savedPost = await sharePost.save()
+    
+    orginalPost.shares.count += 1;
+    orginalPost.shares.users.push(userId);
+    orginalPost.save()
+
+    // const updatePost = await post.save()
+    res.status(200).json(savedPost);
+    
+  } catch (err) {
+    return res.status(500).json({err: err.message});
+  }
+
+}
+
+
 module.exports = {
   createPost,
   updatePost,
@@ -263,4 +388,5 @@ module.exports = {
   allTimelinePost,
   getAllPostForUser,
   deleteAllPost,
+  sharePost,
 };

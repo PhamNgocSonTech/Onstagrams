@@ -72,7 +72,6 @@
   border-radius: 12px;
   border: 1px solid rgba(22, 24, 35, 0.2);
   height: 2.4rem;
-  width: -webkit-fit-content;
   width: -moz-fit-content;
   width: fit-content;
   overflow: hidden;

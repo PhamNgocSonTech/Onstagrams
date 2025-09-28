@@ -130,16 +130,14 @@
   border-radius: 4px;
   background-color: rgba(166, 168, 179, 0.06);
   border: 1px solid rgba(22, 24, 35, 0.12);
-  -webkit-padding-start: 12px;
-          padding-inline-start: 12px;
+  padding-inline-start: 12px;
   color: rgb(22, 24, 35);
   line-height: 100%;
   outline: none;
   font-size: 16px;
   height: 45px;
   caret-color: rgb(254, 44, 85);
-  -webkit-padding-end: unset;
-          padding-inline-end: unset;
+  padding-inline-end: unset;
   margin-bottom: 15px;
   padding-right: 10px;
 }

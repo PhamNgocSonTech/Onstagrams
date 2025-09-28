@@ -1,319 +1,315 @@
 .wrapper {
-    display: flex;
-    padding-bottom: 40px !important;
+  display: flex;
+  padding-bottom: 40px !important;
 
-    .more-btn {
-        position: relative;
-        &:hover {
-            cursor: pointer;
-        }
-
-        .delete-post {
-            position: absolute;
-            right: 2px;
-            margin-top: 0;
-            white-space: nowrap;
-            padding-top: 0;
-            width: fit-content;
-            z-index: 99;
-
-            .btn-option {
-                margin: 0;
-                width: 100%;
-                margin: 0;
-                border-radius: 0;
-                display: flex;
-                font-size: 13px;
-                justify-content: center;
-
-                &.btn-1 {
-                    border-top-left-radius: 3px;
-                    border-top-right-radius: 3px;
-                    border-bottom-color: transparent;
-                }
-
-                &.btn-2 {
-                    border-bottom-left-radius: 3px;
-                    border-bottom-right-radius: 3px;
-                }
-            }
-
-            &:active {
-                opacity: 0.7;
-            }
-        }
-
-        .accept-delete-form {
-            padding: 20px 0;
-            height: 21% !important;
-            h2 {
-                text-align: center;
-                margin-bottom: 15px;
-                color: var(--primary-color);
-                font-family: 'Lexend Deca', sans-serif;
-            }
-            .accept-btns {
-                display: flex;
-                justify-content: center;
-                .accept-btn {
-                    width: 205px;
-                    height: 45px;
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                }
-            }
-        }
+  .more-btn {
+    position: relative;
+    &:hover {
+      cursor: pointer;
     }
 
-    .avatar {
-        width: 56px;
-        height: 56px;
-        border-radius: 50%;
+    .delete-post {
+      position: absolute;
+      right: 2px;
+      margin-top: 0;
+      white-space: nowrap;
+      padding-top: 0;
+      width: fit-content;
+      z-index: 99;
+
+      .btn-option {
+        margin: 0;
+        width: 100%;
+        margin: 0;
+        border-radius: 0;
+        display: flex;
+        font-size: 13px;
+        justify-content: center;
+
+        &.btn-1 {
+          border-top-left-radius: 3px;
+          border-top-right-radius: 3px;
+          border-bottom-color: transparent;
+        }
+
+        &.btn-2 {
+          border-bottom-left-radius: 3px;
+          border-bottom-right-radius: 3px;
+        }
+      }
+
+      &:active {
+        opacity: 0.7;
+      }
+    }
+
+    .accept-delete-form {
+      padding: 20px 0;
+      height: 21% !important;
+      h2 {
+        text-align: center;
+        margin-bottom: 15px;
+        color: var(--primary-color);
+        font-family: "Lexend Deca", sans-serif;
+      }
+      .accept-btns {
+        display: flex;
+        justify-content: center;
+        .accept-btn {
+          width: 205px;
+          height: 45px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }
+      }
+    }
+  }
+
+  .avatar {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    object-fit: cover;
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
+
+  .details {
+    margin-left: 15px;
+    width: 87%;
+
+    .author {
+      margin-bottom: 4px;
+      display: flex;
+
+      .username {
+        margin-right: 4px;
+        font-family: Sofiapro;
+        font-weight: 700;
+        font-size: 20px;
+        line-height: 25px;
+
+        &.active,
+        &:hover {
+          text-decoration: underline;
+        }
+
+        &:hover {
+          cursor: pointer;
+        }
+      }
+
+      .name {
+        font-family: "Be Vietnam Pro", sans-serif;
+        font-size: 14px;
+        line-height: 30px;
+        vertical-align: middle;
+        margin-left: 5px;
+
+        &:hover {
+          cursor: pointer;
+        }
+      }
+
+      .time {
+        font-family: "Be Vietnam Pro", sans-serif;
+        font-size: 14px;
+        line-height: 30px;
+        vertical-align: middle;
+        margin-left: 3px;
+      }
+    }
+
+    .video-des {
+      margin-bottom: 10px;
+      .cap {
+        font-weight: 400;
+        font-size: 16px;
+        font-family: "Be Vietnam Pro", sans-serif;
+      }
+    }
+
+    .hashtag {
+      display: inline-block;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      color: rgba(22, 24, 35, 1);
+      font-size: 16px;
+      padding: 0;
+      font-weight: 600;
+
+      &:hover {
+        text-decoration: underline;
+      }
+
+      & + .hashtag {
+        margin-left: 5px;
+      }
+    }
+
+    .music {
+      margin: 4px 0 12px 0;
+      font-size: 14px;
+    }
+
+    .video-container {
+      width: 100%;
+      border-radius: 8px;
+      cursor: pointer;
+      background: #ffffff center no-repeat;
+      margin-right: 20px;
+      position: relative;
+
+      .three-frames-image {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        grid-gap: 15px;
+        width: 100%;
+        height: 100%;
+
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+
+        .other-img {
+          display: grid;
+          grid-template-rows: 2;
+          grid-gap: 15px;
+        }
+      }
+
+      .img-list {
+        &::-webkit-scrollbar {
+          border-radius: 50px;
+          width: 4px;
+        }
+
+        &::-webkit-scrollbar-thumb {
+          border-radius: 50px;
+          background-color: rgba(0, 0, 0, 0.15);
+        }
+        &::-webkit-scrollbar-track {
+          border-radius: 50px;
+          background-color: rgba(0, 0, 0, 0);
+        }
+
+        .last-imgs {
+          position: relative;
+
+          .excess-img {
+            background-color: rgba(0, 0, 0, 0.486);
+            position: absolute;
+            border-radius: 3px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+            font-size: 20px;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+
+            &:active {
+              opacity: 0.9;
+            }
+          }
+        }
+      }
+
+      .video {
+        border-radius: 3px;
         object-fit: cover;
 
         &:hover {
-            cursor: pointer;
+          cursor: pointer;
         }
+
+        &:active {
+          opacity: 0.9;
+        }
+      }
     }
 
-    .details {
-        margin-left: 15px;
-        width: 87%;
+    .actions {
+      display: flex;
+      flex-direction: column;
+      width: fit-content;
+      position: absolute;
+      right: -62px;
+      bottom: 0;
 
-        .author {
-            margin-bottom: 4px;
-            display: flex;
-
-            .username {
-                margin-right: 4px;
-                font-family: Sofiapro;
-                font-weight: 700;
-                font-size: 20px;
-                line-height: 25px;
-
-                &.active, &:hover {
-                    text-decoration: underline;
-                }
-
-                &:hover {
-                    cursor: pointer;
-                }
-            }
-
-            .name {
-                font-family: "Be Vietnam Pro", sans-serif;
-                font-size: 14px;
-                line-height: 30px;
-                vertical-align: middle;
-                margin-left: 5px;
-
-                &:hover {
-                    cursor: pointer;
-                }
-            }
-
-            .time {
-                font-family: "Be Vietnam Pro", sans-serif;
-                font-size: 14px;
-                line-height: 30px;
-                vertical-align: middle;
-                margin-left: 3px;
-            }
+      .action {
+        .act-btn,
+        .act-text {
+          display: block;
         }
 
-        .video-des {
-            margin-bottom: 10px;
-            .cap {
-                font-weight: 400;
-                font-size: 16px;
-                font-family: "Be Vietnam Pro", sans-serif;
-            }
+        .act-btn {
+          width: 48px;
+          height: 48px;
+          background-color: rgba(22, 24, 35, 0.06);
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin: 8px 0 6px 0;
+
+          &:hover {
+            background-color: rgba(22, 24, 35, 0.1);
+          }
+
+          &:active {
+            background-color: rgba(22, 24, 35, 0.253);
+          }
         }
 
-        .hashtag {
-            display: inline-block;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            color: rgba(22, 24, 35, 1.0);
-            font-size: 16px;
-            padding: 0;
-            font-weight: 600;
-
-            &:hover {
-                text-decoration: underline;
-            }
-            
-            & + .hashtag {
-                margin-left: 5px;
-            }
+        .act-text {
+          color: rgba(22, 24, 35, 0.75);
+          font-size: 12px;
+          font-weight: 800;
+          line-height: 17px;
+          text-align: center;
         }
+      }
+    }
+  }
 
-        .music {
-            margin: 4px 0 12px 0;
-            font-size: 14px;
-        }
+  .follow {
+    border: 1px solid var(--primary-color);
+    color: var(--primary-color);
+    border-radius: 4px;
+    width: 88px;
+    height: 28px;
+    padding: 0 10px;
 
-        .video-container{
-            width: 100%;
-            border-radius: 8px;
-            cursor: pointer;
-            background: #ffffff center no-repeat;
-            margin-right: 20px;
-            position: relative;
-
-            .three-frames-image {
-                display: grid;
-                grid-template-columns: repeat(2, 1fr);
-                grid-gap: 15px;
-                width: 100%;
-                height: 100%;
-
-                img {
-                    width: 100%;
-                    height: 100%;
-                    object-fit: cover;
-                }
-
-                .other-img {
-                    display: grid;
-                    grid-template-rows: 2;
-                    grid-gap: 15px;
-                }
-            }
-
-            .img-list {
-                &::-webkit-scrollbar {
-                    border-radius: 50px;
-                    width: 4px;
-                }
-            
-                &::-webkit-scrollbar-thumb {
-                    border-radius: 50px;
-                    background-color: rgba(0, 0, 0, .15);
-                }
-                &::-webkit-scrollbar-track {
-                    border-radius: 50px;
-                    background-color: rgba(0, 0, 0, 0);
-                }
-                
-                .last-imgs {
-                    position: relative;
-
-                    .excess-img {
-                        background-color: rgba(0, 0, 0, 0.486);
-                        position: absolute;
-                        border-radius: 3px;
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                        text-align: center;
-                        color: white;
-                        font-size: 20px;
-                        top: 0;
-                        right: 0;
-                        bottom: 0;
-                        left: 0;
-
-                        &:active {
-                            opacity: 0.9;
-                        }
-                    }
-                }
-
-
-            }
-
-
-
-            .video {
-                border-radius: 3px;
-                object-fit: cover;
-
-                &:hover {
-                    cursor: pointer;
-                }
-
-                &:active {
-                    opacity: 0.9;
-                }
-            }
-        }
-
-        .actions {
-            display: flex;
-            flex-direction: column;
-            width: fit-content;
-            position: absolute;
-            right: -62px;
-            bottom: 0;
-
-            .action {
-
-                .act-btn, .act-text {
-                    display: block;
-                }
-
-                .act-btn {
-                    width: 48px;
-                    height: 48px;
-                    background-color: rgba(22, 24, 35, 0.06);
-                    border-radius: 50%;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    margin: 8px 0 6px 0;
-
-                    &:hover {
-                        background-color: rgba(22, 24, 35, .1);
-                    }
-
-                    &:active {
-                        background-color: rgba(22, 24, 35, 0.253);
-                    }
-                }
-
-                .act-text {
-                    color: rgba(22, 24, 35, 0.75);
-                    font-size: 12px;
-                    font-weight: 800;
-                    line-height: 17px;
-                    text-align: center;
-                }
-            }
-        }
+    .fl-text {
+      flex-grow: 1;
+      text-align: center;
+      font-size: 12px;
     }
 
-    .follow {
-        border: 1px solid var(--primary-color);
-        color: var(--primary-color);
-        border-radius: 4px;
-        width: 88px;
-        height: 28px;
-        padding: 0 10px;
-        
-        .fl-text {
-            flex-grow: 1;
-            text-align: center;
-            font-size: 12px;
-        }
+    &:hover {
+      background-color: rgba(254, 44, 85, 0.06);
+    }
+  }
 
-        &:hover {
-            background-color: rgba(254, 44, 85, 0.06);
-        }
+  .following {
+    @extend .follow;
+    border-color: rgb(208, 209, 211);
+
+    .fling-text {
+      @extend .fl-text;
+      color: black;
     }
 
-    .following {
-        @extend .follow;
-        border-color: rgb(208, 209, 211);
-
-
-        .fling-text {
-            @extend .fl-text;
-            color: black;
-        }
-
-        &:hover {
-            background-color: rgb(248, 248, 248);
-        }
+    &:hover {
+      background-color: rgb(248, 248, 248);
     }
+  }
 }
