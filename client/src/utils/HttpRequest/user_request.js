@@ -3,11 +3,11 @@ import axios from "axios";
 
 const usersConfig = axios.create({
     // baseURL: `http://localhost:5000/api/users`,
-    baseURL: `https://onstagramapi.onrender.com/api/users`,
+    baseURL: `https://onstagrams.onrender.com/api/users`,
 });
 
 const usersConfig2 = axios.create({
-    baseURL: `https://onstagramapi.onrender.com/api/user`,
+    baseURL: `https://onstagrams.onrender.com/api/user`,
     validateStatus: function (status) {
         return status >= 200 && status <= 500;
     },

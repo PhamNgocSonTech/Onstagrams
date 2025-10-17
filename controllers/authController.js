@@ -4,7 +4,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const nodemailer = require("nodemailer");
 const {
-  sendEmailVerify,
+  // sendEmailVerify,
   sendMailForgotPass,
   notifyEmailIConfirm,
   sendMailResetPassword,
@@ -19,6 +19,7 @@ const VerificationMail = require("../models/VerificationMail");
 const ResetToken = require("../models/ResetToken");
 const { generateOTP } = require("../utils/generateOTP");
 const User = require("../models/User");
+const { sendEmailVerify } = require('../utils/sendEmailVerify')
 
 // ENV CONFIG REQUIRE
 const dotenv = require("dotenv").config();
@@ -43,7 +44,7 @@ myOAuth2Client.setCredentials({
 // NEW REGISTER CAN SEND OTP CODE TO EMAIL FOR USERS
 const registerUser = async (req, res) => {
   try {
-    const { fullname, username, email, password, gender, bio, external } =
+    const { fullName, username, email, password, gender, bio, external } =
       req.body;
 
     const userName = await User.findOne({ username: username });
@@ -59,13 +60,13 @@ const registerUser = async (req, res) => {
         .status(400)
         .json({ msg: "Password must be at least 6 characters." });
     const newUser = new User({
-      fullname,
-      username,
-      email,
-      password,
-      gender,
-      bio,
-      external,
+        fullName,
+        username,
+        email,
+        password,
+        gender,
+        bio,
+        external,
     });
 
     const accessTokenJWT = jwt.sign(
@@ -78,15 +79,17 @@ const registerUser = async (req, res) => {
     );
     await newUser.save();
 
-    const OTP = generateOTP();
+    const otp = generateOTP();
+    const hashOtp = await bcrypt.hash(otp, 10)
     const verificationMail = await VerificationMail.create({
-      user: newUser._id,
-      token: OTP,
+        user: newUser._id,
+        token: hashOtp,
+        expiresAt: Date.now() + 15 * 60 * 1000 // 15 phút
     });
     verificationMail.save();
     /**
      */
-    await sendEmailVerify(newUser.email, newUser.username, OTP);
+    await sendEmailVerify(newUser.email, newUser.username, otp);
     res.status(200).json({
       Status: "Pending",
       msg: "Register Success! Please check your email",
@@ -105,18 +108,20 @@ const verifyEmail = async (req, res) => {
   const { userId, otp } = req.body;
   const getUser = await User.findById(userId);
   if (!getUser) return res.status(400).json("User Not Found");
-  if (getUser.verifed === true)
-    return res.status(400).json("User Already Verify Mail");
+  if (getUser.verifed) return res.status(400).json("User Already Verified");
 
   const getToken = await VerificationMail.findOne({ user: getUser._id });
   if (!getToken) return res.status(400).json("OTP Not Found");
+  if(getToken.expiresAt < Date.now()) return res.status(400).json("OTP Expired");
+
   const checkMatch = await bcrypt.compareSync(otp, getToken.token);
   if (!checkMatch) return res.status(400).json("WRONG OTP");
 
   getUser.verifed = true;
   await VerificationMail.findByIdAndDelete(getToken._id);
-  getUser.save();
+  await getUser.save();
   await notifyEmailIConfirm(getUser.email);
+
   const accessToken = jwt.sign(
     {
       _id: getUser._id,
@@ -127,7 +132,7 @@ const verifyEmail = async (req, res) => {
   );
   const { password, ...other } = getUser._doc;
 
-  return res.status(200).json({ other, accessToken });
+  return res.status(200).json({msg: "Email verified", other, accessToken });
 };
 
 // NEW LOGIN CAN CREATE ACCESS_TOKEN AND REFRESH_TOKEN
