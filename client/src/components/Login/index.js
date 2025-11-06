@@ -18,6 +18,7 @@ import { gapi } from "gapi-script";
 import { GoogleLogin, useGoogleLogin } from "react-google-login";
 import { loginGoogle } from "../../utils/HttpRequest/auth_request";
 import { useGoogleAuth } from "../common/GoogleAuth/googleAuth";
+const API_BASE = process.env.REACT_APP_BASE_URL;
 
 const cn = classNames.bind(styles);
 export const ParentContext = createContext();
@@ -51,7 +52,7 @@ function Login({ handleClosePanel, className }) {
     const { signIn } = useGoogleAuth();
 
     const facebookHandle = () => {
-        window.open("https://onstagrams.onrender.com/api/auth/facebook", "_self");
+        window.open("https://onstagramapi.onrender.com/api/auth/facebook", "_self");
     };
 
     useEffect(() => {
